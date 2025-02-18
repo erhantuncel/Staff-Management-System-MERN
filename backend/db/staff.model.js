@@ -26,7 +26,8 @@ const staffSchema = new mongoose.Schema(
             ],
         },
         image: {
-            type: mongoose.Schema.Types.Buffer,
+            data: mongoose.Schema.Types.Buffer,
+            contentType: mongoose.Schema.Types.String,
         },
         department: {
             type: mongoose.Schema.Types.String,
