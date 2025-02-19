@@ -48,10 +48,12 @@ const create = async (req, res) => {
         }
 
         const newStaff = new Staff(staffFromReqBody);
-        newStaff.image = {
-            data: req.file.buffer,
-            contentType: req.file.mimetype,
-        };
+        if (req.file) {
+            newStaff.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            };
+        }
 
         try {
             await newStaff.save();
