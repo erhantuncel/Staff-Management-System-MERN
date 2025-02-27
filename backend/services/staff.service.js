@@ -43,4 +43,4 @@ const remove = async (req) => {
     await Staff.findByIdAndDelete(id);
 };
 
-export default { sum, create, update, remove, getAll };
+export default { create, update, remove, getAll };

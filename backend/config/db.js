@@ -12,5 +12,15 @@ export const connectDb = async () => {
                 console.log(`Error: ${err}`);
                 process.exit(1);
             });
-    } catch (error) {}
+    } catch (error) {
+        console.log("Db connect error.")
+    }
 };
+
+export const disconnectDb = async () => {
+    try {
+        await mongoose.connection.close()
+    } catch (error) {
+        console.log("Db diconnect error.")
+    }
+}
