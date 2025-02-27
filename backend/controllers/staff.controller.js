@@ -42,7 +42,7 @@ const createStaff = async (req, res, next) => {
             return;
         }
         try {
-            const newStaff = await create(req, res, next);
+            const newStaff = await create(req);
             res.status(201).json({ success: true, data: newStaff });
             next();
         } catch (error) {
@@ -56,7 +56,7 @@ const createStaff = async (req, res, next) => {
 
 const updateStaff = async (req, res, next) => {
     try {
-        const updatedStaff = await staffService.update(req, res);
+        const updatedStaff = await staffService.update(req);
         res.status(200).json({ success: true, data: updatedStaff });
         next();
     } catch (error) {
@@ -66,7 +66,7 @@ const updateStaff = async (req, res, next) => {
 
 const removeStaff = async (req, res, next) => {
     try {
-        await staffService.remove(req, res);
+        await staffService.remove(req);
         res.status(200).json({ success: true, message: "Staff is removed." });
         next();
     } catch (error) {

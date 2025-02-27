@@ -1,23 +1,22 @@
 import mongoose from "mongoose";
 import Staff from "../db/staff.model.js";
 
-const create = async (req, res, next) => {
+const create = async (req) => {
     const staffFromReqBody = req.body;
-    const newStaff = new Staff(staffFromReqBody);
     if (req.file) {
-        newStaff.image = {
+        staffFromReqBody.image = {
             data: req.file.buffer,
             contentType: req.file.mimetype,
         };
     }
-    return await newStaff.save();
+    return await new Staff(staffFromReqBody).save();
 };
 
 const getAll = async () => {
     return await Staff.find({});
 };
 
-const update = async (req, res) => {
+const update = async (req) => {
     const { id } = req.params;
     const staff = req.body;
 
@@ -30,12 +29,11 @@ const update = async (req, res) => {
             new: true,
         });
     } catch (error) {
-        console.log(error);
-        throw new Error("Sever Error");
+        throw new Error("Server Error");
     }
 };
 
-const remove = async (req, res) => {
+const remove = async (req) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -45,4 +43,4 @@ const remove = async (req, res) => {
     await Staff.findByIdAndDelete(id);
 };
 
-export default { create, update, remove, getAll };
+export default { sum, create, update, remove, getAll };
