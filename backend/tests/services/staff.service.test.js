@@ -170,4 +170,45 @@ describe("Staff Service", () => {
             expect(mockfindByIdAndRemove).toHaveBeenCalled();
         });
     });
+
+    describe("getAllWithPagination", () => {
+        const mockRequest = {
+            query: { page: 1, pageSize: 5 },
+        };
+
+        it("should thrown error when aggreating Staff failed", async () => {
+            await expect(
+                staffService.getAllWithPagination(
+                    mockRequest.query.page,
+                    mockRequest.query.pageSize
+                )
+            ).rejects.toThrowError("Pagination Error");
+        });
+
+        it("should list all staffs based on page data", async () => {
+            const mockStaffArrayWithPagination = {
+                metadata: {
+                    totalCount: 10,
+                    page: 1,
+                    pageSize: 5,
+                },
+                data: [
+                    { _id: 1, firstName: "fN1" },
+                    { _id: 2, firstName: "fN2" },
+                    { _id: 3, firstName: "fN3" },
+                    { _id: 4, firstName: "fN4" },
+                    { _id: 5, firstName: "fN5" },
+                ],
+            };
+            const getAllWithPagination = vi
+                .spyOn(staffService, "getAllWithPagination")
+                .mockResolvedValueOnce(mockStaffArrayWithPagination);
+            await staffService.getAllWithPagination(
+                mockRequest.query.page,
+                mockRequest.query.pageSize
+            );
+            expect(getAllWithPagination).toHaveBeenCalled()
+            expect(getAllWithPagination).toHaveReturned(mockStaffArrayWithPagination)
+        });
+    });
 });

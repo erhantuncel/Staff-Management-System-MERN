@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import staffController from "../../controllers/staff.controller.js";
 import staffService from "../../services/staff.service.js";
 import path from "path";
+import { query } from "express";
+import exp from "constants";
 
 vi.mock("../../services/staff.service.js");
 
@@ -192,6 +194,59 @@ describe("Remove staff", () => {
         expect(mockResponse.json).toHaveBeenCalledWith({
             success: true,
             message: "Staff is removed.",
+        });
+    });
+});
+
+describe("getAllStaffWithPagination", () => {
+    it("should return 500 if staffService.getAllWithPagination method failed", async () => {
+        const mockRequest = {
+            query: { page: 1, pageSize: 10 },
+        };
+        vi.spyOn(staffService, "getAllWithPagination").mockRejectedValueOnce(
+            "Pagination Error"
+        );
+        await staffController.getAllStaffWithPagination(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalledWith(500);
+    });
+
+    it("should return 200 if staffService.getAllWithPagination runs successfully", async () => {
+        const mockRequest = {
+            query: { page: 1, pageSize: 10 },
+        };
+
+        const mockStaffArrayWithPagination = {
+            metadata: {
+                totalCount: 10,
+                page: 1,
+                pageSize: 5,
+            },
+            data: [
+                { _id: 1, firstName: "fN1" },
+                { _id: 2, firstName: "fN2" },
+                { _id: 3, firstName: "fN3" },
+                { _id: 4, firstName: "fN4" },
+                { _id: 5, firstName: "fN5" },
+            ],
+        };
+        vi.spyOn(staffService, "getAllWithPagination").mockResolvedValueOnce(
+            mockStaffArrayWithPagination
+        );
+        await staffController.getAllStaffWithPagination(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalled(200);
+        expect(mockResponse.json).toHaveBeenCalledWith({
+            success: true,
+            data: mockStaffArrayWithPagination,
         });
     });
 });
