@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import staffController from "../../controllers/staff.controller.js";
 import staffService from "../../services/staff.service.js";
 import path from "path";
+import { truncate } from "fs";
 
 vi.mock("../../services/staff.service.js");
 
@@ -253,27 +254,75 @@ describe("getAllStaffWithPagination", () => {
 describe("getStaffWithId", () => {
     it("should return 500 if staffService.getStaffWithId metod failed.", async () => {
         const mockRequest = {
-            params: {id: "1"}
-        }
+            params: { id: "1" },
+        };
 
-        vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce("Staff has id: 1 not found.")
-        await staffController.getStaffWithId(mockRequest, mockResponse, mockNext);
-        expect(mockResponse.status).toHaveBeenCalled()
-        expect(mockResponse.status).toHaveBeenCalledWith(500)
-    })
+        vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce(
+            "Staff has id: 1 not found."
+        );
+        await staffController.getStaffWithId(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalledWith(500);
+    });
 
     it("should return 200 if staffService.getStaffWithId run successfully.", async () => {
         const mockRequest = {
-            params: {id: "1"}
-        }
-        const getStaffWithId = vi.spyOn(staffService, "getStaffWithId").mockResolvedValueOnce(mockStaffArray[0])
-        await staffController.getStaffWithId(mockRequest, mockResponse, mockNext);
-        expect(getStaffWithId).toHaveBeenCalledWith("1")
-        expect(mockResponse.status).toHaveBeenCalled()
-        expect(mockResponse.status).toHaveBeenCalledWith(200)
+            params: { id: "1" },
+        };
+        const getStaffWithId = vi
+            .spyOn(staffService, "getStaffWithId")
+            .mockResolvedValueOnce(mockStaffArray[0]);
+        await staffController.getStaffWithId(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(getStaffWithId).toHaveBeenCalledWith("1");
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalledWith(200);
         expect(mockResponse.json).toHaveBeenCalledWith({
             success: true,
-            data: mockStaffArray[0]
-        })
-    })
-})
+            data: mockStaffArray[0],
+        });
+    });
+});
+
+describe("getDepartmentList", () => {
+    it("should return 500 if staffService.getDepartmentList method failed", async () => {
+        const mockGetDepartmentList = vi
+            .spyOn(staffService, "getDepartmentList")
+            .mockRejectedValueOnce("Distinct departments not found");
+        await staffController.getDepartmentList(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(mockGetDepartmentList).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalled(500);
+    });
+
+    it("should return 200 if staffService.getDepartmentList run successfully", async () => {
+        const mockDepartmentList = ["department1", "department2"];
+        const mockGetDepartmentList = vi
+            .spyOn(staffService, "getDepartmentList")
+            .mockResolvedValueOnce(mockDepartmentList);
+        await staffController.getDepartmentList(
+            mockRequest,
+            mockResponse,
+            mockNext
+        );
+        expect(mockGetDepartmentList).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalled();
+        expect(mockResponse.status).toHaveBeenCalledWith(200);
+        expect(mockResponse.json).toHaveBeenCalled();
+        expect(mockResponse.json).toHaveBeenCalledWith({
+            success: true,
+            data: mockDepartmentList,
+        });
+    });
+});

@@ -234,4 +234,28 @@ describe("Staff Service", () => {
             expect(staffFound._id).toBe("1");
         });
     });
+
+    describe("getDepartmentList", () => {
+        it("should throw error when distinct method failed", async () => {
+            const mockDistinct = vi
+                .spyOn(Staff, "distinct")
+                .mockRejectedValueOnce("Distinct error.");
+            await expect(staffService.getDepartmentList()).rejects.toThrowError(
+                "Distinct error."
+            );
+            expect(mockDistinct).toHaveBeenCalled();
+            expect(mockDistinct).toHaveBeenCalledWith("department");
+        });
+
+        it("should return list of departments if distinct method run successfully", async () => {
+            const mockDepartmentList = ["department1", "department2"];
+            const mockDistinct = vi
+                .spyOn(Staff, "distinct")
+                .mockResolvedValueOnce(mockDepartmentList);
+            const departmentList = await staffService.getDepartmentList();
+            expect(mockDistinct).toHaveBeenCalled();
+            expect(mockDistinct).toHaveBeenCalledWith("department");
+            expect(departmentList).toBe(mockDepartmentList);
+        });
+    });
 });

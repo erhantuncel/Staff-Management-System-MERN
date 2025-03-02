@@ -101,11 +101,22 @@ const getStaffWithId = async(req, res, next) => {
     }
 }
 
+const getDepartmentList = async (req, res, next) => {
+    try {
+        const departmentList = await staffService.getDepartmentList();
+        res.status(500).json({success: true, data: departmentList})
+        next()
+    } catch (error) {
+        res.status(500).json({success: false, message: error.message})
+    }
+}
+
 export default {
     getAllStaff,
     createStaff,
     updateStaff,
     removeStaff,
     getAllStaffWithPagination,
-    getStaffWithId
+    getStaffWithId,
+    getDepartmentList
 };

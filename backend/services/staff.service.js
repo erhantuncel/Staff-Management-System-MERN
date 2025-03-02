@@ -77,6 +77,14 @@ const getStaffWithId = async (id) => {
     }
 };
 
+const getDepartmentList = () => {
+    try {
+        return Staff.distinct("department")
+    } catch (error) {
+        throw new Error("Distinct departments not found")
+    }
+}
+
 export default {
     create,
     update,
@@ -84,4 +92,5 @@ export default {
     getAll,
     getAllWithPagination,
     getStaffWithId,
+    getDepartmentList
 };

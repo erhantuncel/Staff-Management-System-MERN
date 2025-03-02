@@ -10,4 +10,6 @@ router.post("/staffs", staffController.createStaff);
 router.put("/staffs/:id", staffController.updateStaff);
 router.delete("/staffs/:id", staffController.removeStaff);
 
+router.get("/departments", staffController.getDepartmentList)
+
 export default router;
