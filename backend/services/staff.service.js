@@ -16,6 +16,32 @@ const getAll = async () => {
     return await Staff.find({});
 };
 
+const getAllWithPagination = async (page, pageSize) => {
+    try {
+        const staffs = await Staff.aggregate([
+            {
+                $facet: {
+                    metadata: [{ $count: "totalCount" }],
+                    data: [
+                        { $skip: (page - 1) * pageSize },
+                        { $limit: pageSize },
+                    ],
+                },
+            },
+        ]);
+        return {
+            metadata: {
+                totalCount: staffs[0].metadata[0].totalCount,
+                page,
+                pageSize,
+            },
+            data: staffs[0].data,
+        };
+    } catch (error) {
+        throw new Error("Pagination Error");
+    }
+};
+
 const update = async (req) => {
     const { id } = req.params;
     const staff = req.body;
@@ -43,4 +69,4 @@ const remove = async (req) => {
     await Staff.findByIdAndDelete(id);
 };
 
-export default { create, update, remove, getAll };
+export default { create, update, remove, getAll, getAllWithPagination };

@@ -23,12 +23,28 @@ const upload = multer({
     },
 }).single("image");
 
-const { getAll, create } = staffService;
+const { getAll, create, getAllWithPagination } = staffService;
 
 const getAllStaff = async (req, res, next) => {
     try {
         const staffs = await getAll();
         res.status(200).json({ success: true, data: staffs });
+        next();
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const getAllStaffWithPagination = async (req, res, next) => {
+    let { page, pageSize } = req.query;
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 10;
+    try {
+        const staffsWithPagination = await staffService.getAllWithPagination(
+            page,
+            pageSize
+        );
+        res.status(200).json({ success: true, data: staffsWithPagination });
         next();
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -74,4 +90,10 @@ const removeStaff = async (req, res, next) => {
     }
 };
 
-export default { getAllStaff, createStaff, updateStaff, removeStaff };
+export default {
+    getAllStaff,
+    createStaff,
+    updateStaff,
+    removeStaff,
+    getAllStaffWithPagination,
+};
