@@ -2,8 +2,6 @@ import { describe, expect, it, vi } from "vitest";
 import staffController from "../../controllers/staff.controller.js";
 import staffService from "../../services/staff.service.js";
 import path from "path";
-import { query } from "express";
-import exp from "constants";
 
 vi.mock("../../services/staff.service.js");
 
@@ -41,6 +39,25 @@ const mockResponse = {
 
 const mockNext = vi.fn();
 
+const mockStaffArray = [
+    {
+        _id: "1",
+        firstName: "first1",
+        lastName: "last1",
+        phone: "1234567801",
+        email: "email1@localhost.com",
+        department: "Department1",
+    },
+    {
+        _id: "2",
+        firstName: "first2",
+        lastName: "last2",
+        phone: "1234567802",
+        email: "email2@localhost.com",
+        department: "Department2",
+    },
+];
+
 describe("Get all staff", () => {
     it("should return 500 when getAll method failed", async () => {
         vi.mocked(staffService.getAll).mockRejectedValueOnce(
@@ -57,24 +74,6 @@ describe("Get all staff", () => {
     });
 
     it("should return 200 when getAll run successfully", async () => {
-        const mockStaffArray = [
-            {
-                _id: "67c0b6007292b50a4fa00aa1",
-                firstName: "first1",
-                lastName: "last1",
-                phone: "1234567801",
-                email: "email1@localhost.com",
-                department: "Department1",
-            },
-            {
-                _id: "67c0b6007292b50a4fa00aa2",
-                firstName: "first2",
-                lastName: "last2",
-                phone: "1234567802",
-                email: "email2@localhost.com",
-                department: "Department2",
-            },
-        ];
         vi.mocked(staffService.getAll).mockResolvedValueOnce(mockStaffArray);
         await staffController.getAllStaff(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalled();
@@ -250,3 +249,31 @@ describe("getAllStaffWithPagination", () => {
         });
     });
 });
+
+describe("getStaffWithId", () => {
+    it("should return 500 if staffService.getStaffWithId metod failed.", async () => {
+        const mockRequest = {
+            params: {id: "1"}
+        }
+
+        vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce("Staff has id: 1 not found.")
+        await staffController.getStaffWithId(mockRequest, mockResponse, mockNext);
+        expect(mockResponse.status).toHaveBeenCalled()
+        expect(mockResponse.status).toHaveBeenCalledWith(500)
+    })
+
+    it("should return 200 if staffService.getStaffWithId run successfully.", async () => {
+        const mockRequest = {
+            params: {id: "1"}
+        }
+        const getStaffWithId = vi.spyOn(staffService, "getStaffWithId").mockResolvedValueOnce(mockStaffArray[0])
+        await staffController.getStaffWithId(mockRequest, mockResponse, mockNext);
+        expect(getStaffWithId).toHaveBeenCalledWith("1")
+        expect(mockResponse.status).toHaveBeenCalled()
+        expect(mockResponse.status).toHaveBeenCalledWith(200)
+        expect(mockResponse.json).toHaveBeenCalledWith({
+            success: true,
+            data: mockStaffArray[0]
+        })
+    })
+})

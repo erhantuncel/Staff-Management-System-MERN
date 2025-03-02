@@ -90,10 +90,22 @@ const removeStaff = async (req, res, next) => {
     }
 };
 
+const getStaffWithId = async(req, res, next) => {
+    const {id} = req.params
+    try {
+        const staffFound = await staffService.getStaffWithId(id)
+        res.status(200).json({success: true, data: staffFound})
+        next()
+    } catch (error) {
+        res.status(500).json({success: false, message: error.message})
+    }
+}
+
 export default {
     getAllStaff,
     createStaff,
     updateStaff,
     removeStaff,
     getAllStaffWithPagination,
+    getStaffWithId
 };

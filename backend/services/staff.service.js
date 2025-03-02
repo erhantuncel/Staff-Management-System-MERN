@@ -69,4 +69,19 @@ const remove = async (req) => {
     await Staff.findByIdAndDelete(id);
 };
 
-export default { create, update, remove, getAll, getAllWithPagination };
+const getStaffWithId = async (id) => {
+    try {
+        return await Staff.findById(id);
+    } catch (error) {
+        throw new Error(`Staff has id: ${id} not found.`);
+    }
+};
+
+export default {
+    create,
+    update,
+    remove,
+    getAll,
+    getAllWithPagination,
+    getStaffWithId,
+};

@@ -35,7 +35,7 @@ const mockRequestWithFile = {
 
 const mockStaffArray = [
     {
-        _id: "67bd7a52419b4dfb2da00aa2",
+        _id: "1",
         firstName: "first2",
         lastName: "last2",
         phone: "1234567802",
@@ -43,7 +43,7 @@ const mockStaffArray = [
         department: "Department2",
     },
     {
-        _id: "67bd7a52419b4dfb2da00aa3",
+        _id: "2",
         firstName: "first3",
         lastName: "last3",
         phone: "1234567803",
@@ -207,8 +207,31 @@ describe("Staff Service", () => {
                 mockRequest.query.page,
                 mockRequest.query.pageSize
             );
-            expect(getAllWithPagination).toHaveBeenCalled()
-            expect(getAllWithPagination).toHaveReturned(mockStaffArrayWithPagination)
+            expect(getAllWithPagination).toHaveBeenCalled();
+            expect(getAllWithPagination).toHaveReturned(
+                mockStaffArrayWithPagination
+            );
+        });
+    });
+
+    describe("getStaffWithId", () => {
+        it("should thrown error when findById method failed", async () => {
+            vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce(
+                "Staff has id:id not found."
+            );
+            await expect(
+                staffService.getStaffWithId("id")
+            ).rejects.toThrowError("Staff has id:id not found.");
+        });
+
+        it("should find staff findById method runs successfully", async () => {
+            const mockStaff = mockStaffArray[0];
+            const mockStaffFindById = vi
+                .spyOn(Staff, "findById")
+                .mockResolvedValueOnce(mockStaff);
+            const staffFound = await staffService.getStaffWithId("1");
+            expect(mockStaffFindById).toHaveBeenCalledWith("1");
+            expect(staffFound._id).toBe("1");
         });
     });
 });
