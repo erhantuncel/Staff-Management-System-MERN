@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import Staff from "../db/staff.model.js";
+import utils from "../utils/index.js";
+import ValidationError from "../utils/ValidationError.js";
+import NotFoundError from "../utils/NotFoundError.js";
 
 const create = async (req) => {
     const staffFromReqBody = req.body;
@@ -9,7 +12,16 @@ const create = async (req) => {
             contentType: req.file.mimetype,
         };
     }
-    return await new Staff(staffFromReqBody).save();
+    const staffToSave = new Staff(staffFromReqBody);
+    const validationResult = staffToSave.validateSync();
+    if (validationResult) {
+        throw new ValidationError(
+            "Staff validation failed",
+            utils.getInvalidFields(validationResult)
+        );
+    }
+
+    return await staffToSave.save();
 };
 
 const getAll = async () => {
@@ -17,29 +29,25 @@ const getAll = async () => {
 };
 
 const getAllWithPagination = async (page, pageSize) => {
-    try {
-        const staffs = await Staff.aggregate([
-            {
-                $facet: {
-                    metadata: [{ $count: "totalCount" }],
-                    data: [
-                        { $skip: (page - 1) * pageSize },
-                        { $limit: pageSize },
-                    ],
-                },
+    const staffs = await Staff.aggregate([
+        {
+            $facet: {
+                metadata: [{ $count: "totalCount" }],
+                data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
             },
-        ]);
-        return {
-            metadata: {
-                totalCount: staffs[0].metadata[0].totalCount,
-                page,
-                pageSize,
-            },
-            data: staffs[0].data,
-        };
-    } catch (error) {
-        throw new Error("Pagination Error");
+        },
+    ]);
+    if (staffs[0].data.length === 0) {
+        throw new NotFoundError("Staff list not found.");
     }
+    return {
+        metadata: {
+            totalCount: staffs[0].metadata[0].totalCount,
+            page,
+            pageSize,
+        },
+        data: staffs[0].data,
+    };
 };
 
 const update = async (req) => {
@@ -50,13 +58,9 @@ const update = async (req) => {
         throw new Error("Invalid staff id.");
     }
 
-    try {
-        return await Staff.findByIdAndUpdate(id, staff, {
-            new: true,
-        });
-    } catch (error) {
-        throw new Error("Server Error");
-    }
+    return await Staff.findByIdAndUpdate(id, staff, {
+        new: true,
+    });
 };
 
 const remove = async (req) => {
@@ -70,20 +74,23 @@ const remove = async (req) => {
 };
 
 const getStaffWithId = async (id) => {
-    try {
-        return await Staff.findById(id);
-    } catch (error) {
-        throw new Error(`Staff has id: ${id} not found.`);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new ValidationError("Invalid staff id.");
     }
+    const StaffFound = await Staff.findById(id);
+    if (!StaffFound) {
+        throw new NotFoundError(`Staff has id: ${id} not found.`);
+    }
+    return StaffFound;
 };
 
-const getDepartmentList = () => {
-    try {
-        return Staff.distinct("department")
-    } catch (error) {
-        throw new Error("Distinct departments not found")
+const getDepartmentList = async () => {
+    const departmentList = await Staff.distinct("department");
+    if (departmentList.length === 0) {
+        throw new NotFoundError("Departments not found.");
     }
-}
+    return departmentList;
+};
 
 export default {
     create,
@@ -92,5 +99,5 @@ export default {
     getAll,
     getAllWithPagination,
     getStaffWithId,
-    getDepartmentList
+    getDepartmentList,
 };

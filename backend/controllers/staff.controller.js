@@ -1,4 +1,5 @@
 import staffService from "../services/staff.service.js";
+import BaseError from "../utils/BaseError.js";
 import utils from "../utils/index.js";
 import multer from "multer";
 import path from "path";
@@ -18,20 +19,17 @@ const upload = multer({
         if (mimeType && extName) {
             cb(null, true);
         } else {
-            cb(new Error("Images only! (jpeg, jpg, png)"), false);
+            cb(new BaseError("Images only! (jpeg, jpg, png)"), false);
         }
     },
 }).single("image");
 
-const { getAll, create, getAllWithPagination } = staffService;
-
 const getAllStaff = async (req, res, next) => {
     try {
-        const staffs = await getAll();
-        res.status(200).json({ success: true, data: staffs });
-        next();
+        const staffs = await staffService.getAll();
+        res.status(200).json(utils.createSuccessDataResult(200, staffs));
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error);
     }
 };
 
@@ -44,28 +42,32 @@ const getAllStaffWithPagination = async (req, res, next) => {
             page,
             pageSize
         );
-        res.status(200).json({ success: true, data: staffsWithPagination });
-        next();
+        res.status(200).json(
+            utils.createSuccessDataResult(
+                200,
+                staffsWithPagination.data,
+                staffsWithPagination.metadata,
+                "Paginated staffs are listed successfully."
+            )
+        );
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error);
     }
 };
 
 const createStaff = async (req, res, next) => {
     upload(req, res, async (err) => {
         if (err) {
-            res.status(501).json({ success: false, message: err.message });
-            return;
-        }
-        try {
-            const newStaff = await create(req);
-            res.status(201).json({ success: true, data: newStaff });
-            next();
-        } catch (error) {
-            res.status(501).json({
-                success: false,
-                message: utils.createErrorMessage(error),
-            });
+            next(err);
+        } else {
+            try {
+                const newStaff = await staffService.create(req);
+                res.status(201).json(
+                    utils.createSuccessDataResult(201, newStaff)
+                );
+            } catch (error) {
+                next(error);
+            }
         }
     });
 };
@@ -73,43 +75,58 @@ const createStaff = async (req, res, next) => {
 const updateStaff = async (req, res, next) => {
     try {
         const updatedStaff = await staffService.update(req);
-        res.status(200).json({ success: true, data: updatedStaff });
-        next();
+        res.status(200).json(utils.createSuccessDataResult(200, updatedStaff));
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error);
     }
 };
 
 const removeStaff = async (req, res, next) => {
     try {
         await staffService.remove(req);
-        res.status(200).json({ success: true, message: "Staff is removed." });
-        next();
+        res.status(200).json(
+            utils.createSuccessResult(
+                200,
+                `Staff has id:${req.params.id} is removed.`
+            )
+        );
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error);
     }
 };
 
-const getStaffWithId = async(req, res, next) => {
-    const {id} = req.params
+const getStaffWithId = async (req, res, next) => {
+    const { id } = req.params;
     try {
-        const staffFound = await staffService.getStaffWithId(id)
-        res.status(200).json({success: true, data: staffFound})
-        next()
+        const staffFound = await staffService.getStaffWithId(id);
+        res.status(200).json(
+            utils.createSuccessDataResult(
+                200,
+                staffFound,
+                null,
+                `Staff with id:${id} is found.`
+            )
+        );
     } catch (error) {
-        res.status(500).json({success: false, message: error.message})
+        next(error);
     }
-}
+};
 
 const getDepartmentList = async (req, res, next) => {
     try {
         const departmentList = await staffService.getDepartmentList();
-        res.status(500).json({success: true, data: departmentList})
-        next()
+        res.status(200).json(
+            utils.createSuccessDataResult(
+                200,
+                departmentList,
+                null,
+                "Departments are listed successfully."
+            )
+        );
     } catch (error) {
-        res.status(500).json({success: false, message: error.message})
+        next(error);
     }
-}
+};
 
 export default {
     getAllStaff,
@@ -118,5 +135,5 @@ export default {
     removeStaff,
     getAllStaffWithPagination,
     getStaffWithId,
-    getDepartmentList
+    getDepartmentList,
 };

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import staffController from "../../controllers/staff.controller.js";
 import staffService from "../../services/staff.service.js";
+import utils from "../../utils/index.js";
 import path from "path";
-import { truncate } from "fs";
 
 vi.mock("../../services/staff.service.js");
 
@@ -30,6 +30,9 @@ vi.mock("multer", () => {
         default: mockMulter,
     };
 });
+
+const mockCreateSuccessDataResult = vi.spyOn(utils, "createSuccessDataResult");
+const mockCreateSuccessResult = vi.spyOn(utils, "createSuccessResult");
 
 const mockRequest = {};
 
@@ -61,28 +64,23 @@ const mockStaffArray = [
 
 describe("Get all staff", () => {
     it("should return 500 when getAll method failed", async () => {
-        vi.mocked(staffService.getAll).mockRejectedValueOnce(
-            new Error("Server Error")
-        );
+        const error = new Error("Server Error");
+        vi.mocked(staffService.getAll).mockRejectedValueOnce(error);
         await staffController.getAllStaff(mockRequest, mockResponse, mockNext);
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
-        expect(mockResponse.json).toHaveBeenCalled();
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: false,
-            message: "Server Error",
-        });
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 200 when getAll run successfully", async () => {
         vi.mocked(staffService.getAll).mockResolvedValueOnce(mockStaffArray);
+
         await staffController.getAllStaff(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            data: mockStaffArray,
-        });
+        expect(mockResponse.status).toHaveBeenCalledWith(200);
+        expect(mockCreateSuccessDataResult).toHaveBeenCalledWith(
+            200,
+            mockStaffArray
+        );
     });
 });
 
@@ -108,17 +106,18 @@ describe("Create Staff", () => {
                 mockResponse,
                 mockNext
             );
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(501);
-        expect(mockResponse.json).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(
+            new Error("Images only! (jpeg, jpg, png)")
+        );
     });
 
     it("should return 501 if staffService.create method thrown an error", async () => {
-        vi.spyOn(staffService, "create").mockRejectedValueOnce();
+        const error = new Error("Server Error");
+        vi.spyOn(staffService, "create").mockRejectedValueOnce(error);
         await staffController.createStaff(mockRequest, mockResponse, mockNext);
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(501);
-        expect(mockResponse.json).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 201 if staff is created succesfully", async () => {
@@ -140,15 +139,20 @@ describe("Create Staff", () => {
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(201);
         expect(mockResponse.json).toHaveBeenCalled();
+        expect(mockCreateSuccessDataResult).toHaveBeenCalledWith(
+            201,
+            mockStaff
+        );
     });
 });
 
 describe("Update Staff", () => {
     it("should return 500 if staffService.update method failed", async () => {
-        vi.spyOn(staffService, "update").mockRejectedValueOnce("Update Error");
+        const error = new Error("Update Error");
+        vi.spyOn(staffService, "update").mockRejectedValueOnce(error);
         await staffController.updateStaff(mockRequest, mockResponse, mockNext);
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 201 if staffService.update runs successfully", async () => {
@@ -171,48 +175,50 @@ describe("Update Staff", () => {
         await staffController.updateStaff(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            data: mockUpdatedStaff,
-        });
+        expect(mockCreateSuccessDataResult(200, mockUpdatedStaff));
     });
 });
 
 describe("Remove staff", () => {
     it("should return 500 if staffService.remove method failed", async () => {
-        vi.spyOn(staffService, "remove").mockRejectedValueOnce("Remove Error");
+        const error = new Error("Remove Error");
+        vi.spyOn(staffService, "remove").mockRejectedValueOnce(error);
         await staffController.removeStaff(mockRequest, mockResponse, mockNext);
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 200 if staffService.remove runs successfully", async () => {
+        const mockRequest = {
+            params: { id: "1" },
+        };
         vi.spyOn(staffService, "remove").mockResolvedValueOnce();
         await staffController.removeStaff(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            message: "Staff is removed.",
-        });
+        expect(mockCreateSuccessResult).toHaveBeenCalledWith(
+            200,
+            `Staff has id:${mockRequest.params.id} is removed.`
+        );
     });
 });
 
 describe("getAllStaffWithPagination", () => {
     it("should return 500 if staffService.getAllWithPagination method failed", async () => {
+        const error = new Error("Pagination Error");
         const mockRequest = {
             query: { page: 1, pageSize: 10 },
         };
         vi.spyOn(staffService, "getAllWithPagination").mockRejectedValueOnce(
-            "Pagination Error"
+            error
         );
         await staffController.getAllStaffWithPagination(
             mockRequest,
             mockResponse,
             mockNext
         );
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 200 if staffService.getAllWithPagination runs successfully", async () => {
@@ -244,10 +250,14 @@ describe("getAllStaffWithPagination", () => {
         );
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalled(200);
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            data: mockStaffArrayWithPagination,
-        });
+        expect(
+            mockCreateSuccessDataResult(
+                200,
+                mockStaffArrayWithPagination.data,
+                mockStaffArrayWithPagination.metadata,
+                "Paginated staffs are listed successfully."
+            )
+        );
     });
 });
 
@@ -257,16 +267,17 @@ describe("getStaffWithId", () => {
             params: { id: "1" },
         };
 
-        vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce(
-            "Staff has id: 1 not found."
+        const error = new Error(
+            `Staff has id: ${mockRequest.params.id} not found.`
         );
+        vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce(error);
         await staffController.getStaffWithId(
             mockRequest,
             mockResponse,
             mockNext
         );
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalledWith(500);
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 200 if staffService.getStaffWithId run successfully.", async () => {
@@ -284,26 +295,29 @@ describe("getStaffWithId", () => {
         expect(getStaffWithId).toHaveBeenCalledWith("1");
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(200);
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            data: mockStaffArray[0],
-        });
+        expect(mockCreateSuccessDataResult).toHaveBeenCalledWith(
+            200,
+            mockStaffArray[0],
+            null,
+            `Staff with id:${mockStaffArray[0]._id} is found.`
+        );
     });
 });
 
 describe("getDepartmentList", () => {
     it("should return 500 if staffService.getDepartmentList method failed", async () => {
+        const error = new Error("Departments not found");
         const mockGetDepartmentList = vi
             .spyOn(staffService, "getDepartmentList")
-            .mockRejectedValueOnce("Distinct departments not found");
+            .mockRejectedValueOnce(error);
         await staffController.getDepartmentList(
             mockRequest,
             mockResponse,
             mockNext
         );
         expect(mockGetDepartmentList).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalled(500);
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
     });
 
     it("should return 200 if staffService.getDepartmentList run successfully", async () => {
@@ -320,9 +334,11 @@ describe("getDepartmentList", () => {
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(200);
         expect(mockResponse.json).toHaveBeenCalled();
-        expect(mockResponse.json).toHaveBeenCalledWith({
-            success: true,
-            data: mockDepartmentList,
-        });
+        expect(mockCreateSuccessDataResult).toHaveBeenCalledWith(
+            200,
+            mockDepartmentList,
+            null,
+            "Departments are listed successfully."
+        );
     });
 });

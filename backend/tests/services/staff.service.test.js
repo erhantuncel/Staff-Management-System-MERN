@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, test, vi } from "vitest";
 import staffService from "../../services/staff.service.js";
 import Staff from "../../db/staff.model.js";
+import NotFoundError from "../../utils/NotFoundError.js";
+import ValidationError from "../../utils/ValidationError.js";
 
 vi.mock("../../db/staff.model.js");
 
@@ -35,7 +37,7 @@ const mockRequestWithFile = {
 
 const mockStaffArray = [
     {
-        _id: "1",
+        _id: "67cb20351fc66921c7584a23",
         firstName: "first2",
         lastName: "last2",
         phone: "1234567802",
@@ -43,7 +45,7 @@ const mockStaffArray = [
         department: "Department2",
     },
     {
-        _id: "2",
+        _id: "67cb20351fc66921c7584a24",
         firstName: "first3",
         lastName: "last3",
         phone: "1234567803",
@@ -176,13 +178,27 @@ describe("Staff Service", () => {
             query: { page: 1, pageSize: 5 },
         };
 
-        it("should thrown error when aggreating Staff failed", async () => {
+        const mockStaffArrayWithPagination = [
+            {
+                metadata: {
+                    totalCount: 10,
+                    page: 1,
+                    pageSize: 5,
+                },
+                data: [],
+            },
+        ];
+
+        it("should thrown NotFoundError when aggreating Staff data array is empty", async () => {
+            vi.spyOn(Staff, "aggregate").mockResolvedValue(
+                mockStaffArrayWithPagination
+            );
             await expect(
                 staffService.getAllWithPagination(
                     mockRequest.query.page,
                     mockRequest.query.pageSize
                 )
-            ).rejects.toThrowError("Pagination Error");
+            ).rejects.toThrowError(new NotFoundError("Staff list not found."));
         });
 
         it("should list all staffs based on page data", async () => {
@@ -215,23 +231,29 @@ describe("Staff Service", () => {
     });
 
     describe("getStaffWithId", () => {
-        it("should thrown error when findById method failed", async () => {
-            vi.spyOn(staffService, "getStaffWithId").mockRejectedValueOnce(
-                "Staff has id:id not found."
+        it("should thrown Validation Error if id is invalid.", async () => {
+            await expect(staffService.getStaffWithId("1")).rejects.toThrow(
+                new ValidationError("Invalid staff id.")
             );
-            await expect(
-                staffService.getStaffWithId("id")
-            ).rejects.toThrowError("Staff has id:id not found.");
+        });
+
+        it("should thrown NotFoundError when findById return null", async () => {
+            vi.spyOn(Staff, "findById").mockResolvedValue(null);
+            const id = "67cb20351fc66921c7584a23";
+            await expect(staffService.getStaffWithId(id)).rejects.toThrowError(
+                new NotFoundError(`Staff has id: ${id} not found.`)
+            );
         });
 
         it("should find staff findById method runs successfully", async () => {
+            const id = "67cb20351fc66921c7584a23";
             const mockStaff = mockStaffArray[0];
             const mockStaffFindById = vi
                 .spyOn(Staff, "findById")
                 .mockResolvedValueOnce(mockStaff);
-            const staffFound = await staffService.getStaffWithId("1");
-            expect(mockStaffFindById).toHaveBeenCalledWith("1");
-            expect(staffFound._id).toBe("1");
+            const staffFound = await staffService.getStaffWithId(id);
+            expect(mockStaffFindById).toHaveBeenCalledWith(id);
+            expect(staffFound._id).toBe("67cb20351fc66921c7584a23");
         });
     });
 
