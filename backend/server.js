@@ -3,6 +3,7 @@ import express from "express";
 import { connectDb } from "./config/db.js";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 
@@ -14,5 +15,5 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
     connectDb();
-    console.log(`Sever started at http://localhost:${PORT}`);
+    logger.info(`Sever started at http://localhost:${PORT}`);
 });
