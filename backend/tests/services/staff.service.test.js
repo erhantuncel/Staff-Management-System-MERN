@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import staffService from "../../services/staff.service.js";
 import Staff from "../../db/staff.model.js";
 import NotFoundError from "../../utils/NotFoundError.js";
 import ValidationError from "../../utils/ValidationError.js";
+import utils from "../../utils/index.js";
 
 vi.mock("../../db/staff.model.js");
 
@@ -12,27 +13,6 @@ const mockStaffToSave = {
     phone: "1234567801",
     email: "email1@localhost.com",
     department: "Department1",
-};
-
-const mockFile = {
-    buffer: Buffer.from("7123jasxs89812", "hex"),
-    mimetype: "image/png",
-};
-
-const mockStaffToSaveWithImage = {
-    ...mockStaffToSave,
-    image: {
-        data: mockFile.buffer,
-        contentType: mockFile.mimetype,
-    },
-};
-
-const mockRequestWithoutFile = {
-    body: mockStaffToSave,
-};
-const mockRequestWithFile = {
-    ...mockRequestWithoutFile,
-    file: mockFile,
 };
 
 const mockStaffArray = [
@@ -54,8 +34,8 @@ const mockStaffArray = [
     },
 ];
 
-const mockSavedStaff = { id: 1, ...mockStaffToSave };
-const mockSavedStaffWithImage = { id: 1, ...mockStaffToSaveWithImage };
+const mockValidId = "67cb20351fc66921c7584a23";
+const mockInvalidId = "invalid id";
 
 describe("Staff Service", () => {
     beforeEach(() => {
@@ -63,26 +43,51 @@ describe("Staff Service", () => {
     });
 
     describe("Create staff", () => {
-        it("should return saved staff object has not image file", async () => {
-            const saveMethod = vi
-                .spyOn(Staff.prototype, "save")
-                .mockResolvedValueOnce(mockSavedStaff);
-            await staffService.create(mockRequestWithoutFile);
-            expect(Staff).toHaveBeenCalledWith(mockStaffToSave);
-            expect(saveMethod).toHaveBeenCalled();
-            expect(saveMethod).toReturnWith(Promise.resolve(mockSavedStaff));
+        const mockValidateSync = vi.spyOn(Staff.prototype, "validateSync");
+        const mockGetInvalidFields = vi.spyOn(utils, "getInvalidFields");
+
+        it("should thrown ValidationError if staffObject is not valid.", async () => {
+            const validationResult = {
+                errors: [
+                    { phone: "Must be 10 character" },
+                    { email: "Invalid e-mail address" },
+                ],
+            };
+            const invalidFields = {
+                phone: "Must be 10 character",
+                email: "Invalid e-mail address",
+            };
+
+            mockValidateSync.mockImplementationOnce(() => validationResult);
+            mockGetInvalidFields.mockReturnValueOnce(invalidFields);
+
+            await expect(
+                staffService.create(mockStaffToSave)
+            ).rejects.toThrowError(
+                new ValidationError("Staff validation failed", invalidFields)
+            );
+            expect(mockValidateSync).toHaveBeenCalled();
+            expect(mockValidateSync).toHaveReturnedWith(validationResult);
+            expect(mockGetInvalidFields).toHaveBeenCalled();
+            expect(mockGetInvalidFields).toHaveBeenCalledWith(validationResult);
         });
 
-        it("should return saved staff object has image file", async () => {
-            const saveMethod = vi
+        it("should return saved staff if staffObject is valid", async () => {
+            mockValidateSync.mockImplementationOnce(() => undefined);
+            const mockStaffSaved = (mockStaffToSave._id =
+                "67cb20351fc66921c7584a26");
+            const mockStaffSave = vi
                 .spyOn(Staff.prototype, "save")
-                .mockResolvedValueOnce(mockSavedStaff);
-            await staffService.create(mockRequestWithFile);
-            expect(Staff).toHaveBeenCalledWith(mockStaffToSaveWithImage);
-            expect(saveMethod).toHaveBeenCalled();
-            expect(saveMethod).toReturnWith(
-                Promise.resolve(mockSavedStaffWithImage)
+                .mockReturnValueOnce(mockStaffSaved);
+
+            const mockStaffReturned = await staffService.create(
+                mockStaffToSave
             );
+            expect(mockValidateSync).toHaveBeenCalled();
+            expect(mockValidateSync).toHaveReturnedWith(undefined);
+            expect(mockGetInvalidFields).not.toHaveBeenCalled();
+            expect(mockStaffSave).toHaveBeenCalled();
+            expect(mockStaffReturned._id).toBe(mockStaffSaved._id);
         });
     });
 
@@ -98,92 +103,56 @@ describe("Staff Service", () => {
     });
 
     describe("update", () => {
+        const mockNewStaffObjectToUpdate = mockStaffToSave;
+        mockNewStaffObjectToUpdate.email = "updatedEmail@localhost.com";
         it("should thrown error when id from request is invalid", async () => {
-            const mockRequest = {
-                params: { id: "invalidId" },
-                ...mockRequestWithoutFile,
-            };
-
-            await expect(staffService.update(mockRequest)).rejects.toThrowError(
-                "Invalid staff id."
-            );
-        });
-
-        it("should return error when findByIdAdnUpdate method failed", async () => {
-            const mockRequest = {
-                params: { id: 1 },
-                ...mockRequestWithoutFile,
-            };
-
-            const mockUpdatedStaff = mockRequest.body;
-            mockUpdatedStaff.email = "updatedEmail@localhost.com";
-            vi.spyOn(Staff, "findByIdAndUpdate").mockRejectedValueOnce();
-            await expect(staffService.update(mockRequest)).rejects.toThrowError(
-                "Server Error"
-            );
-            expect(Staff.findByIdAndUpdate).toHaveBeenCalledWith(
-                1,
-                mockUpdatedStaff,
-                { new: true }
-            );
+            await expect(
+                staffService.update(mockInvalidId, mockNewStaffObjectToUpdate)
+            ).rejects.toThrowError(new ValidationError("Invalid staff id."));
         });
 
         it("should return updated staff when findByIdAdnUpdate method successfully", async () => {
-            const mockRequest = {
-                params: { id: 1 },
-                ...mockRequestWithoutFile,
-            };
-            const mockUpdatedStaff = mockRequest.body;
-            mockUpdatedStaff.email = "updatedEmail@localhost.com";
             const mockfindByIdAndUpdate = vi
                 .spyOn(Staff, "findByIdAndUpdate")
-                .mockReturnValueOnce(mockUpdatedStaff);
-            await staffService.update(mockRequest);
+                .mockReturnValueOnce(mockNewStaffObjectToUpdate);
+            await staffService.update(mockValidId, mockNewStaffObjectToUpdate);
             expect(mockfindByIdAndUpdate).toHaveBeenCalled();
             expect(mockfindByIdAndUpdate).toHaveBeenCalledWith(
-                1,
-                mockUpdatedStaff,
+                "67cb20351fc66921c7584a23",
+                mockNewStaffObjectToUpdate,
                 { new: true }
             );
-            expect(mockfindByIdAndUpdate).toHaveReturned(mockUpdatedStaff);
+            expect(mockfindByIdAndUpdate).toHaveReturned(
+                mockNewStaffObjectToUpdate
+            );
         });
     });
 
     describe("remove", () => {
         it("should thrown error when id from request is invalid", async () => {
-            const mockRequest = {
-                params: { id: "invalidId" },
-                ...mockRequestWithoutFile,
-            };
-
-            await expect(staffService.remove(mockRequest)).rejects.toThrowError(
-                "Invalid staff id."
-            );
+            await expect(
+                staffService.remove(mockInvalidId)
+            ).rejects.toThrowError(new ValidationError("Invalid staff id."));
         });
 
         it("should remove staff by id", async () => {
-            const mockRequest = {
-                params: { id: 1 },
-                ...mockRequestWithoutFile,
-            };
-
             const mockfindByIdAndRemove = vi.spyOn(Staff, "findByIdAndDelete");
-            await staffService.remove(mockRequest);
+            await staffService.remove(mockValidId);
             expect(mockfindByIdAndRemove).toHaveBeenCalled();
+            expect(mockfindByIdAndRemove).toHaveBeenCalledWith(mockValidId);
         });
     });
 
     describe("getAllWithPagination", () => {
-        const mockRequest = {
-            query: { page: 1, pageSize: 5 },
-        };
+        const page = 1;
+        const pageSize = 5;
 
         const mockStaffArrayWithPagination = [
             {
                 metadata: {
                     totalCount: 10,
-                    page: 1,
-                    pageSize: 5,
+                    page: page,
+                    pageSize: pageSize,
                 },
                 data: [],
             },
@@ -194,35 +163,23 @@ describe("Staff Service", () => {
                 mockStaffArrayWithPagination
             );
             await expect(
-                staffService.getAllWithPagination(
-                    mockRequest.query.page,
-                    mockRequest.query.pageSize
-                )
+                staffService.getAllWithPagination(page, pageSize)
             ).rejects.toThrowError(new NotFoundError("Staff list not found."));
         });
 
         it("should list all staffs based on page data", async () => {
-            const mockStaffArrayWithPagination = {
-                metadata: {
-                    totalCount: 10,
-                    page: 1,
-                    pageSize: 5,
-                },
-                data: [
-                    { _id: 1, firstName: "fN1" },
-                    { _id: 2, firstName: "fN2" },
-                    { _id: 3, firstName: "fN3" },
-                    { _id: 4, firstName: "fN4" },
-                    { _id: 5, firstName: "fN5" },
-                ],
-            };
+            mockStaffArrayWithPagination.data = [
+                { _id: 1, firstName: "fN1" },
+                { _id: 2, firstName: "fN2" },
+                { _id: 3, firstName: "fN3" },
+                { _id: 4, firstName: "fN4" },
+                { _id: 5, firstName: "fN5" },
+            ];
+
             const getAllWithPagination = vi
                 .spyOn(staffService, "getAllWithPagination")
                 .mockResolvedValueOnce(mockStaffArrayWithPagination);
-            await staffService.getAllWithPagination(
-                mockRequest.query.page,
-                mockRequest.query.pageSize
-            );
+            await staffService.getAllWithPagination(page, pageSize);
             expect(getAllWithPagination).toHaveBeenCalled();
             expect(getAllWithPagination).toHaveReturned(
                 mockStaffArrayWithPagination
@@ -232,16 +189,17 @@ describe("Staff Service", () => {
 
     describe("getStaffWithId", () => {
         it("should thrown Validation Error if id is invalid.", async () => {
-            await expect(staffService.getStaffWithId("1")).rejects.toThrow(
-                new ValidationError("Invalid staff id.")
-            );
+            await expect(
+                staffService.getStaffWithId(mockInvalidId)
+            ).rejects.toThrow(new ValidationError("Invalid staff id."));
         });
 
         it("should thrown NotFoundError when findById return null", async () => {
-            vi.spyOn(Staff, "findById").mockResolvedValue(null);
-            const id = "67cb20351fc66921c7584a23";
-            await expect(staffService.getStaffWithId(id)).rejects.toThrowError(
-                new NotFoundError(`Staff has id: ${id} not found.`)
+            vi.spyOn(Staff, "findById").mockReturnValueOnce(null);
+            await expect(
+                staffService.getStaffWithId(mockValidId)
+            ).rejects.toThrowError(
+                new NotFoundError(`Staff has id: ${mockValidId} not found.`)
             );
         });
 
@@ -258,25 +216,23 @@ describe("Staff Service", () => {
     });
 
     describe("getDepartmentList", () => {
+        const mockStaffDistinctMethod = vi.spyOn(Staff, "distinct");
+
         it("should throw error when distinct method failed", async () => {
-            const mockDistinct = vi
-                .spyOn(Staff, "distinct")
-                .mockRejectedValueOnce("Distinct error.");
+            mockStaffDistinctMethod.mockRejectedValueOnce("Distinct error.");
             await expect(staffService.getDepartmentList()).rejects.toThrowError(
                 "Distinct error."
             );
-            expect(mockDistinct).toHaveBeenCalled();
-            expect(mockDistinct).toHaveBeenCalledWith("department");
+            expect(mockStaffDistinctMethod).toHaveBeenCalled();
+            expect(mockStaffDistinctMethod).toHaveBeenCalledWith("department");
         });
 
         it("should return list of departments if distinct method run successfully", async () => {
             const mockDepartmentList = ["department1", "department2"];
-            const mockDistinct = vi
-                .spyOn(Staff, "distinct")
-                .mockResolvedValueOnce(mockDepartmentList);
+            mockStaffDistinctMethod.mockResolvedValueOnce(mockDepartmentList);
             const departmentList = await staffService.getDepartmentList();
-            expect(mockDistinct).toHaveBeenCalled();
-            expect(mockDistinct).toHaveBeenCalledWith("department");
+            expect(mockStaffDistinctMethod).toHaveBeenCalled();
+            expect(mockStaffDistinctMethod).toHaveBeenCalledWith("department");
             expect(departmentList).toBe(mockDepartmentList);
         });
     });

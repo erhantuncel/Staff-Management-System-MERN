@@ -43,9 +43,17 @@ const mockResponse = {
 
 const mockNext = vi.fn();
 
+const mockRequestBody = {
+    firstName: "first1",
+    lastName: "last1",
+    phone: "1234567801",
+    email: "email1@localhost.com",
+    department: "Department1",
+};
+
 const mockStaffArray = [
     {
-        _id: "1",
+        _id: "67cb20351fc66921c7584a23",
         firstName: "first1",
         lastName: "last1",
         phone: "1234567801",
@@ -53,7 +61,7 @@ const mockStaffArray = [
         department: "Department1",
     },
     {
-        _id: "2",
+        _id: "67cb20351fc66921c7584a24",
         firstName: "first2",
         lastName: "last2",
         phone: "1234567802",
@@ -85,17 +93,9 @@ describe("Get all staff", () => {
 });
 
 describe("Create Staff", () => {
-    const mockRequest = {
-        body: {
-            firstName: "first1",
-            lastName: "last1",
-            phone: "1234567801",
-            email: "email1@localhost.com",
-            department: "Department1",
-        },
-    };
+    mockRequest.body = mockRequestBody;
 
-    it("should return 501 if upload function thrown an error", async () => {
+    it("should return 501 if file is invalid", async () => {
         (mockRequest.file = {
             buffer: Buffer.from("7123jasxs89812", "hex"),
             mimetype: "text/csv",
@@ -147,8 +147,10 @@ describe("Create Staff", () => {
 });
 
 describe("Update Staff", () => {
-    it("should return 500 if staffService.update method failed", async () => {
+    it("should call next() method with error if staffService.update method failed", async () => {
         const error = new Error("Update Error");
+        mockRequest.params = { id: "67cb20351fc66921c7584a23" };
+        mockRequest.body = mockRequestBody;
         vi.spyOn(staffService, "update").mockRejectedValueOnce(error);
         await staffController.updateStaff(mockRequest, mockResponse, mockNext);
         expect(mockNext).toHaveBeenCalled();
@@ -157,12 +159,19 @@ describe("Update Staff", () => {
 
     it("should return 201 if staffService.update runs successfully", async () => {
         const mockUpdatedStaff = {
-            _id: "67bd7a52419b4dfb2da00aa2",
+            _id: "67cb20351fc66921c7584a24",
             firstName: "first2",
             lastName: "last2",
             phone: "1234567802",
             email: "email2@localhost.com",
             department: "Department2",
+            image: {
+                data: Buffer.from("2131231231", "hex"),
+                contentType: "image/png",
+            },
+        };
+
+        mockRequest.body = {
             image: {
                 data: Buffer.from("2131231231", "hex"),
                 contentType: "image/png",
@@ -182,6 +191,8 @@ describe("Update Staff", () => {
 describe("Remove staff", () => {
     it("should return 500 if staffService.remove method failed", async () => {
         const error = new Error("Remove Error");
+        mockRequest.params = { id: "67cb20351fc66921c7584a23" };
+        mockRequest.body = mockRequestBody;
         vi.spyOn(staffService, "remove").mockRejectedValueOnce(error);
         await staffController.removeStaff(mockRequest, mockResponse, mockNext);
         expect(mockNext).toHaveBeenCalled();
@@ -189,9 +200,7 @@ describe("Remove staff", () => {
     });
 
     it("should return 200 if staffService.remove runs successfully", async () => {
-        const mockRequest = {
-            params: { id: "1" },
-        };
+        mockRequest.params = { id: "67cb20351fc66921c7584a23" };
         vi.spyOn(staffService, "remove").mockResolvedValueOnce();
         await staffController.removeStaff(mockRequest, mockResponse, mockNext);
         expect(mockResponse.status).toHaveBeenCalled();
@@ -204,11 +213,9 @@ describe("Remove staff", () => {
 });
 
 describe("getAllStaffWithPagination", () => {
+    mockRequest.query = { page: 1, pageSize: 10 };
     it("should return 500 if staffService.getAllWithPagination method failed", async () => {
         const error = new Error("Pagination Error");
-        const mockRequest = {
-            query: { page: 1, pageSize: 10 },
-        };
         vi.spyOn(staffService, "getAllWithPagination").mockRejectedValueOnce(
             error
         );
@@ -222,22 +229,17 @@ describe("getAllStaffWithPagination", () => {
     });
 
     it("should return 200 if staffService.getAllWithPagination runs successfully", async () => {
-        const mockRequest = {
-            query: { page: 1, pageSize: 10 },
-        };
-
         const mockStaffArrayWithPagination = {
             metadata: {
                 totalCount: 10,
-                page: 1,
-                pageSize: 5,
+                page: mockRequest.page,
+                pageSize: mockRequest.pageSize,
             },
             data: [
-                { _id: 1, firstName: "fN1" },
-                { _id: 2, firstName: "fN2" },
-                { _id: 3, firstName: "fN3" },
-                { _id: 4, firstName: "fN4" },
-                { _id: 5, firstName: "fN5" },
+                { _id: "67cb20351fc66921c7584a23", firstName: "fN1" },
+                { _id: "67cb20351fc66921c7584a24", firstName: "fN2" },
+                { _id: "67cb20351fc66921c7584a25", firstName: "fN3" },
+                { _id: "467cb20351fc66921c7584a26", firstName: "fN4" },
             ],
         };
         vi.spyOn(staffService, "getAllWithPagination").mockResolvedValueOnce(
@@ -262,11 +264,9 @@ describe("getAllStaffWithPagination", () => {
 });
 
 describe("getStaffWithId", () => {
-    it("should return 500 if staffService.getStaffWithId metod failed.", async () => {
-        const mockRequest = {
-            params: { id: "1" },
-        };
+    mockRequest.params = { id: "67cb20351fc66921c7584a23" };
 
+    it("should return 500 if staffService.getStaffWithId metod failed.", async () => {
         const error = new Error(
             `Staff has id: ${mockRequest.params.id} not found.`
         );
@@ -281,9 +281,6 @@ describe("getStaffWithId", () => {
     });
 
     it("should return 200 if staffService.getStaffWithId run successfully.", async () => {
-        const mockRequest = {
-            params: { id: "1" },
-        };
         const getStaffWithId = vi
             .spyOn(staffService, "getStaffWithId")
             .mockResolvedValueOnce(mockStaffArray[0]);
@@ -292,7 +289,7 @@ describe("getStaffWithId", () => {
             mockResponse,
             mockNext
         );
-        expect(getStaffWithId).toHaveBeenCalledWith("1");
+        expect(getStaffWithId).toHaveBeenCalledWith("67cb20351fc66921c7584a23");
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(200);
         expect(mockCreateSuccessDataResult).toHaveBeenCalledWith(

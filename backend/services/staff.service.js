@@ -4,15 +4,8 @@ import utils from "../utils/index.js";
 import ValidationError from "../utils/ValidationError.js";
 import NotFoundError from "../utils/NotFoundError.js";
 
-const create = async (req) => {
-    const staffFromReqBody = req.body;
-    if (req.file) {
-        staffFromReqBody.image = {
-            data: req.file.buffer,
-            contentType: req.file.mimetype,
-        };
-    }
-    const staffToSave = new Staff(staffFromReqBody);
+const create = async (staffObjectToSave) => {
+    const staffToSave = new Staff(staffObjectToSave);
     const validationResult = staffToSave.validateSync();
     if (validationResult) {
         throw new ValidationError(
@@ -20,7 +13,6 @@ const create = async (req) => {
             utils.getInvalidFields(validationResult)
         );
     }
-
     return await staffToSave.save();
 };
 
@@ -50,26 +42,19 @@ const getAllWithPagination = async (page, pageSize) => {
     };
 };
 
-const update = async (req) => {
-    const { id } = req.params;
-    const staff = req.body;
-
+const update = async (id, newStaffObjectToUpdate) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new Error("Invalid staff id.");
+        throw new ValidationError("Invalid staff id.");
     }
-
-    return await Staff.findByIdAndUpdate(id, staff, {
+    return await Staff.findByIdAndUpdate(id, newStaffObjectToUpdate, {
         new: true,
     });
 };
 
-const remove = async (req) => {
-    const { id } = req.params;
-
+const remove = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new Error("Invalid staff id.");
+        throw new ValidationError("Invalid staff id.");
     }
-
     await Staff.findByIdAndDelete(id);
 };
 

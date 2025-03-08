@@ -61,7 +61,14 @@ const createStaff = async (req, res, next) => {
             next(err);
         } else {
             try {
-                const newStaff = await staffService.create(req);
+                let staffObjectToSave = req.body;
+                if (req.file) {
+                    staffObjectToSave.image = {
+                        data: req.file.buffer,
+                        contentType: req.file.mimetype,
+                    };
+                }
+                const newStaff = await staffService.create(staffObjectToSave);
                 res.status(201).json(
                     utils.createSuccessDataResult(201, newStaff)
                 );
@@ -74,7 +81,9 @@ const createStaff = async (req, res, next) => {
 
 const updateStaff = async (req, res, next) => {
     try {
-        const updatedStaff = await staffService.update(req);
+        const { id } = req.params;
+        const newStaffObjectToUpdate = req.body;
+        const updatedStaff = await staffService.update(id, newStaffObjectToUpdate);
         res.status(200).json(utils.createSuccessDataResult(200, updatedStaff));
     } catch (error) {
         next(error);
@@ -83,7 +92,8 @@ const updateStaff = async (req, res, next) => {
 
 const removeStaff = async (req, res, next) => {
     try {
-        await staffService.remove(req);
+        const { id } = req.params;
+        await staffService.remove(id);
         res.status(200).json(
             utils.createSuccessResult(
                 200,
