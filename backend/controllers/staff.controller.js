@@ -1,5 +1,5 @@
 import staffService from "../services/staff.service.js";
-import BaseError from "../utils/BaseError.js";
+import BaseError from "../utils/Errors/BaseError.js";
 import utils from "../utils/index.js";
 import multer from "multer";
 import path from "path";

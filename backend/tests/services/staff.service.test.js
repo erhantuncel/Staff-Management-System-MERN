@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import staffService from "../../services/staff.service.js";
 import Staff from "../../db/staff.model.js";
-import NotFoundError from "../../utils/NotFoundError.js";
-import ValidationError from "../../utils/ValidationError.js";
+import NotFoundError from "../../utils/Errors/NotFoundError.js";
+import ValidationError from "../../utils/Errors/ValidationError.js";
 import utils from "../../utils/index.js";
 
 vi.mock("../../db/staff.model.js");

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import Staff from "../db/staff.model.js";
 import utils from "../utils/index.js";
-import ValidationError from "../utils/ValidationError.js";
-import NotFoundError from "../utils/NotFoundError.js";
+import ValidationError from "../utils/Errors/ValidationError.js";
+import NotFoundError from "../utils/Errors/NotFoundError.js";
 
 const create = async (staffObjectToSave) => {
     const staffToSave = new Staff(staffObjectToSave);
