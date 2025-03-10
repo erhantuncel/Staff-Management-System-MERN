@@ -1,28 +1,7 @@
+import { validationResult } from "express-validator";
 import staffService from "../services/staff.service.js";
-import BaseError from "../utils/Errors/BaseError.js";
 import utils from "../utils/index.js";
-import multer from "multer";
-import path from "path";
-
-const fileTypes = /jpeg|jpg|png/;
-const storage = multer.memoryStorage();
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 2 * 1024 * 1024,
-    },
-    fileFilter: (req, file, cb) => {
-        const extName = fileTypes.test(
-            path.extname(file.originalname).toLowerCase()
-        );
-        const mimeType = fileTypes.test(file.mimetype);
-        if (mimeType && extName) {
-            cb(null, true);
-        } else {
-            cb(new BaseError("Images only! (jpeg, jpg, png)"), false);
-        }
-    },
-}).single("image");
+import ValidationError from "../utils/Errors/ValidationError.js";
 
 const getAllStaff = async (req, res, next) => {
     try {
@@ -56,34 +35,38 @@ const getAllStaffWithPagination = async (req, res, next) => {
 };
 
 const createStaff = async (req, res, next) => {
-    upload(req, res, async (err) => {
-        if (err) {
-            next(err);
-        } else {
-            try {
-                let staffObjectToSave = req.body;
-                if (req.file) {
-                    staffObjectToSave.image = {
-                        data: req.file.buffer,
-                        contentType: req.file.mimetype,
-                    };
-                }
-                const newStaff = await staffService.create(staffObjectToSave);
-                res.status(201).json(
-                    utils.createSuccessDataResult(201, newStaff)
-                );
-            } catch (error) {
-                next(error);
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        let invalidFieldsObject = {};
+        validationErrors.array().forEach((error) => {
+            invalidFieldsObject[error.path] = error.msg;
+        });
+        next(new ValidationError("Invalid request!", invalidFieldsObject));
+    } else {
+        try {
+            let staffObjectToSave = req.body;
+            if (req.file) {
+                staffObjectToSave.image = {
+                    data: req.file.buffer,
+                    contentType: req.file.mimetype,
+                };
             }
+            const newStaff = await staffService.create(staffObjectToSave);
+            res.status(201).json(utils.createSuccessDataResult(201, newStaff));
+        } catch (error) {
+            next(error);
         }
-    });
+    }
 };
 
 const updateStaff = async (req, res, next) => {
     try {
         const { id } = req.params;
         const newStaffObjectToUpdate = req.body;
-        const updatedStaff = await staffService.update(id, newStaffObjectToUpdate);
+        const updatedStaff = await staffService.update(
+            id,
+            newStaffObjectToUpdate
+        );
         res.status(200).json(utils.createSuccessDataResult(200, updatedStaff));
     } catch (error) {
         next(error);

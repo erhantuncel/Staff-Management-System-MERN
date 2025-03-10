@@ -1,3 +1,7 @@
+import multer from "multer";
+import path from "path";
+import BaseError from "./Errors/BaseError.js";
+
 const createSuccessResult = (statusCode, message) => ({
     status: "success",
     statusCode: statusCode,
@@ -42,10 +46,35 @@ const getInvalidFields = (error) => {
     return errors;
 };
 
+const getMulterForCreateStaff = () => {
+    const fileTypes = /jpeg|jpg|png/;
+    const storage = multer.memoryStorage();
+    return multer(
+        multer({
+            storage: storage,
+            limits: {
+                fileSize: 2 * 1024 * 1024,
+            },
+            fileFilter: (req, file, cb) => {
+                const extName = fileTypes.test(
+                    path.extname(file.originalname).toLowerCase()
+                );
+                const mimeType = fileTypes.test(file.mimetype);
+                if (mimeType && extName) {
+                    cb(null, true);
+                } else {
+                    cb(new BaseError("Images only! (jpeg, jpg, png)"), false);
+                }
+            },
+        })
+    );
+};
+
 export default {
     createSuccessResult,
     createErrorResult,
     createSuccessDataResult,
     createErrorDataResult,
     getInvalidFields,
+    getMulterForCreateStaff
 };

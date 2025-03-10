@@ -107,9 +107,6 @@ describe("Create Staff", () => {
                 mockNext
             );
         expect(mockNext).toHaveBeenCalled();
-        expect(mockNext).toHaveBeenCalledWith(
-            new Error("Images only! (jpeg, jpg, png)")
-        );
     });
 
     it("should return 501 if staffService.create method thrown an error", async () => {
