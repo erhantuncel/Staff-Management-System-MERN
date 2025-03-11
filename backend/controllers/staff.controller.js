@@ -1,7 +1,5 @@
-import { validationResult } from "express-validator";
 import staffService from "../services/staff.service.js";
 import utils from "../utils/index.js";
-import ValidationError from "../utils/Errors/ValidationError.js";
 
 const getAllStaff = async (req, res, next) => {
     try {
@@ -35,27 +33,18 @@ const getAllStaffWithPagination = async (req, res, next) => {
 };
 
 const createStaff = async (req, res, next) => {
-    const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty()) {
-        let invalidFieldsObject = {};
-        validationErrors.array().forEach((error) => {
-            invalidFieldsObject[error.path] = error.msg;
-        });
-        next(new ValidationError("Invalid request!", invalidFieldsObject));
-    } else {
-        try {
-            let staffObjectToSave = req.body;
-            if (req.file) {
-                staffObjectToSave.image = {
-                    data: req.file.buffer,
-                    contentType: req.file.mimetype,
-                };
-            }
-            const newStaff = await staffService.create(staffObjectToSave);
-            res.status(201).json(utils.createSuccessDataResult(201, newStaff));
-        } catch (error) {
-            next(error);
+    try {
+        let staffObjectToSave = req.body;
+        if (req.file) {
+            staffObjectToSave.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            };
         }
+        const newStaff = await staffService.create(staffObjectToSave);
+        res.status(201).json(utils.createSuccessDataResult(201, newStaff));
+    } catch (error) {
+        next(error);
     }
 };
 
