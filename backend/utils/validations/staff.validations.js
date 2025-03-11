@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const createSTaffValidator = [
+export const staffValidatorToCreate = [
     body("firstName")
         .notEmpty()
         .withMessage("First name is required")

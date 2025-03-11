@@ -3,7 +3,7 @@ import { staffController } from "../controllers/index.js";
 // import { createStaffMulterConfig } from "../utils/multerConfigs.js";
 import utils from "../utils/index.js";
 
-import { createSTaffValidator } from "../utils/validations/staff.validations.js";
+import { staffValidatorToCreate } from "../utils/validations/staff.validations.js";
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get("/staffs/:id", staffController.getStaffWithId);
 router.post(
     "/staffs",
     utils.getMulterForCreateStaff().single("image"),
-    createSTaffValidator,
+    staffValidatorToCreate,
     staffController.createStaff
 );
 router.put("/staffs/:id", staffController.updateStaff);
