@@ -54,19 +54,19 @@ export const pageValidatorForGetAllStaffWithPagination = [
 export const staffValidatorToUpdate = [
     param("id").isMongoId().withMessage("id must be valid mongoId."),
     body("firstName")
-        .optional({ values: "null" })
+        .optional({ values: "falsy" })
         .isString()
         .withMessage("First name must be string")
         .isLength({ max: 40 })
         .withMessage("First name must be maximum 40 characters."),
     body("lastName")
-        .optional({ values: "null" })
+        .optional({ values: "falsy" })
         .isString()
         .withMessage("Last name must be string")
         .isLength({ max: 40 })
         .withMessage("Last name must be maximum 40 characters."),
     body("phone")
-        .optional({ values: "null" })
+        .optional({ values: "falsy" })
         .isString()
         .withMessage("Phone should be string")
         .custom((value) => {
@@ -77,13 +77,13 @@ export const staffValidatorToUpdate = [
             }
         }),
     body("email")
-        .optional({ values: "null" })
+        .optional({ values: "falsy" })
         .isString()
         .withMessage("E-mail should be string")
         .isEmail()
         .withMessage("E-mail must be valid format."),
     body("department")
-        .optional({ values: "null" })
+        .optional({ values: "falsy" })
         .isString()
         .withMessage("Department should be string"),
 ];
