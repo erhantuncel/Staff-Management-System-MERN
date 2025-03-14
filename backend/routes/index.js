@@ -207,6 +207,20 @@ router.delete(
     staffController.removeStaff
 );
 
+/**
+ *  @swagger
+ *  /departments:
+ *      get:
+ *          summary: Get department list.
+ *          description: Get department list.
+ *          responses:
+ *              "200":
+ *                  description: "A successful response"
+ *              "404":
+ *                  description: "Department not found."
+ *              "500":
+ *                  description: "Internal server error."
+ */
 router.get("/departments", staffController.getDepartmentList);
 
 export default router;
