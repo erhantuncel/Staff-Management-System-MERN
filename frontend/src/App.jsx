@@ -1,12 +1,8 @@
-import React from "react"
+import React from "react";
+import UserDashboard from "./layouts/UserDashboard.jsx";
 
 function App() {
-
-  return (
-    <>
-      App component
-    </>
-  )
+    return <UserDashboard />;
 }
 
-export default App
+export default App;
