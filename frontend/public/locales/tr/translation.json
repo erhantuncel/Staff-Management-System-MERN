@@ -1,0 +1,18 @@
+{
+    "BROWSER": {
+        "title": "Personel Bilgi Sistemi"
+    },
+
+    "TEMPLATE": {
+        "HEADER": {
+            "NAVBAR": {
+                "title": "Personel Bilgi Sistemi"
+            }
+        },
+
+        "FOOTER": {
+            "link.turkish": "Türkçe",
+            "link.english": "İngilizce"
+        }
+    }
+}

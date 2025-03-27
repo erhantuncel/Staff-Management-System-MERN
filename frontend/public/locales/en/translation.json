@@ -1,0 +1,18 @@
+{
+    "BROWSER": {
+        "title": "Staff Information System"
+    },
+
+    "TEMPLATE": {
+        "HEADER": {
+            "NAVBAR": {
+                "title": "Staff Information System"
+            }
+        },
+
+        "FOOTER": {
+            "link.turkish": "Turkish",
+            "link.english": "English"
+        }
+    }
+}
