@@ -1,7 +1,15 @@
 import React from "react";
 import { Translation } from "react-i18next";
+import { NavLink } from "react-router";
 
 const Header = () => {
+    const handleDropDownItemClick = () => {
+        const elem = document.activeElement;
+        if (elem) {
+            elem?.blur();
+        }
+    };
+
     return (
         <Translation>
             {(t, { i18n }) => {
@@ -32,13 +40,21 @@ const Header = () => {
                                 </div>
                                 <ul
                                     tabIndex={0}
-                                    className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow"
+                                    className="menu menu-sm dropdown-content bg-neutral rounded-box z-1 mt-3 w-52 p-2 shadow"
                                 >
-                                    <li>
-                                        <a>Departments</a>
+                                    <li onClick={handleDropDownItemClick}>
+                                        <NavLink to="/user/departments">
+                                            {t(
+                                                "TEMPLATE.HEADER.NAVBAR.link.department.label",
+                                            )}
+                                        </NavLink>
                                     </li>
-                                    <li>
-                                        <a>Staffs</a>
+                                    <li onClick={handleDropDownItemClick}>
+                                        <NavLink to="/user/staffs">
+                                            {t(
+                                                "TEMPLATE.HEADER.NAVBAR.link.staff.label",
+                                            )}
+                                        </NavLink>
                                     </li>
                                 </ul>
                             </div>
@@ -49,10 +65,18 @@ const Header = () => {
                         <div className="navbar-center hidden lg:flex lg:grow">
                             <ul className="menu menu-horizontal px-1">
                                 <li className="hover:bg-base-300 hover:text-base-content">
-                                    <a>Item 1</a>
+                                    <NavLink to="/user/departments">
+                                        {t(
+                                            "TEMPLATE.HEADER.NAVBAR.link.department.label",
+                                        )}
+                                    </NavLink>
                                 </li>
                                 <li className="hover:bg-base-300 hover:text-base-content">
-                                    <a>Item 2</a>
+                                    <NavLink to="/user/staffs">
+                                        {t(
+                                            "TEMPLATE.HEADER.NAVBAR.link.staff.label",
+                                        )}
+                                    </NavLink>
                                 </li>
                             </ul>
                         </div>
