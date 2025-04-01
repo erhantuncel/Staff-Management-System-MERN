@@ -16,5 +16,25 @@
             "link.turkish": "Türkçe",
             "link.english": "İngilizce"
         }
+    },
+
+    "STAFF": {
+        "list.table.title.no": "No",
+        "list.table.title.firstName": "Ad",
+        "list.table.title.lastName": "Soyad",
+        "list.table.title.departmentName": "Bölüm",
+        "list.table.title.registeredDate": "Kayıt Zamanı",
+        "list.table.title.actions": "İşlemler",
+        "list.table.row.button.detail": "Detay",
+        "list.table.row.button.delete": "Sil",
+        "list.table.label.entryCount1": "Sayfada",
+        "list.table.label.entryCount2": "kayıt göster",
+        "list.table.label.entryInformation": "{{totalEntry}} kayıttan {{rangeStart}}-{{rangeEnd}} arasındaki kayıtlar gösteriliyor.",
+        "list.table.searchType.firstName": "Ad",
+        "list.table.searchType.lastName": "Soyad",
+        "list.table.button.searchStaff": "Ara",
+        "button.addStaff": "Personel Ekle",
+        "select.department.label": "Departman Seçiniz",
+        "select.column.label": "Sütun Seçiniz"
     }
 }
