@@ -1,8 +1,8 @@
 import React from "react";
 import Pagination from "../Pagination";
-import StaffTable from "./StaffTable";
 import StaffActionBar from "./StaffActionBar";
 import StaffFilterBar from "./StaffFilterBar";
+import StaffTable from "./StaffTable";
 
 const Staffs = () => {
     let staffArray = [];
@@ -11,6 +11,8 @@ const Staffs = () => {
             id: i + 1,
             firstName: "First Name " + i,
             lastName: "Last Name " + i,
+            phone: "12345678" + i < 10 ? "0" + i : i,
+            email: "FirstName" + i + "@localhost.com",
             department: "Department" + i,
         });
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "./form/Button";
 
 const Pagination = () => {
     const { t } = useTranslation();
@@ -16,12 +17,12 @@ const Pagination = () => {
                 </p>
             </div>
             <div className="join">
-                <button className="join-item btn btn-sm btn-soft">1</button>
-                <button className="join-item btn btn-sm btn-soft btn-active">
+                <Button className="join-item btn btn-sm btn-soft">1</Button>
+                <Button className="join-item btn btn-sm btn-soft btn-active">
                     2
-                </button>
-                <button className="join-item btn btn-sm btn-soft">3</button>
-                <button className="join-item btn btn-sm btn-soft">4</button>
+                </Button>
+                <Button className="join-item btn btn-sm btn-soft">3</Button>
+                <Button className="join-item btn btn-sm btn-soft">4</Button>
             </div>
         </div>
     );

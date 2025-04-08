@@ -36,5 +36,14 @@
         "button.addStaff": "Add Staff",
         "select.department.label": "Select Department",
         "select.column.label": "Select Column"
+    },
+
+    "DELETECONFIRMATIONMODAL": {
+        "header.title": "Delete Staff Confirmation",
+        "warningMessage": "Do you want to delete information about <strong>{{firstName}} {{lastName}}</strong> with id <strong>{{staffId}}</strong> ?",
+        "acceptButton.label": "Delete",
+        "cancelButton.label": "Cancel",
+        "toastr.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is deleted.",
+        "toastr.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is not deleted."
     }
 }

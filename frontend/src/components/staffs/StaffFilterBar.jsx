@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "../form/Button";
+import Input from "../form/Input";
 
 const StaffFilterBar = () => {
     const { t } = useTranslation();
@@ -46,8 +48,8 @@ const StaffFilterBar = () => {
                     </option>
                     <option>{t("STAFF.list.table.searchType.lastName")}</option>
                 </select>
-                <input type="text" placeholder="" className="input input-sm" />
-                <button className="btn btn-neutral btn-sm">
+                <Input type="text" placeholder="" className="input input-sm" />
+                <Button className="btn btn-neutral btn-sm">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -61,7 +63,7 @@ const StaffFilterBar = () => {
                         />
                     </svg>
                     {t("STAFF.list.table.button.searchStaff")}
-                </button>
+                </Button>
             </div>
         </div>
     );

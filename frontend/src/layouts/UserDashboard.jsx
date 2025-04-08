@@ -3,7 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Route, Routes } from "react-router";
 import DepartmentList from "../components/DeparmentList";
-import Staffs from "../components/staffs/Staffs";
+import Staffs from "../components/staffs";
 
 const UserDashboard = () => {
     return (

@@ -36,5 +36,14 @@
         "button.addStaff": "Personel Ekle",
         "select.department.label": "Departman Seçiniz",
         "select.column.label": "Sütun Seçiniz"
+    },
+
+    "DELETECONFIRMATIONMODAL": {
+        "header.title": "Personel Silme Onayı",
+        "warningMessage": "<strong>{{staffId}}</strong> numaralı <strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
+        "acceptButton.label": "Sil",
+        "cancelButton.label": "İptal",
+        "toastr.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
+        "toastr.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
     }
 }

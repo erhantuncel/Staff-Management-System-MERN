@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import StaffDetailModal from "./StaffDetailModal";
+import ConfirmationModal from "../ConfirmationModal";
+import Button from "../form/Button";
 
-const StaffListTable = ({ staffArray }) => {
+const StaffTable = ({ staffArray }) => {
     const { t } = useTranslation();
+
+    const [selectedStaff, setSelectedStaff] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
+        useState(false);
+    const [confirmationModalMessage, setConfirmationModalMessage] =
+        useState(null);
+
+    const showStaffDetails = (staff) => {
+        setSelectedStaff(staff);
+        setIsModalOpen(true);
+    };
+
+    const showDeleteConfirmationModal = (staff) => {
+        setSelectedStaff(staff);
+        setConfirmationModalMessage(
+            t("DELETECONFIRMATIONMODAL.warningMessage", {
+                staffId: staff.id,
+                firstName: staff.firstName,
+                lastName: staff.lastName,
+            }),
+        );
+        setIsConfirmationModalOpen(true);
+    };
+
+    const handleDeleteConfirmationAccept = () => {
+        console.log(`Staff has id: ${selectedStaff?.id} is deleted.`);
+        setIsConfirmationModalOpen(false);
+    };
 
     return (
         <div className="rounded-box border-base-content/5 mb-5 max-h-[calc(100vh-300px)] overflow-scroll border">
@@ -28,7 +60,10 @@ const StaffListTable = ({ staffArray }) => {
                             <td>{staff.department}</td>
                             <td>23.04.2024 18:17</td>
                             <td className="text-right">
-                                <button className="btn btn-sm btn-soft mr-1">
+                                <Button
+                                    className="btn btn-sm btn-soft mr-1"
+                                    onClick={() => showStaffDetails(staff)}
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 16 16"
@@ -48,8 +83,13 @@ const StaffListTable = ({ staffArray }) => {
                                             "STAFF.list.table.row.button.detail",
                                         )}
                                     </span>
-                                </button>
-                                <button className="btn btn-sm btn-soft">
+                                </Button>
+                                <Button
+                                    className="btn btn-sm btn-soft"
+                                    onClick={() =>
+                                        showDeleteConfirmationModal(staff)
+                                    }
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 16 16"
@@ -68,14 +108,32 @@ const StaffListTable = ({ staffArray }) => {
                                             "STAFF.list.table.row.button.delete",
                                         )}
                                     </span>
-                                </button>
+                                </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            <StaffDetailModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                staffInfo={selectedStaff}
+            />
+            <ConfirmationModal
+                isOpen={isConfirmationModalOpen}
+                message={confirmationModalMessage}
+                title={t("DELETECONFIRMATIONMODAL.header.title")}
+                acceptButtonLabel={t(
+                    "DELETECONFIRMATIONMODAL.acceptButton.label",
+                )}
+                cancelButtonLabel={t(
+                    "DELETECONFIRMATIONMODAL.cancelButton.label",
+                )}
+                onClose={() => setIsConfirmationModalOpen(false)}
+                onAccept={() => handleDeleteConfirmationAccept()}
+            />
         </div>
     );
 };
 
-export default StaffListTable;
+export default StaffTable;
