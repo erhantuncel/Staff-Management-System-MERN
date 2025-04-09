@@ -4,10 +4,6 @@ import Input from "../form/Input";
 import Select from "../form/Select";
 
 const StaffDetailModal = ({ isOpen, onClose, staffInfo }) => {
-    const handleClose = () => {
-        onClose();
-    };
-
     const onSubmit = (event) => {
         event.preventDefault();
         console.log("On Submit");
@@ -23,7 +19,7 @@ const StaffDetailModal = ({ isOpen, onClose, staffInfo }) => {
     return (
         <Modal
             isOpen={isOpen}
-            onClose={handleClose}
+            onClose={onclose}
             title="Staff Details"
             modalBoxClassName="w-10/12 max-w-2xl"
             formSubmitAction={onSubmit}
