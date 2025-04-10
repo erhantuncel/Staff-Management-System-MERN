@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Pagination from "../Pagination";
 import StaffActionBar from "./StaffActionBar";
 import StaffFilterBar from "./StaffFilterBar";
 import StaffTable from "./StaffTable";
+import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 
 const Staffs = () => {
     let staffArray = [];
@@ -17,12 +18,31 @@ const Staffs = () => {
         });
     }
 
+    const modalInitialState = { isOpen: false, type: "add" };
+
+    const [staffsData, setStaffsData] = useState(staffArray);
+    const [modalState, setModalState] = useState(modalInitialState);
+    const [selectedStaff, setSelectedStaff] = useState(null);
+
+    const handleOpenModal = (type, staff) => {
+        staff && setSelectedStaff(staff);
+        setModalState({ isOpen: true, type });
+    };
+
     return (
         <>
-            <StaffActionBar />
+            <StaffActionBar handleOpenModal={handleOpenModal} />
             <StaffFilterBar />
-            <StaffTable staffArray={staffArray} />
+            <StaffTable
+                staffsData={staffsData}
+                handleOpenModal={handleOpenModal}
+            />
             <Pagination />
+            <StaffAddUpdateDetailModal
+                modalState={modalState}
+                onClose={() => setModalState({ ...modalState, isOpen: false })}
+                staffInfo={selectedStaff}
+            />
         </>
     );
 };

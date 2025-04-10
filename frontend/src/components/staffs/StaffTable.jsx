@@ -1,23 +1,16 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import StaffDetailModal from "./StaffDetailModal";
 import ConfirmationModal from "../ConfirmationModal";
 import Button from "../form/Button";
 
-const StaffTable = ({ staffArray }) => {
+const StaffTable = ({ staffsData, handleOpenModal }) => {
     const { t } = useTranslation();
 
     const [selectedStaff, setSelectedStaff] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
         useState(false);
     const [confirmationModalMessage, setConfirmationModalMessage] =
         useState(null);
-
-    const showStaffDetails = (staff) => {
-        setSelectedStaff(staff);
-        setIsModalOpen(true);
-    };
 
     const showDeleteConfirmationModal = (staff) => {
         setSelectedStaff(staff);
@@ -52,7 +45,7 @@ const StaffTable = ({ staffArray }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {staffArray.map((staff) => (
+                    {staffsData.map((staff) => (
                         <tr>
                             <th>{staff.id}</th>
                             <td>{staff.firstName}</td>
@@ -62,7 +55,9 @@ const StaffTable = ({ staffArray }) => {
                             <td className="text-right">
                                 <Button
                                     className="btn btn-sm btn-soft mr-1"
-                                    onClick={() => showStaffDetails(staff)}
+                                    onClick={() =>
+                                        handleOpenModal("details", staff)
+                                    }
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -114,11 +109,6 @@ const StaffTable = ({ staffArray }) => {
                     ))}
                 </tbody>
             </table>
-            <StaffDetailModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                staffInfo={selectedStaff}
-            />
             <ConfirmationModal
                 isOpen={isConfirmationModalOpen}
                 message={confirmationModalMessage}

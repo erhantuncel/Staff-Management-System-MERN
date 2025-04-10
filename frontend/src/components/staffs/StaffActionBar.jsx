@@ -2,12 +2,15 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../form/Button";
 
-const StaffActionBar = () => {
+const StaffActionBar = ({ handleOpenModal }) => {
     const { t } = useTranslation();
 
     return (
         <div className="mb-5 flex justify-start">
-            <Button className="btn btn-sm btn-neutral">
+            <Button
+                className="btn btn-sm btn-neutral"
+                onClick={() => handleOpenModal("add")}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
