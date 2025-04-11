@@ -51,7 +51,7 @@ const StaffTable = ({ staffsData, handleOpenModal }) => {
                             <td>{staff.firstName}</td>
                             <td>{staff.lastName}</td>
                             <td>{staff.department}</td>
-                            <td>23.04.2024 18:17</td>
+                            <td>{staff.createDate}</td>
                             <td className="text-right">
                                 <Button
                                     className="btn btn-sm btn-soft mr-1"

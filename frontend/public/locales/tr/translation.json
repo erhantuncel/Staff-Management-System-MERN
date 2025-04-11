@@ -35,7 +35,35 @@
         "list.table.button.searchStaff": "Ara",
         "button.addStaff": "Personel Ekle",
         "select.department.label": "Departman Seçiniz",
-        "select.column.label": "Sütun Seçiniz"
+        "select.column.label": "Sütun Seçiniz",
+        "ADDUPDATEDETAILMODAL": {
+            "title.add": "Personel Ekle",
+            "title.update": "Personel Güncelle",
+            "title.detail": "Personel Bilgileri",
+            "label.id": "No",
+            "label.createDate": "Kayıt Zamanı",
+            "label.firstName": "Ad",
+            "label.lastName": "Soyad",
+            "label.phone": "Telefon",
+            "label.email": "E-mail",
+            "label.department": "Bölüm",
+            "label.department.defaultValue": "Departman Seçiniz",
+            "button.cancel": "Vazgeç",
+            "button.update": "Güncelle",
+            "button.close": "Kapat",
+            "button.accept.add": "Ekle",
+            "button.accept.update": "Kaydet",
+            "button.image.select": "Seç",
+            "button.image.remove": "Kaldır",
+            "image.validation.error.fileSize": "En fazla {{fileSize}} boyutunda resim yükleyebilirsiniz.",
+            "image.validation.error.fileType": "İzin verilen dosya tipleri: {{fileTypes}}",
+            "toastr.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
+            "toastr.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
+            "toastr.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
+            "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
+            "invalid.message.required": "Boş olmamalı.",
+            "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
+        }
     },
 
     "DELETECONFIRMATIONMODAL": {

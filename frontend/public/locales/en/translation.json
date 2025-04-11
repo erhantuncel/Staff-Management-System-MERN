@@ -35,7 +35,35 @@
         "list.table.button.searchStaff": "Search",
         "button.addStaff": "Add Staff",
         "select.department.label": "Select Department",
-        "select.column.label": "Select Column"
+        "select.column.label": "Select Column",
+        "ADDUPDATEDETAILMODAL": {
+            "title.add": "Add Staff",
+            "title.update": "Update Staff",
+            "title.detail": "Staff Details",
+            "label.id": "Id",
+            "label.createDate": "Create Date",
+            "label.firstName": "First Name",
+            "label.lastName": "Last Name",
+            "label.phone": "Phone",
+            "label.email": "E-mail",
+            "label.department": "Department",
+            "label.department.defaultValue": "Select Department",
+            "button.cancel": "Cancel",
+            "button.update": "Update",
+            "button.close": "Close",
+            "button.accept.add": "Add",
+            "button.accept.update": "Save",
+            "button.image.select": "Select",
+            "button.image.remove": "Remove",
+            "image.validation.error.fileSize": "Maximum upload file size {{fileSize}}.",
+            "image.validation.error.fileType": "Allowed file types : {{fileTypes}}",
+            "toastr.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
+            "toastr.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
+            "toastr.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
+            "toastr.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
+            "invalid.message.required": "Must not be empty.",
+            "invalid.message.phone.pattern": "Must be {{numberCount}} numbers."
+        }
     },
 
     "DELETECONFIRMATIONMODAL": {
