@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Button from "../form/Button";
+import Button from "../../components/form/Button";
 
 const StaffActionBar = ({ handleOpenModal }) => {
     const { t } = useTranslation();

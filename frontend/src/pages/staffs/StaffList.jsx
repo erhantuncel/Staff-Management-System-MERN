@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Pagination from "../Pagination";
+import Pagination from "../../components/Pagination";
 import StaffActionBar from "./StaffActionBar";
 import StaffFilterBar from "./StaffFilterBar";
 import StaffTable from "./StaffTable";
 import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 
-const Staffs = () => {
+const StaffList = () => {
     let staffArray = [];
     for (let i = 0; i <= 25; i++) {
         staffArray.push({
@@ -18,7 +18,7 @@ const Staffs = () => {
             department: "Department" + i,
         });
     }
-    console.log(staffArray);
+
     const modalInitialState = { isOpen: false, type: "add" };
     const selectedStaffInitialState = {
         id: "",
@@ -62,4 +62,4 @@ const Staffs = () => {
     );
 };
 
-export default Staffs;
+export default StaffList;

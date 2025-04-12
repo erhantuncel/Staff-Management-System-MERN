@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Button from "../form/Button";
-import Input from "../form/Input";
+import Button from "../../components/form/Button";
+import Input from "../../components/form/Input";
 
 const StaffFilterBar = () => {
     const { t } = useTranslation();

@@ -2,8 +2,8 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Route, Routes } from "react-router";
-import DepartmentList from "../components/DeparmentList";
-import Staffs from "../components/staffs";
+import DepartmentList from "../pages/departments/DeparmentList";
+import StaffList from "../pages/staffs/StaffList";
 
 const UserDashboard = () => {
     return (
@@ -13,7 +13,7 @@ const UserDashboard = () => {
                 <Routes>
                     <Route path="/" element={<DepartmentList />} />
                     <Route path="/departments" element={<DepartmentList />} />
-                    <Route path="/staffs" element={<Staffs />} />
+                    <Route path="/staffs" element={<StaffList />} />
                 </Routes>
             </div>
             <Footer />
