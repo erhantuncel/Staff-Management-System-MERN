@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Pagination from "../../components/Pagination";
 import StaffActionBar from "./StaffActionBar";
-import StaffFilterBar from "./StaffFilterBar";
 import StaffTable from "./StaffTable";
 import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
+import StaffFilterContainer from "./StaffFilterContainer";
 
 const StaffList = () => {
     let staffArray = [];
@@ -46,7 +46,7 @@ const StaffList = () => {
     return (
         <>
             <StaffActionBar handleOpenModal={handleOpenModal} />
-            <StaffFilterBar />
+            <StaffFilterContainer />
             <StaffTable
                 staffsData={staffsData}
                 handleOpenModal={handleOpenModal}
