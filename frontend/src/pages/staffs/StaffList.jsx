@@ -20,9 +20,7 @@ const StaffList = () => {
     }
 
     const modalInitialState = { isOpen: false, type: "add" };
-    const selectedStaffInitialState = {
-        id: "",
-        createDate: "",
+    const empyStaffInfoForNewStaff = {
         firstName: "",
         lastName: "",
         phone: "",
@@ -35,7 +33,9 @@ const StaffList = () => {
     const [selectedStaff, setSelectedStaff] = useState(null);
 
     const handleOpenModal = (type, staff) => {
-        setSelectedStaff(staff || selectedStaffInitialState);
+        type === "add"
+            ? setSelectedStaff(empyStaffInfoForNewStaff)
+            : setSelectedStaff(staff);
         setModalState({ isOpen: true, type });
     };
 

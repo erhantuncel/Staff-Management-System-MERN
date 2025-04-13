@@ -10,7 +10,7 @@ const Modal = ({
     isOpen,
     onClose,
     modalBoxClassName,
-    formSubmitAction,
+    // formSubmitAction,
     children,
 }) => {
     const modalRef = useRef(null);
@@ -46,11 +46,14 @@ const Modal = ({
     return (
         <dialog className="modal" ref={modalRef} onKeyDown={handleKeyDown}>
             <div className={`modal-box ${modalBoxClassName}`}>
-                <form onSubmit={formSubmitAction}>
+                {/* <form onSubmit={formSubmitAction}>
                     {title}
                     {body}
                     {actions}
-                </form>
+                </form> */}
+                {title}
+                {body}
+                {actions}
             </div>
         </dialog>
     );

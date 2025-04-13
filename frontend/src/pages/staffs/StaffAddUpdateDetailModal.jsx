@@ -2,8 +2,11 @@ import React from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/form/Button";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import StaffImage from "./StaffImage";
 import StaffDetailsForm from "./StaffDetailsForm";
+import StaffValidationSchema from "./StaffValidationSchema";
 
 const StaffAddUpdateDetailModal = ({
     modalState,
@@ -13,9 +16,17 @@ const StaffAddUpdateDetailModal = ({
 }) => {
     const { t } = useTranslation();
 
-    const onSubmit = (event) => {
-        event.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(StaffValidationSchema),
+    });
+
+    const onSubmit = (data) => {
         console.log("On Submit");
+        console.log(data);
         onClose();
     };
 
@@ -24,7 +35,6 @@ const StaffAddUpdateDetailModal = ({
             isOpen={modalState.isOpen}
             onClose={onClose}
             modalBoxClassName="w-10/12 max-w-2xl"
-            formSubmitAction={onSubmit}
         >
             <Modal.Title>
                 {modalState.type === "add"
@@ -42,6 +52,8 @@ const StaffAddUpdateDetailModal = ({
                         <StaffDetailsForm
                             staffInfo={staffInfo}
                             modalState={modalState}
+                            register={register}
+                            errors={errors}
                         />
                     </div>
                 </div>
@@ -52,6 +64,7 @@ const StaffAddUpdateDetailModal = ({
                         "btn btn-sm btn-neutral " +
                         (modalState.type !== "add" ? "hidden" : "")
                     }
+                    onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.add")}
                 </Button>
@@ -60,6 +73,7 @@ const StaffAddUpdateDetailModal = ({
                         "btn btn-sm btn-neutral " +
                         (modalState.type !== "update" ? "hidden" : "")
                     }
+                    onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.update")}
                 </Button>
