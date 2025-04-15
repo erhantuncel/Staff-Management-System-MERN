@@ -6,8 +6,10 @@ const Input = ({
     className,
     placeholder,
     value,
+    isHidden,
     onChange,
     error,
+    readOnly,
     ...rest
 }) => {
     return (
@@ -19,9 +21,15 @@ const Input = ({
                 value={value}
                 onChange={onChange}
                 name={name}
+                readOnly={readOnly}
+                hidden={isHidden}
                 {...rest}
             />
-            {error && <div className="validator-hint text-error">{error}</div>}
+            {error && (
+                <div hidden={isHidden} className={"validator-hint text-error"}>
+                    {error}
+                </div>
+            )}
         </>
     );
 };

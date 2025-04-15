@@ -20,60 +20,31 @@ const StaffDetailsForm = ({ staffInfo, modalState, register, errors }) => {
                 Object.entries(staffInfo).map(([key, value], index) => {
                     return (
                         <div className="mb-2 flex flex-row" key={index}>
-                            <p className="basis-3/7 content-center text-sm font-bold">
+                            <span className="basis-3/7 content-center text-sm font-bold">
                                 {t(`STAFF.ADDUPDATEDETAILMODAL.label.${key}`)}
-                            </p>
+                            </span>
                             <div className="basis-5/7">
-                                <p
-                                    className={
-                                        "basis-5/7 " +
-                                        (modalState.type !== "details"
-                                            ? modalState.type === "update"
-                                                ? editableFields.indexOf(
-                                                      key,
-                                                  ) !== -1
-                                                    ? "hidden"
-                                                    : ""
-                                                : "hidden"
-                                            : "")
-                                    }
-                                >
+                                <span hidden={modalState.type !== "details"}>
                                     {value}
-                                </p>
+                                </span>
                                 {key === "department" ? (
                                     <Select
                                         defaultValue={t(
                                             "STAFF.ADDUPDATEDETAILMODAL.label.department.defaultValue",
                                         )}
-                                        className={
-                                            "select-sm " +
-                                            (modalState.type !== "details"
-                                                ? modalState.type === "update"
-                                                    ? editableFields.indexOf(
-                                                          key,
-                                                      ) !== -1
-                                                        ? ""
-                                                        : "hidden"
-                                                    : ""
-                                                : "hidden")
-                                        }
+                                        className={"select-sm"}
+                                        hidden={modalState.type === "details"}
                                         options={departments}
                                         {...register(`${key}`)}
                                     />
                                 ) : (
                                     <Input
                                         type="text"
-                                        className={
-                                            "input input-sm " +
-                                            (modalState.type !== "details"
-                                                ? modalState.type === "update"
-                                                    ? editableFields.indexOf(
-                                                          key,
-                                                      ) !== -1
-                                                        ? ""
-                                                        : "hidden"
-                                                    : ""
-                                                : "hidden")
+                                        className={"input input-sm"}
+                                        hidden={modalState.type === "details"}
+                                        readOnly={
+                                            modalState.type === "update" &&
+                                            editableFields.indexOf(key) === -1
                                         }
                                         error={errors && errors[key]?.message}
                                         {...register(`${key}`)}

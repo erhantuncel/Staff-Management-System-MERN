@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/form/Button";
 import { useTranslation } from "react-i18next";
@@ -16,17 +16,33 @@ const StaffAddUpdateDetailModal = ({
 }) => {
     const { t } = useTranslation();
 
+    useEffect(() => {
+        staffInfo &&
+            Object.keys(staffInfo).forEach((key) =>
+                setValue(key, staffInfo[key]),
+            );
+    }, [staffInfo]);
+
     const {
         register,
+        setValue,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
+        mode: "onTouched",
         resolver: yupResolver(StaffValidationSchema),
     });
 
     const onSubmit = (data) => {
         console.log("On Submit");
+        data["createDate"] = new Date();
         console.log(data);
+        onClose();
+    };
+
+    const handleClose = () => {
+        reset();
         onClose();
     };
 
@@ -60,35 +76,29 @@ const StaffAddUpdateDetailModal = ({
             </Modal.Body>
             <Modal.Actions>
                 <Button
-                    className={
-                        "btn btn-sm btn-neutral " +
-                        (modalState.type !== "add" ? "hidden" : "")
-                    }
+                    className={"btn btn-sm btn-neutral"}
+                    hidden={modalState.type !== "add"}
                     onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.add")}
                 </Button>
                 <Button
-                    className={
-                        "btn btn-sm btn-neutral " +
-                        (modalState.type !== "update" ? "hidden" : "")
-                    }
+                    className={"btn btn-sm btn-neutral"}
+                    hidden={modalState.type !== "update"}
                     onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.update")}
                 </Button>
                 <Button
-                    className={
-                        "btn btn-sm btn-neutral " +
-                        (modalState.type !== "details" ? "hidden" : "")
-                    }
+                    className={"btn btn-sm btn-neutral"}
+                    hidden={modalState.type !== "details"}
                     onClick={() =>
                         changeModalState({ ...modalState, type: "update" })
                     }
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.update")}
                 </Button>
-                <Button className="btn btn-sm btn-soft" onClick={onClose}>
+                <Button className="btn btn-sm btn-soft" onClick={handleClose}>
                     {modalState.type === "details"
                         ? t("STAFF.ADDUPDATEDETAILMODAL.button.close")
                         : t("STAFF.ADDUPDATEDETAILMODAL.button.cancel")}
