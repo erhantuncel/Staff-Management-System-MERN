@@ -47,7 +47,6 @@
             "label.phone": "Telefon",
             "label.email": "E-mail",
             "label.department": "Bölüm",
-            "label.department.defaultValue": "Departman Seçiniz",
             "button.cancel": "Vazgeç",
             "button.update": "Güncelle",
             "button.close": "Kapat",

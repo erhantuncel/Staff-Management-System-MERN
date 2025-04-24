@@ -17,9 +17,7 @@ const StaffValidationSchema = yup.object().shape({
         .string("E-mail should be string")
         .required("E-mail is required")
         .email("E-mail must be valid format."),
-    department: yup
-        .string("Department should be string")
-        .required("Department is required"),
+    department: yup.object().required("Department is required"),
 });
 
 export default StaffValidationSchema;

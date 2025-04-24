@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/form/Button";
 import { useTranslation } from "react-i18next";
@@ -18,12 +18,20 @@ const StaffAddUpdateDetailModal = ({
 
     useEffect(() => {
         staffInfo &&
-            Object.keys(staffInfo).forEach((key) =>
-                setValue(key, staffInfo[key]),
-            );
+            Object.keys(staffInfo).forEach((key) => {
+                if (key === "department" && staffInfo[key]) {
+                    setValue(key, {
+                        value: staffInfo[key],
+                        label: staffInfo[key],
+                    });
+                } else {
+                    setValue(key, staffInfo[key]);
+                }
+            });
     }, [staffInfo]);
 
     const {
+        control,
         register,
         setValue,
         handleSubmit,
@@ -70,6 +78,7 @@ const StaffAddUpdateDetailModal = ({
                             modalState={modalState}
                             register={register}
                             errors={errors}
+                            control={control}
                         />
                     </div>
                 </div>

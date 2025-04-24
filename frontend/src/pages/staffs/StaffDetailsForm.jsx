@@ -1,16 +1,21 @@
 import React from "react";
 import Input from "../../components/form/Input";
-import Select from "../../components/form/Select";
+import ControllerSelect from "../../components/form/ControllerSelect";
 import { useTranslation } from "react-i18next";
 
-const StaffDetailsForm = ({ staffInfo, modalState, register, errors }) => {
+const StaffDetailsForm = ({
+    staffInfo,
+    modalState,
+    register,
+    control,
+    errors,
+}) => {
     const { t } = useTranslation();
 
-    const departments = [
-        { key: "1", value: "R&D" },
-        { key: "2", value: "Finance" },
-        { key: "3", value: "Stock" },
-    ];
+    const departments = Array.from({ length: 26 }, (val, i) => ({
+        value: `Department${i}`,
+        label: `Department${i}`,
+    }));
 
     const editableFields = ["phone", "email", "department"];
 
@@ -28,14 +33,12 @@ const StaffDetailsForm = ({ staffInfo, modalState, register, errors }) => {
                                     {value}
                                 </span>
                                 {key === "department" ? (
-                                    <Select
-                                        defaultValue={t(
-                                            "STAFF.ADDUPDATEDETAILMODAL.label.department.defaultValue",
-                                        )}
-                                        className={"select-sm"}
-                                        hidden={modalState.type === "details"}
+                                    <ControllerSelect
+                                        name={key}
+                                        control={control}
+                                        isHidden={modalState.type === "details"}
                                         options={departments}
-                                        {...register(`${key}`)}
+                                        error={errors && errors[key]?.message}
                                     />
                                 ) : (
                                     <Input
