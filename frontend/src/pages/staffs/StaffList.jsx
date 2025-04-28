@@ -20,12 +20,21 @@ const StaffList = () => {
     }
 
     const modalInitialState = { isOpen: false, type: "add" };
+    // const empyStaffInfoForNewStaff = {
+    //     firstName: "",
+    //     lastName: "",
+    //     phone: "",
+    //     email: "",
+    //     department: "",
+    //     image: "",
+    // };
     const empyStaffInfoForNewStaff = {
         firstName: null,
         lastName: null,
         phone: null,
         email: null,
         department: null,
+        image: null,
     };
 
     const [staffsData, setStaffsData] = useState(staffArray);

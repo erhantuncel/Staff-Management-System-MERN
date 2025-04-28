@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/form/Button";
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,8 @@ const StaffAddUpdateDetailModal = ({
 }) => {
     const { t } = useTranslation();
 
+    const [image, setImage] = useState(null);
+
     useEffect(() => {
         staffInfo &&
             Object.keys(staffInfo).forEach((key) => {
@@ -28,6 +30,7 @@ const StaffAddUpdateDetailModal = ({
                     setValue(key, staffInfo[key]);
                 }
             });
+        staffInfo && setImage(staffInfo.image);
     }, [staffInfo]);
 
     const {
@@ -46,11 +49,13 @@ const StaffAddUpdateDetailModal = ({
         console.log("On Submit");
         data["createDate"] = new Date();
         console.log(data);
+        setImage(null);
         onClose();
     };
 
     const handleClose = () => {
         reset();
+        setImage(null);
         onClose();
     };
 
@@ -68,20 +73,29 @@ const StaffAddUpdateDetailModal = ({
                       : t("STAFF.ADDUPDATEDETAILMODAL.title.detail")}
             </Modal.Title>
             <Modal.Body>
-                <div className="flex flex-row">
-                    <div className="basis-64 pr-10 text-center">
-                        <StaffImage modalState={modalState} />
+                <form noValidate>
+                    <div className="flex flex-row">
+                        <div className="basis-64 pr-10 text-center">
+                            <StaffImage
+                                modalState={modalState}
+                                image={image}
+                                setImage={setImage}
+                                register={register}
+                                setValue={setValue}
+                                error={errors && errors["image"]?.message}
+                            />
+                        </div>
+                        <div className="basis-128">
+                            <StaffDetailsForm
+                                staffInfo={staffInfo}
+                                modalState={modalState}
+                                register={register}
+                                errors={errors}
+                                control={control}
+                            />
+                        </div>
                     </div>
-                    <div className="basis-128">
-                        <StaffDetailsForm
-                            staffInfo={staffInfo}
-                            modalState={modalState}
-                            register={register}
-                            errors={errors}
-                            control={control}
-                        />
-                    </div>
-                </div>
+                </form>
             </Modal.Body>
             <Modal.Actions>
                 <Button

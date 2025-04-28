@@ -18,6 +18,17 @@ const StaffValidationSchema = yup.object().shape({
         .required("E-mail is required")
         .email("E-mail must be valid format."),
     department: yup.object().required("Department is required"),
+    image: yup
+        .mixed()
+        .nullable(true)
+        .test("fileType", "Unsupported file format", (value) => {
+            return value
+                ? ["image/png", "image/jpeg"].includes(value.type)
+                : true;
+        })
+        .test("fileSize", "File size too large", (value) => {
+            return value ? value.size <= 2 * 1024 * 1024 : true;
+        }),
 });
 
 export default StaffValidationSchema;
