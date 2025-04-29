@@ -20,14 +20,7 @@ const StaffList = () => {
     }
 
     const modalInitialState = { isOpen: false, type: "add" };
-    // const empyStaffInfoForNewStaff = {
-    //     firstName: "",
-    //     lastName: "",
-    //     phone: "",
-    //     email: "",
-    //     department: "",
-    //     image: "",
-    // };
+
     const empyStaffInfoForNewStaff = {
         firstName: null,
         lastName: null,
@@ -55,7 +48,7 @@ const StaffList = () => {
     return (
         <>
             <StaffActionBar handleOpenModal={handleOpenModal} />
-            <StaffFilterContainer />
+            <StaffFilterContainer setStaffsData={setStaffsData} />
             <StaffTable
                 staffsData={staffsData}
                 handleOpenModal={handleOpenModal}
