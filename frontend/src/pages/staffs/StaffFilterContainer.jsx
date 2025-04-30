@@ -18,9 +18,10 @@ const StaffFilterContainer = ({ setStaffsData }) => {
 
     return (
         <div className="mb-2 grid grid-cols-2">
-            <div className="flex content-center gap-1 justify-self-start">
-                <PageSizeFilter />
-            </div>
+            <PageSizeFilter
+                staffFilter={staffFilter}
+                setStaffFilter={setStaffFilter}
+            />
             <ColumnFilter
                 staffFilter={staffFilter}
                 setStaffFilter={setStaffFilter}
