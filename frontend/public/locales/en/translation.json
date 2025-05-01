@@ -16,5 +16,61 @@
             "link.turkish": "Turkish",
             "link.english": "English"
         }
+    },
+
+    "STAFF": {
+        "list.table.title.no": "Id",
+        "list.table.title.firstName": "First Name",
+        "list.table.title.lastName": "Last Name",
+        "list.table.title.departmentName": "Department",
+        "list.table.title.registeredDate": "Create Date",
+        "list.table.title.actions": "Actions",
+        "list.table.row.button.detail": "Detail",
+        "list.table.row.button.delete": "Delete",
+        "list.table.label.entryCount1": "Show",
+        "list.table.label.entryCount2": "entries",
+        "list.table.label.entryInformation": "Showing {{rangeStart}} to {{rangeEnd}} of {{totalEntry}} entries.",
+        "list.table.searchType.firstName": "First Name",
+        "list.table.searchType.lastName": "Last Name",
+        "list.table.button.searchStaff": "Search",
+        "button.addStaff": "Add Staff",
+        "select.department.label": "Select Department",
+        "select.column.label": "Select Column",
+        "ADDUPDATEDETAILMODAL": {
+            "title.add": "Add Staff",
+            "title.update": "Update Staff",
+            "title.detail": "Staff Details",
+            "label.id": "Id",
+            "label.createDate": "Create Date",
+            "label.firstName": "First Name",
+            "label.lastName": "Last Name",
+            "label.phone": "Phone",
+            "label.email": "E-mail",
+            "label.department": "Department",
+            "button.cancel": "Cancel",
+            "button.update": "Update",
+            "button.close": "Close",
+            "button.accept.add": "Add",
+            "button.accept.update": "Save",
+            "button.image.select": "Select",
+            "button.image.remove": "Remove",
+            "image.validation.error.fileSize": "Maximum upload file size {{fileSize}}.",
+            "image.validation.error.fileType": "Allowed file types : {{fileTypes}}",
+            "toastr.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
+            "toastr.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
+            "toastr.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
+            "toastr.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
+            "invalid.message.required": "Must not be empty.",
+            "invalid.message.phone.pattern": "Must be {{numberCount}} numbers."
+        }
+    },
+
+    "DELETECONFIRMATIONMODAL": {
+        "header.title": "Delete Staff Confirmation",
+        "warningMessage": "Do you want to delete information about <strong>{{firstName}} {{lastName}}</strong> with id <strong>{{staffId}}</strong> ?",
+        "acceptButton.label": "Delete",
+        "cancelButton.label": "Cancel",
+        "toastr.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is deleted.",
+        "toastr.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is not deleted."
     }
 }

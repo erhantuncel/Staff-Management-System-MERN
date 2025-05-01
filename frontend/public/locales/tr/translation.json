@@ -16,5 +16,61 @@
             "link.turkish": "Türkçe",
             "link.english": "İngilizce"
         }
+    },
+
+    "STAFF": {
+        "list.table.title.no": "No",
+        "list.table.title.firstName": "Ad",
+        "list.table.title.lastName": "Soyad",
+        "list.table.title.departmentName": "Bölüm",
+        "list.table.title.registeredDate": "Kayıt Zamanı",
+        "list.table.title.actions": "İşlemler",
+        "list.table.row.button.detail": "Detay",
+        "list.table.row.button.delete": "Sil",
+        "list.table.label.entryCount1": "Sayfada",
+        "list.table.label.entryCount2": "kayıt göster",
+        "list.table.label.entryInformation": "{{totalEntry}} kayıttan {{rangeStart}}-{{rangeEnd}} arasındaki kayıtlar gösteriliyor.",
+        "list.table.searchType.firstName": "Ad",
+        "list.table.searchType.lastName": "Soyad",
+        "list.table.button.searchStaff": "Ara",
+        "button.addStaff": "Personel Ekle",
+        "select.department.label": "Departman Seçiniz",
+        "select.column.label": "Sütun Seçiniz",
+        "ADDUPDATEDETAILMODAL": {
+            "title.add": "Personel Ekle",
+            "title.update": "Personel Güncelle",
+            "title.detail": "Personel Bilgileri",
+            "label.id": "No",
+            "label.createDate": "Kayıt Zamanı",
+            "label.firstName": "Ad",
+            "label.lastName": "Soyad",
+            "label.phone": "Telefon",
+            "label.email": "E-mail",
+            "label.department": "Bölüm",
+            "button.cancel": "Vazgeç",
+            "button.update": "Güncelle",
+            "button.close": "Kapat",
+            "button.accept.add": "Ekle",
+            "button.accept.update": "Kaydet",
+            "button.image.select": "Seç",
+            "button.image.remove": "Kaldır",
+            "image.validation.error.fileSize": "En fazla {{fileSize}} boyutunda resim yükleyebilirsiniz.",
+            "image.validation.error.fileType": "İzin verilen dosya tipleri: {{fileTypes}}",
+            "toastr.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
+            "toastr.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
+            "toastr.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
+            "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
+            "invalid.message.required": "Boş olmamalı.",
+            "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
+        }
+    },
+
+    "DELETECONFIRMATIONMODAL": {
+        "header.title": "Personel Silme Onayı",
+        "warningMessage": "<strong>{{staffId}}</strong> numaralı <strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
+        "acceptButton.label": "Sil",
+        "cancelButton.label": "İptal",
+        "toastr.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
+        "toastr.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
     }
 }
