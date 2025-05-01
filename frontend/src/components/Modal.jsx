@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 const getChildrenOnDisplayName = (children, displayName) => {
     return React.Children.map(children, (child) =>
@@ -6,13 +7,7 @@ const getChildrenOnDisplayName = (children, displayName) => {
     );
 };
 
-const Modal = ({
-    isOpen,
-    onClose,
-    modalBoxClassName,
-    // formSubmitAction,
-    children,
-}) => {
+const Modal = ({ isOpen, onClose, modalBoxClassName, children }) => {
     const modalRef = useRef(null);
 
     useEffect(() => {
@@ -43,19 +38,15 @@ const Modal = ({
     const body = getChildrenOnDisplayName(children, "Body");
     const actions = getChildrenOnDisplayName(children, "Actions");
 
-    return (
+    return createPortal(
         <dialog className="modal" ref={modalRef} onKeyDown={handleKeyDown}>
             <div className={`modal-box ${modalBoxClassName}`}>
-                {/* <form onSubmit={formSubmitAction}>
-                    {title}
-                    {body}
-                    {actions}
-                </form> */}
                 {title}
                 {body}
                 {actions}
             </div>
-        </dialog>
+        </dialog>,
+        document.getElementById("modal"),
     );
 };
 
