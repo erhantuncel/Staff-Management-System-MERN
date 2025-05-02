@@ -1,18 +1,15 @@
-import React, { useImperativeHandle, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../../components/form/Button";
 import PlusCircleIcon from "../../components/icons/PlusCircleIcon";
 import TrashIcon from "../../components/icons/TrashIcon";
+import { UIContext } from "../../contexts/UIContext";
 
-const StaffImage = ({
-    modalState,
-    setValue,
-    image,
-    setImage,
-    error,
-    register,
-}) => {
+const StaffImage = ({ setValue, image, setImage, error, register }) => {
     const { t } = useTranslation();
+
+    const { modalToShow } = useContext(UIContext);
+
     const { ref, ...fields } = register("image");
     const fileInputRef = useRef(null);
 
@@ -28,6 +25,7 @@ const StaffImage = ({
 
     const handleRemoveClick = () => {
         setImage(null);
+        setValue("image", null);
     };
 
     return (
@@ -41,7 +39,7 @@ const StaffImage = ({
                     )}
                 </div>
             </div>
-            {modalState.type !== "details" && (
+            {modalToShow !== "details" && (
                 <div className="mt-1 flex flex-row justify-center gap-1">
                     <Button
                         className="btn btn-ghost btn-xs"

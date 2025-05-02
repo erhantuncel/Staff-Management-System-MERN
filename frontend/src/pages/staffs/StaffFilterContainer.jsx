@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ColumnFilter from "./ColumnFilter";
 import PageSizeFilter from "./PageSizeFilter";
 
-const StaffFilterContainer = ({ setStaffsData }) => {
+const StaffFilterContainer = () => {
     const filterIntialValues = {
         department: "",
         column: "",
@@ -25,7 +25,6 @@ const StaffFilterContainer = ({ setStaffsData }) => {
             <ColumnFilter
                 staffFilter={staffFilter}
                 setStaffFilter={setStaffFilter}
-                setStaffsData={setStaffsData}
             />
         </div>
     );

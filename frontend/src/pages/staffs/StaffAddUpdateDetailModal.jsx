@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/form/Button";
 import { useTranslation } from "react-i18next";
@@ -7,31 +7,40 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import StaffImage from "./StaffImage";
 import StaffDetailsForm from "./StaffDetailsForm";
 import StaffValidationSchema from "./StaffValidationSchema";
+import { UIContext } from "../../contexts/UIContext";
+import { StaffListContext } from "../../contexts/StaffListContext";
 
-const StaffAddUpdateDetailModal = ({
-    modalState,
-    changeModalState,
-    onClose,
-    staffInfo,
-}) => {
+const StaffAddUpdateDetailModal = ({ onClose }) => {
     const { t } = useTranslation();
+
+    const {
+        modalToShow,
+        showAddModal,
+        showUpdateModal,
+        showDetailsModal,
+        showDeleteModal,
+        hideModal,
+    } = useContext(UIContext);
+    const { selectedStaff } = useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
 
+    // const staffInfo = staffObject;
+
     useEffect(() => {
-        staffInfo &&
-            Object.keys(staffInfo).forEach((key) => {
-                if (key === "department" && staffInfo[key]) {
+        selectedStaff &&
+            Object.keys(selectedStaff).forEach((key) => {
+                if (key === "department" && selectedStaff[key]) {
                     setValue(key, {
-                        value: staffInfo[key],
-                        label: staffInfo[key],
+                        value: selectedStaff[key],
+                        label: selectedStaff[key],
                     });
                 } else {
-                    setValue(key, staffInfo[key]);
+                    setValue(key, selectedStaff[key]);
                 }
             });
-        staffInfo && setImage(staffInfo.image);
-    }, [staffInfo]);
+        selectedStaff && setImage(selectedStaff.image);
+    }, [selectedStaff]);
 
     const {
         control,
@@ -50,25 +59,27 @@ const StaffAddUpdateDetailModal = ({
         data["createDate"] = new Date();
         console.log(data);
         setImage(null);
-        onClose();
+        hideModal();
+        // onClose();
     };
 
     const handleClose = () => {
         reset();
         setImage(null);
-        onClose();
+        hideModal();
+        // onClose();
     };
 
     return (
         <Modal
-            isOpen={modalState.isOpen}
+            isOpen={["add", "update", "details"].includes(modalToShow)}
             onClose={onClose}
             modalBoxClassName="w-10/12 max-w-2xl"
         >
             <Modal.Title>
-                {modalState.type === "add"
+                {modalToShow === "add"
                     ? t("STAFF.ADDUPDATEDETAILMODAL.title.add")
-                    : modalState.type === "update"
+                    : modalToShow === "update"
                       ? t("STAFF.ADDUPDATEDETAILMODAL.title.update")
                       : t("STAFF.ADDUPDATEDETAILMODAL.title.detail")}
             </Modal.Title>
@@ -77,7 +88,6 @@ const StaffAddUpdateDetailModal = ({
                     <div className="flex flex-row">
                         <div className="basis-64 pr-10 text-center">
                             <StaffImage
-                                modalState={modalState}
                                 image={image}
                                 setImage={setImage}
                                 register={register}
@@ -87,8 +97,6 @@ const StaffAddUpdateDetailModal = ({
                         </div>
                         <div className="basis-128">
                             <StaffDetailsForm
-                                staffInfo={staffInfo}
-                                modalState={modalState}
                                 register={register}
                                 errors={errors}
                                 control={control}
@@ -100,29 +108,27 @@ const StaffAddUpdateDetailModal = ({
             <Modal.Actions>
                 <Button
                     className={"btn btn-sm btn-neutral"}
-                    hidden={modalState.type !== "add"}
+                    hidden={modalToShow !== "add"}
                     onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.add")}
                 </Button>
                 <Button
                     className={"btn btn-sm btn-neutral"}
-                    hidden={modalState.type !== "update"}
+                    hidden={modalToShow !== "update"}
                     onClick={handleSubmit(onSubmit)}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.update")}
                 </Button>
                 <Button
                     className={"btn btn-sm btn-neutral"}
-                    hidden={modalState.type !== "details"}
-                    onClick={() =>
-                        changeModalState({ ...modalState, type: "update" })
-                    }
+                    hidden={modalToShow !== "details"}
+                    onClick={showUpdateModal}
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.update")}
                 </Button>
                 <Button className="btn btn-sm btn-soft" onClick={handleClose}>
-                    {modalState.type === "details"
+                    {modalToShow === "details"
                         ? t("STAFF.ADDUPDATEDETAILMODAL.button.close")
                         : t("STAFF.ADDUPDATEDETAILMODAL.button.cancel")}
                 </Button>

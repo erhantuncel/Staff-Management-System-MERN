@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Button from "../../components/form/Button";
 import TrashIcon from "../../components/icons/TrashIcon";
 import DocumentMagnifyingGlassIcon from "../../components/icons/DocumentMagnifyingGlassIcon";
+import { UIContext } from "../../contexts/UIContext";
+import { StaffListContext } from "../../contexts/StaffListContext";
 
-const StaffTable = ({ staffsData, handleOpenModal }) => {
+const StaffTable = () => {
     const { t } = useTranslation();
+
+    const { showDetailsModal } = useContext(UIContext);
+    const { selectStaff, items, populateStaffListItems } =
+        useContext(StaffListContext);
 
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
@@ -31,6 +37,11 @@ const StaffTable = ({ staffsData, handleOpenModal }) => {
         setIsConfirmationModalOpen(false);
     };
 
+    const handleShowDetailsModal = (staff) => {
+        selectStaff(staff);
+        showDetailsModal();
+    };
+
     return (
         <div className="rounded-box border-base-content/5 mb-5 max-h-[calc(100vh-300px)] overflow-scroll border">
             <table className="table">
@@ -47,7 +58,7 @@ const StaffTable = ({ staffsData, handleOpenModal }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {staffsData.map((staff) => (
+                    {items.map((staff) => (
                         <tr key={staff.id}>
                             <th>{staff.id}</th>
                             <td>{staff.firstName}</td>
@@ -58,7 +69,7 @@ const StaffTable = ({ staffsData, handleOpenModal }) => {
                                 <Button
                                     className="btn btn-sm btn-soft mr-1"
                                     onClick={() =>
-                                        handleOpenModal("details", staff)
+                                        handleShowDetailsModal(staff)
                                     }
                                 >
                                     <DocumentMagnifyingGlassIcon type="micro" />

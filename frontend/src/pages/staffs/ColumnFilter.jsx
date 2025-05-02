@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import Select from "../../components/form/Select";
 import Input from "../../components/form/Input";
 import Button from "../../components/form/Button";
 import MagnifyingGlassIcon from "../../components/icons/MagnifyingGlassIcon";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { StaffListContext } from "../../contexts/StaffListContext";
 
-const ColumnFilter = ({ staffFilter, setStaffFilter, setStaffsData }) => {
+const ColumnFilter = ({ staffFilter, setStaffFilter }) => {
     const { t } = useTranslation();
 
     const departments = [
@@ -26,6 +27,8 @@ const ColumnFilter = ({ staffFilter, setStaffFilter, setStaffsData }) => {
         keyword: "",
     };
 
+    const { populateStaffListItems } = useContext(StaffListContext);
+
     const {
         register,
         handleSubmit,
@@ -39,7 +42,7 @@ const ColumnFilter = ({ staffFilter, setStaffFilter, setStaffsData }) => {
         console.log("On Submit");
         console.log(data);
         setStaffFilter({ ...staffFilter, ...data });
-        setStaffsData([]);
+        populateStaffListItems([]);
         reset(formInitialValues);
     };
 
