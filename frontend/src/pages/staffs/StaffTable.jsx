@@ -10,18 +10,25 @@ import { StaffListContext } from "../../contexts/StaffListContext";
 const StaffTable = () => {
     const { t } = useTranslation();
 
-    const { showDetailsModal } = useContext(UIContext);
-    const { selectStaff, items, populateStaffListItems } =
-        useContext(StaffListContext);
+    const { showDetailsModal, showDeleteModal, hideModal } =
+        useContext(UIContext);
+    const { selectedStaff, selectStaff, items } = useContext(StaffListContext);
 
-    const [selectedStaff, setSelectedStaff] = useState(null);
-    const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
-        useState(false);
     const [confirmationModalMessage, setConfirmationModalMessage] =
         useState(null);
 
-    const showDeleteConfirmationModal = (staff) => {
-        setSelectedStaff(staff);
+    const handleDeleteConfirmationAccept = () => {
+        console.log(`Staff has id: ${selectedStaff?.id} is deleted.`);
+        hideModal();
+    };
+
+    const handleShowDetailsModal = (staff) => {
+        selectStaff(staff);
+        showDetailsModal();
+    };
+
+    const handleShowDeleteModal = (staff) => {
+        selectStaff(staff);
         setConfirmationModalMessage(
             t("DELETECONFIRMATIONMODAL.warningMessage", {
                 staffId: staff.id,
@@ -29,17 +36,7 @@ const StaffTable = () => {
                 lastName: staff.lastName,
             }),
         );
-        setIsConfirmationModalOpen(true);
-    };
-
-    const handleDeleteConfirmationAccept = () => {
-        console.log(`Staff has id: ${selectedStaff?.id} is deleted.`);
-        setIsConfirmationModalOpen(false);
-    };
-
-    const handleShowDetailsModal = (staff) => {
-        selectStaff(staff);
-        showDetailsModal();
+        showDeleteModal();
     };
 
     return (
@@ -81,9 +78,7 @@ const StaffTable = () => {
                                 </Button>
                                 <Button
                                     className="btn btn-sm btn-soft"
-                                    onClick={() =>
-                                        showDeleteConfirmationModal(staff)
-                                    }
+                                    onClick={() => handleShowDeleteModal(staff)}
                                 >
                                     <TrashIcon type="micro" />
                                     <span className="hidden lg:flex">
@@ -98,7 +93,6 @@ const StaffTable = () => {
                 </tbody>
             </table>
             <ConfirmationModal
-                isOpen={isConfirmationModalOpen}
                 message={confirmationModalMessage}
                 title={t("DELETECONFIRMATIONMODAL.header.title")}
                 acceptButtonLabel={t(
@@ -107,7 +101,6 @@ const StaffTable = () => {
                 cancelButtonLabel={t(
                     "DELETECONFIRMATIONMODAL.cancelButton.label",
                 )}
-                onClose={() => setIsConfirmationModalOpen(false)}
                 onAccept={() => handleDeleteConfirmationAccept()}
             />
         </div>

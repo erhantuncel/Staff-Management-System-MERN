@@ -22,7 +22,7 @@ const Modal = ({ isOpen, onClose, modalBoxClassName, children }) => {
     }, [isOpen]);
 
     const handleCloseModal = (event) => {
-        event.preventDefault();
+        event?.preventDefault();
         if (onClose) {
             onClose();
         }

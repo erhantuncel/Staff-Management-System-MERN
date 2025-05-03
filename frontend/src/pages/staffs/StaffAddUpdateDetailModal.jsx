@@ -10,22 +10,13 @@ import StaffValidationSchema from "./StaffValidationSchema";
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 
-const StaffAddUpdateDetailModal = ({ onClose }) => {
+const StaffAddUpdateDetailModal = () => {
     const { t } = useTranslation();
 
-    const {
-        modalToShow,
-        showAddModal,
-        showUpdateModal,
-        showDetailsModal,
-        showDeleteModal,
-        hideModal,
-    } = useContext(UIContext);
+    const { modalToShow, showUpdateModal, hideModal } = useContext(UIContext);
     const { selectedStaff } = useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
-
-    // const staffInfo = staffObject;
 
     useEffect(() => {
         selectedStaff &&
@@ -60,20 +51,18 @@ const StaffAddUpdateDetailModal = ({ onClose }) => {
         console.log(data);
         setImage(null);
         hideModal();
-        // onClose();
     };
 
     const handleClose = () => {
         reset();
         setImage(null);
         hideModal();
-        // onClose();
     };
 
     return (
         <Modal
             isOpen={["add", "update", "details"].includes(modalToShow)}
-            onClose={onClose}
+            onClose={hideModal}
             modalBoxClassName="w-10/12 max-w-2xl"
         >
             <Modal.Title>

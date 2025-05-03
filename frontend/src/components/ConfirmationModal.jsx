@@ -1,28 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import Button from "./form/Button";
+import Modal from "./Modal";
+import { UIContext } from "../contexts/UIContext";
 
 const ConfirmationModal = ({
-    isOpen,
     onAccept,
-    onClose,
     cancelButtonLabel,
     acceptButtonLabel,
     title,
-    modalBoxClassName,
     message,
 }) => {
-    const modalRef = useRef(null);
-
-    useEffect(() => {
-        const modalElement = modalRef.current;
-        if (!modalElement) return;
-
-        if (isOpen) {
-            modalElement.showModal();
-        } else {
-            modalElement.close();
-        }
-    }, [isOpen]);
+    const { modalToShow, hideModal } = useContext(UIContext);
 
     const handleAccept = () => {
         console.log("Confirmation Modal Accepted");
@@ -33,35 +21,29 @@ const ConfirmationModal = ({
 
     const handleCancel = () => {
         console.log("Confirmation Modal Cancelled");
-        if (onClose) {
-            onClose();
-        }
-    };
-
-    const handleKeyDown = (event) => {
-        if (event.key === "Escape") {
-            handleCloseModal();
-        }
+        hideModal();
     };
 
     return (
-        <dialog className="modal" ref={modalRef} onKeyDown={handleKeyDown}>
-            <div className={`modal-box ${modalBoxClassName}`}>
-                <h3 className="text-lg font-bold">{title}</h3>
-                <div className="py-4">{message}</div>
-                <div className="modal-action">
-                    <Button
-                        className="btn btn-sm btn-error"
-                        onClick={handleAccept}
-                    >
-                        {acceptButtonLabel}
-                    </Button>
-                    <Button className="btn btn-sm" onClick={handleCancel}>
-                        {cancelButtonLabel}
-                    </Button>
-                </div>
-            </div>
-        </dialog>
+        <Modal
+            isOpen={modalToShow === "delete"}
+            onClose={hideModal}
+            modalBoxClassName="w-10/12 max-w-md"
+        >
+            <Modal.Title>{title}</Modal.Title>
+            <Modal.Body>{message}</Modal.Body>
+            <Modal.Actions>
+                <Button
+                    className="btn btn-sm btn-neutral"
+                    onClick={handleAccept}
+                >
+                    {acceptButtonLabel}
+                </Button>
+                <Button className="btn btn-sm" onClick={handleCancel}>
+                    {cancelButtonLabel}
+                </Button>
+            </Modal.Actions>
+        </Modal>
     );
 };
 
