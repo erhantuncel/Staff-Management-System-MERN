@@ -1,18 +1,12 @@
 import React from "react";
 
-import UserDashboard from "./layouts/UserDashboard.jsx";
-import GuestDashboard from "./layouts/GuestDashboard.jsx";
 import { Slide, ToastContainer } from "react-toastify";
-import { Routes, Route } from "react-router";
+import { Outlet } from "react-router";
 
 function App() {
     return (
         <>
-            <Routes>
-                <Route path="/user/*" element={<UserDashboard />} />
-                <Route path="/" element={<GuestDashboard />} />
-            </Routes>
-
+            <Outlet />
             <ToastContainer
                 position="top-right"
                 autoClose={3000}
