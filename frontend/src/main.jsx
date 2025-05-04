@@ -1,8 +1,7 @@
 import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, RouterProvider } from "react-router";
+import { RouterProvider } from "react-router";
 import "./index.css";
-import App from "./App";
 import { getRouter } from "./routes";
 
 // import i18n (needs to be bundled ;))
@@ -17,9 +16,6 @@ createRoot(document.getElementById("root")).render(
         <StrictMode>
             <UIContextProvider>
                 <StaffListContextProvider>
-                    {/* <BrowserRouter>
-                        <App />
-                    </BrowserRouter> */}
                     <RouterProvider router={router} />
                 </StaffListContextProvider>
             </UIContextProvider>
