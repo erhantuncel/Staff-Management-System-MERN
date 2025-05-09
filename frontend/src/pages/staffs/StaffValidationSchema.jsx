@@ -1,34 +1,72 @@
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 
-const StaffValidationSchema = yup.object().shape({
-    firstName: yup
-        .string("First name must be string")
-        .required("First name is required")
-        .max(40, "First name must be maximum 40 characters."),
-    lastName: yup
-        .string("Last name must be string")
-        .required("Last name is required")
-        .max(40, "Last name must be maximum 40 characters."),
-    phone: yup
-        .string("Phone should be string")
-        .required("Phone is required")
-        .length(10, "Phone number should be 10 digits"),
-    email: yup
-        .string("E-mail should be string")
-        .required("E-mail is required")
-        .email("E-mail must be valid format."),
-    department: yup.object().required("Department is required"),
-    image: yup
-        .mixed()
-        .nullable(true)
-        .test("fileType", "Unsupported file format", (value) => {
-            return value
-                ? ["image/png", "image/jpeg"].includes(value.type)
-                : true;
-        })
-        .test("fileSize", "File size too large", (value) => {
-            return value ? value.size <= 2 * 1024 * 1024 : true;
-        }),
-});
+const getStaffValidation = () => {
+    const { t } = useTranslation();
 
-export default StaffValidationSchema;
+    return yup.object().shape({
+        firstName: yup
+            .string()
+            .required(t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.required"))
+            .max(
+                40,
+                t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.max.character", {
+                    maxChar: 40,
+                }),
+            ),
+        lastName: yup
+            .string()
+            .required(t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.required"))
+            .max(
+                40,
+                t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.max.character", {
+                    maxChar: 40,
+                }),
+            ),
+        phone: yup
+            .string()
+            .required(t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.required"))
+            .length(
+                10,
+                t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.phone.pattern", {
+                    numberCount: 10,
+                }),
+            ),
+        email: yup
+            .string()
+            .required(t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.required"))
+            .email(
+                t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.email.format"),
+            ),
+        department: yup
+            .object()
+            .required(t("STAFF.ADDUPDATEDETAILMODAL.invalid.message.required")),
+        image: yup
+            .mixed()
+            .nullable(true)
+            .test(
+                "fileType",
+                t(
+                    "STAFF.ADDUPDATEDETAILMODAL.image.validation.error.fileType",
+                    { fileTypes: ".png, .jpeg" },
+                ),
+                (value) => {
+                    return value
+                        ? ["image/png", "image/jpeg"].includes(value.type)
+                        : true;
+                },
+            )
+            .test(
+                "fileSize",
+                t(
+                    "STAFF.ADDUPDATEDETAILMODAL.image.validation.error.fileSize",
+                    { fileSize: "2MB" },
+                ),
+                (value) => {
+                    return value ? value.size <= 2 * 1024 * 1024 : true;
+                },
+            ),
+    });
+};
+
+export default getStaffValidation;

@@ -61,7 +61,9 @@
             "toastr.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
             "toastr.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
             "invalid.message.required": "Must not be empty.",
-            "invalid.message.phone.pattern": "Must be {{numberCount}} numbers."
+            "invalid.message.phone.pattern": "Must be {{numberCount}} numbers.",
+            "invalid.message.email.format": "E-mail must be valid format.",
+            "invalid.message.max.character": "Must be maximum {{maxChar}} characters"
         }
     },
 

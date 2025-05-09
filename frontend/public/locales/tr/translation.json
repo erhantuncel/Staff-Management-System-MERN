@@ -61,7 +61,9 @@
             "toastr.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
             "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
             "invalid.message.required": "Boş olmamalı.",
-            "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı."
+            "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı.",
+            "invalid.message.email.format": "Geçerli bir e-mail adresi olmalı.",
+            "invalid.message.max.character": "En fazla {{maxChar}} karakter olmalı."
         }
     },
 

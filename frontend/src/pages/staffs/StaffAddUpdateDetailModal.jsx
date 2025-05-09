@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import StaffImage from "./StaffImage";
 import StaffDetailsForm from "./StaffDetailsForm";
-import StaffValidationSchema from "./StaffValidationSchema";
+import getStaffValidation from "./StaffValidationSchema";
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 
@@ -42,7 +42,7 @@ const StaffAddUpdateDetailModal = () => {
         formState: { errors },
     } = useForm({
         mode: "onTouched",
-        resolver: yupResolver(StaffValidationSchema),
+        resolver: yupResolver(getStaffValidation()),
     });
 
     const onSubmit = (data) => {
