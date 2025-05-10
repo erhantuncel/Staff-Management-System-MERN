@@ -6,6 +6,7 @@ import TrashIcon from "../../components/icons/TrashIcon";
 import DocumentMagnifyingGlassIcon from "../../components/icons/DocumentMagnifyingGlassIcon";
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
+import { toast } from "react-toastify";
 
 const StaffTable = () => {
     const { t } = useTranslation();
@@ -19,6 +20,26 @@ const StaffTable = () => {
 
     const handleDeleteConfirmationAccept = () => {
         console.log(`Staff has id: ${selectedStaff?.id} is deleted.`);
+        toast.success(
+            t(
+                "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
+                {
+                    staffId: selectedStaff?.id,
+                    firstName: selectedStaff?.firstName,
+                    lastName: selectedStaff?.lastName,
+                },
+            ),
+        );
+        toast.error(
+            t(
+                "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.error.message",
+                {
+                    staffId: selectedStaff?.id,
+                    firstName: selectedStaff?.firstName,
+                    lastName: selectedStaff?.lastName,
+                },
+            ),
+        );
         hideModal();
     };
 

@@ -56,10 +56,10 @@
             "button.image.remove": "Kaldır",
             "image.validation.error.fileSize": "En fazla {{fileSize}} boyutunda resim yükleyebilirsiniz.",
             "image.validation.error.fileType": "İzin verilen dosya tipleri: {{fileTypes}}",
-            "toastr.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
-            "toastr.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
-            "toastr.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
-            "toastr.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
+            "toastify.updateStaff.success.message": "{{firstName}} {{lastName}} bilgileri güncelendi.",
+            "toastify.updateStaff.error.message": "{{firstName}} {{lastName}} bilgileri güncellenemedi.",
+            "toastify.addStaff.success.message": "{{firstName}} {{lastName}} bilgileri eklendi.",
+            "toastify.addStaff.error.message": "{{firstName}} {{lastName}} bilgileri eklenemedi.",
             "invalid.message.required": "Boş olmamalı.",
             "invalid.message.phone.pattern": "{{numberCount}} adet rakamdan oluşmalı.",
             "invalid.message.email.format": "Geçerli bir e-mail adresi olmalı.",
@@ -72,7 +72,7 @@
         "warningMessage": "<strong>{{staffId}}</strong> numaralı <strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
         "acceptButton.label": "Sil",
         "cancelButton.label": "İptal",
-        "toastr.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
-        "toastr.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
+        "toastify.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
+        "toastify.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
     }
 }

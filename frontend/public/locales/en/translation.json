@@ -56,10 +56,10 @@
             "button.image.remove": "Remove",
             "image.validation.error.fileSize": "Maximum upload file size {{fileSize}}.",
             "image.validation.error.fileType": "Allowed file types : {{fileTypes}}",
-            "toastr.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
-            "toastr.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
-            "toastr.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
-            "toastr.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
+            "toastify.updateStaff.success.message": "Informations about {{firstName}} {{lastName}} is updated.",
+            "toastify.updateStaff.error.message": "Informations about {{firstName}} {{lastName}} is not updated.",
+            "toastify.addStaff.success.message": "Informations about {{firstName}} {{lastName}} is added.",
+            "toastify.addStaff.error.message": "Informations about {{firstName}} {{lastName}} is not added.",
             "invalid.message.required": "Must not be empty.",
             "invalid.message.phone.pattern": "Must be {{numberCount}} numbers.",
             "invalid.message.email.format": "E-mail must be valid format.",
@@ -72,7 +72,7 @@
         "warningMessage": "Do you want to delete information about <strong>{{firstName}} {{lastName}}</strong> with id <strong>{{staffId}}</strong> ?",
         "acceptButton.label": "Delete",
         "cancelButton.label": "Cancel",
-        "toastr.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is deleted.",
-        "toastr.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is not deleted."
+        "toastify.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is deleted.",
+        "toastify.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is not deleted."
     }
 }

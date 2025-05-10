@@ -9,6 +9,7 @@ import StaffDetailsForm from "./StaffDetailsForm";
 import getStaffValidation from "./StaffValidationSchema";
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
+import { toast } from "react-toastify";
 
 const StaffAddUpdateDetailModal = () => {
     const { t } = useTranslation();
@@ -51,12 +52,30 @@ const StaffAddUpdateDetailModal = () => {
         console.log(data);
         setImage(null);
         hideModal();
+        toast.success(getMessageForToastify(data, "success"));
+        toast.error(getMessageForToastify(data, "error"));
     };
 
     const handleClose = () => {
         reset();
         setImage(null);
         hideModal();
+    };
+
+    const getMessageForToastify = (staff, status) => {
+        let toastifyMessage = "";
+        if (modalToShow === "add") {
+            toastifyMessage = t(
+                `STAFF.ADDUPDATEDETAILMODAL.toastify.addStaff.${status}.message`,
+                { firstName: staff.firstName, lastName: staff.lastName },
+            );
+        } else if (modalToShow === "update") {
+            toastifyMessage = t(
+                `STAFF.ADDUPDATEDETAILMODAL.toastify.updateStaff.${status}.message`,
+                { firstName: staff.firstName, lastName: staff.lastName },
+            );
+        }
+        return toastifyMessage;
     };
 
     return (
