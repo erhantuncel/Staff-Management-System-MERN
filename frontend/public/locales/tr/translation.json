@@ -40,7 +40,6 @@
             "title.add": "Personel Ekle",
             "title.update": "Personel Güncelle",
             "title.detail": "Personel Bilgileri",
-            "label.id": "No",
             "label.createDate": "Kayıt Zamanı",
             "label.firstName": "Ad",
             "label.lastName": "Soyad",

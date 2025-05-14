@@ -23,14 +23,14 @@ const StaffDetailsForm = ({ register, control, errors }) => {
             {Object.entries(selectedStaff).map(([key, value], index) => {
                 return (
                     <div className="mb-2 flex flex-row" key={index}>
-                        {key !== "image" && (
+                        {key !== "image" && key !== "_id" && (
                             <span className="basis-3/7 content-center text-sm font-bold">
                                 {t(`STAFF.ADDUPDATEDETAILMODAL.label.${key}`)}
                             </span>
                         )}
                         <div className="basis-5/7">
                             <span hidden={modalToShow !== "details"}>
-                                {value}
+                                {key !== "image" && key !== "_id" && value}
                             </span>
                             {key === "department" ? (
                                 <ControllerSelect
@@ -41,7 +41,8 @@ const StaffDetailsForm = ({ register, control, errors }) => {
                                     error={errors && errors[key]?.message}
                                 />
                             ) : (
-                                key !== "image" && (
+                                key !== "image" &&
+                                key !== "_id" && (
                                     <Input
                                         type="text"
                                         className={"input input-sm"}

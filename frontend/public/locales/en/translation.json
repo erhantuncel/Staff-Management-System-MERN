@@ -40,7 +40,6 @@
             "title.add": "Add Staff",
             "title.update": "Update Staff",
             "title.detail": "Staff Details",
-            "label.id": "Id",
             "label.createDate": "Create Date",
             "label.firstName": "First Name",
             "label.lastName": "Last Name",
