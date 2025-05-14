@@ -12,19 +12,19 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-app.use(express.json());
-app.use("/api", routes);
-app.use(errorHandler);
-
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.use(express.json());
+app.use("/api", routes);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     connectDb();
