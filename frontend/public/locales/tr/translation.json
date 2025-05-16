@@ -68,10 +68,10 @@
 
     "DELETECONFIRMATIONMODAL": {
         "header.title": "Personel Silme Onayı",
-        "warningMessage": "<strong>{{staffId}}</strong> numaralı <strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
+        "warningMessage": "<strong>{{firstName}} {{lastName}}</strong> bilgilerini veritabanından silmek istiyor musunuz?",
         "acceptButton.label": "Sil",
         "cancelButton.label": "İptal",
-        "toastify.deleteDepartment.success.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silindi.",
-        "toastify.deleteDepartment.error.message": "{{staffId}} numaralı {{firstName}} {{lastName}} bilgileri silinemedi."
+        "toastify.deleteDepartment.success.message": "{{firstName}} {{lastName}} bilgileri silindi.",
+        "toastify.deleteDepartment.error.message": "{{firstName}} {{lastName}} bilgileri silinemedi."
     }
 }

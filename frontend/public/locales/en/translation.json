@@ -68,10 +68,10 @@
 
     "DELETECONFIRMATIONMODAL": {
         "header.title": "Delete Staff Confirmation",
-        "warningMessage": "Do you want to delete information about <strong>{{firstName}} {{lastName}}</strong> with id <strong>{{staffId}}</strong> ?",
+        "warningMessage": "Do you want to delete information about <strong>{{firstName}} {{lastName}}?",
         "acceptButton.label": "Delete",
         "cancelButton.label": "Cancel",
-        "toastify.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is deleted.",
-        "toastify.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} with id {{staffId}} is not deleted."
+        "toastify.deleteDepartment.success.message": "Information about {{firstName}} {{lastName}} is deleted.",
+        "toastify.deleteDepartment.error.message": "Information about {{firstName}} {{lastName}} is not deleted."
     }
 }

@@ -7,40 +7,51 @@ import DocumentMagnifyingGlassIcon from "../../components/icons/DocumentMagnifyi
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
+import { getAllStaffs, removeStaff } from "../../api/services/StaffService";
 
 const StaffTable = () => {
     const { t } = useTranslation();
 
     const { showDetailsModal, showDeleteModal, hideModal } =
         useContext(UIContext);
-    const { selectedStaff, selectStaff, items } = useContext(StaffListContext);
+    const { selectedStaff, selectStaff, items, populateStaffListItems } =
+        useContext(StaffListContext);
 
     const [confirmationModalMessage, setConfirmationModalMessage] =
         useState(null);
 
     const handleDeleteConfirmationAccept = () => {
-        console.log(`Staff has id: ${selectedStaff?.id} is deleted.`);
-        toast.success(
-            t(
-                "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
-                {
-                    staffId: selectedStaff?.id,
-                    firstName: selectedStaff?.firstName,
-                    lastName: selectedStaff?.lastName,
-                },
-            ),
-        );
-        toast.error(
-            t(
-                "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.error.message",
-                {
-                    staffId: selectedStaff?.id,
-                    firstName: selectedStaff?.firstName,
-                    lastName: selectedStaff?.lastName,
-                },
-            ),
-        );
-        hideModal();
+        console.log(`Staff has id: ${selectedStaff?._id} is deleted.`);
+        removeStaff(selectedStaff._id)
+            .then((response) => {
+                console.log(response);
+                toast.success(
+                    t(
+                        "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
+                        {
+                            firstName: selectedStaff?.firstName,
+                            lastName: selectedStaff?.lastName,
+                        },
+                    ),
+                );
+            })
+            .catch((error) => {
+                toast.error(
+                    t(
+                        "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.error.message",
+                        {
+                            firstName: selectedStaff?.firstName,
+                            lastName: selectedStaff?.lastName,
+                        },
+                    ),
+                );
+            })
+            .finally(() => {
+                hideModal();
+                getAllStaffs().then((response) =>
+                    populateStaffListItems(response.data),
+                );
+            });
     };
 
     const handleShowDetailsModal = (staff) => {
@@ -76,9 +87,9 @@ const StaffTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((staff) => (
-                        <tr key={staff.id}>
-                            <th>{staff.id}</th>
+                    {items.map((staff, index) => (
+                        <tr key={staff._id}>
+                            <th>{index + 1}</th>
                             <td>{staff.firstName}</td>
                             <td>{staff.lastName}</td>
                             <td>{staff.department}</td>

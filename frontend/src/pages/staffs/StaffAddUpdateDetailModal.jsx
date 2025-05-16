@@ -10,12 +10,18 @@ import getStaffValidation from "./StaffValidationSchema";
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
+import {
+    createStaff,
+    getAllStaffs,
+    updateStaff,
+} from "../../api/services/StaffService";
 
 const StaffAddUpdateDetailModal = () => {
     const { t } = useTranslation();
 
     const { modalToShow, showUpdateModal, hideModal } = useContext(UIContext);
-    const { selectedStaff } = useContext(StaffListContext);
+    const { selectedStaff, populateStaffListItems } =
+        useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
 
@@ -48,12 +54,38 @@ const StaffAddUpdateDetailModal = () => {
 
     const onSubmit = (data) => {
         console.log("On Submit");
-        data["createDate"] = new Date();
-        console.log(data);
-        setImage(null);
-        hideModal();
-        toast.success(getMessageForToastify(data, "success"));
-        toast.error(getMessageForToastify(data, "error"));
+        data = { ...data, department: data.department.value };
+
+        let serviceResponse = null;
+        switch (modalToShow) {
+            case "add":
+                serviceResponse = createStaff(data);
+                break;
+            case "update":
+                serviceResponse = updateStaff(selectedStaff._id, data);
+                break;
+        }
+
+        serviceResponse
+            ?.then((response) => {
+                if (
+                    (response.statusCode === modalToShow) === "add" ? 201 : 200
+                ) {
+                    toast.success(getMessageForToastify(data, "success"));
+                } else {
+                    toast.error(getMessageForToastify(data, "error"));
+                }
+            })
+            .catch((error) => {
+                toast.error(getMessageForToastify(data, "error"));
+            })
+            .finally(() => {
+                setImage(null);
+                hideModal();
+                getAllStaffs().then((response) =>
+                    populateStaffListItems(response.data),
+                );
+            });
     };
 
     const handleClose = () => {

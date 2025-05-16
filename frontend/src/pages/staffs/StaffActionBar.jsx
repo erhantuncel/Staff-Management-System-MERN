@@ -13,6 +13,7 @@ const StaffActionBar = () => {
 
     const handleAddStaff = () => {
         const empyStaffInfoForNewStaff = {
+            _id: null,
             firstName: null,
             lastName: null,
             phone: null,
