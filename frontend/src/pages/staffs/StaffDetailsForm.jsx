@@ -15,12 +15,15 @@ const StaffDetailsForm = ({ register, control, errors }) => {
     }));
 
     const { selectedStaff } = useContext(StaffListContext);
-
+    const fields = ["firstName", "lastName", "email", "phone", "department"];
     const editableFields = ["phone", "email", "department"];
 
     return (
         <>
             {Object.entries(selectedStaff).map(([key, value], index) => {
+                if (!fields.includes(key)) {
+                    return;
+                }
                 return (
                     <div className="mb-2 flex flex-row" key={index}>
                         {key !== "image" && key !== "_id" && (
