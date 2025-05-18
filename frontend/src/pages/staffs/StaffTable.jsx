@@ -83,6 +83,12 @@ const StaffTable = () => {
         showDeleteModal();
     };
 
+    const calculateStartingNumber = () => {
+        const page = parseInt(pagination.page);
+        const pageSize = parseInt(pagination.pageSize);
+        return page * pageSize - pageSize + 1;
+    };
+
     return (
         <div className="rounded-box border-base-content/5 mb-5 max-h-[calc(100vh-300px)] overflow-scroll border">
             <table className="table">
@@ -101,7 +107,7 @@ const StaffTable = () => {
                 <tbody>
                     {items.map((staff, index) => (
                         <tr key={staff._id}>
-                            <th>{index + 1}</th>
+                            <th>{calculateStartingNumber() + index}</th>
                             <td>{staff.firstName}</td>
                             <td>{staff.lastName}</td>
                             <td>{staff.department}</td>
