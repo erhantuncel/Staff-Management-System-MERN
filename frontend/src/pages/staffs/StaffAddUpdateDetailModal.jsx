@@ -12,7 +12,7 @@ import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
 import {
     createStaff,
-    getAllStaffs,
+    getAllStaffWithPagination,
     updateStaff,
 } from "../../api/services/StaffService";
 
@@ -20,7 +20,7 @@ const StaffAddUpdateDetailModal = () => {
     const { t } = useTranslation();
 
     const { modalToShow, showUpdateModal, hideModal } = useContext(UIContext);
-    const { selectedStaff, populateStaffListItems } =
+    const { selectedStaff, populateStaffListItems, pagination, setTotalCount } =
         useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
@@ -82,9 +82,13 @@ const StaffAddUpdateDetailModal = () => {
             .finally(() => {
                 setImage(null);
                 hideModal();
-                getAllStaffs().then((response) =>
-                    populateStaffListItems(response.data),
-                );
+                getAllStaffWithPagination(
+                    pagination.page,
+                    pagination.pageSize,
+                ).then((response) => {
+                    populateStaffListItems(response.data);
+                    setTotalCount(response.metadata.totalCount);
+                });
             });
     };
 

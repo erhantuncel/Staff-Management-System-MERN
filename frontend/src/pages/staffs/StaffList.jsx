@@ -5,7 +5,7 @@ import StaffTable from "./StaffTable";
 import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 import StaffFilterContainer from "./StaffFilterContainer";
 import { StaffListContext } from "../../contexts/StaffListContext";
-import { getAllStaffs } from "../../api/services/StaffService";
+import { getAllStaffWithPagination } from "../../api/services/StaffService";
 import { toast } from "react-toastify";
 
 const StaffList = () => {
@@ -23,19 +23,22 @@ const StaffList = () => {
     //     });
     // }
 
-    const { populateStaffListItems } = useContext(StaffListContext);
+    const { populateStaffListItems, pagination, totalCount, setTotalCount } =
+        useContext(StaffListContext);
 
     useEffect(() => {
-        // populateStaffListItems(staffArray);
-        getAllStaffs()
-            .then((response) => populateStaffListItems(response.data))
+        getAllStaffWithPagination(pagination.page, pagination.pageSize)
+            .then((response) => {
+                populateStaffListItems(response.data);
+                setTotalCount(response.metadata.totalCount);
+            })
             .catch((error) => {
                 console.log(error);
                 toast.error(
                     "There was an issue while fetching staffs from server.",
                 );
             });
-    }, []);
+    }, [pagination, totalCount]);
 
     return (
         <>

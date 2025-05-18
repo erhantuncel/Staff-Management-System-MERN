@@ -7,15 +7,24 @@ import DocumentMagnifyingGlassIcon from "../../components/icons/DocumentMagnifyi
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
-import { getAllStaffs, removeStaff } from "../../api/services/StaffService";
+import {
+    getAllStaffWithPagination,
+    removeStaff,
+} from "../../api/services/StaffService";
 
 const StaffTable = () => {
     const { t } = useTranslation();
 
     const { showDetailsModal, showDeleteModal, hideModal } =
         useContext(UIContext);
-    const { selectedStaff, selectStaff, items, populateStaffListItems } =
-        useContext(StaffListContext);
+    const {
+        selectedStaff,
+        selectStaff,
+        items,
+        populateStaffListItems,
+        pagination,
+        setTotalCount,
+    } = useContext(StaffListContext);
 
     const [confirmationModalMessage, setConfirmationModalMessage] =
         useState(null);
@@ -24,7 +33,6 @@ const StaffTable = () => {
         console.log(`Staff has id: ${selectedStaff?._id} is deleted.`);
         removeStaff(selectedStaff._id)
             .then((response) => {
-                console.log(response);
                 toast.success(
                     t(
                         "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
@@ -48,9 +56,13 @@ const StaffTable = () => {
             })
             .finally(() => {
                 hideModal();
-                getAllStaffs().then((response) =>
-                    populateStaffListItems(response.data),
-                );
+                getAllStaffWithPagination(
+                    pagination.page,
+                    pagination.pageSize,
+                ).then((response) => {
+                    populateStaffListItems(response.data);
+                    setTotalCount(response.metadata.totalCount);
+                });
             });
     };
 

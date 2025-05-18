@@ -6,6 +6,8 @@ export const StaffListContext = createContext();
 export const StaffListContextProvider = ({ children }) => {
     const [selectedStaff, setSelectedStaff] = useState({});
     const [items, dispatch] = useReducer(staffListReducer, []);
+    const [pagination, setPagination] = useState({ page: 1, pageSize: 5 });
+    const [totalCount, setTotalCount] = useState(0);
 
     const selectStaff = (staff) => {
         setSelectedStaff(staff);
@@ -20,6 +22,10 @@ export const StaffListContextProvider = ({ children }) => {
         selectStaff,
         items,
         populateStaffListItems,
+        pagination,
+        setPagination,
+        totalCount,
+        setTotalCount,
     };
 
     return (

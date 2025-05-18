@@ -18,10 +18,7 @@ const StaffFilterContainer = () => {
 
     return (
         <div className="mb-2 grid grid-cols-2">
-            <PageSizeFilter
-                staffFilter={staffFilter}
-                setStaffFilter={setStaffFilter}
-            />
+            <PageSizeFilter />
             <ColumnFilter
                 staffFilter={staffFilter}
                 setStaffFilter={setStaffFilter}

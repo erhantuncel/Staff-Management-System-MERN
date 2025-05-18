@@ -7,6 +7,13 @@ export const getAllStaffs = async () => {
     return response.data;
 };
 
+export const getAllStaffWithPagination = async (page, pageSize) => {
+    const response = await apiClient.get(`${baseURL}/pagination`, {
+        params: { page: page, pageSize: pageSize },
+    });
+    return response.data;
+};
+
 export const createStaff = async (data) => {
     const response = await apiClient.post(baseURL, data, {
         headers: {

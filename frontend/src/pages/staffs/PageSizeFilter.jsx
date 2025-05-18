@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Select from "../../components/form/Select";
 import { useTranslation } from "react-i18next";
+import { StaffListContext } from "../../contexts/StaffListContext";
 
-const PageSizeFilter = ({ staffFilter, setStaffFilter }) => {
+const PageSizeFilter = () => {
     const { t } = useTranslation();
 
     const pageSizeOptions = [
@@ -11,8 +12,10 @@ const PageSizeFilter = ({ staffFilter, setStaffFilter }) => {
         { key: "3", value: 15 },
     ];
 
+    const { pagination, setPagination } = useContext(StaffListContext);
+
     const handleChange = (event) => {
-        setStaffFilter({ ...staffFilter, pageSize: event.target.value });
+        setPagination({ pageSize: event.target.value, page: 1 });
     };
 
     return (
@@ -22,10 +25,11 @@ const PageSizeFilter = ({ staffFilter, setStaffFilter }) => {
                     {t("STAFF.list.table.label.entryCount1")}
                 </span>
                 <Select
-                    defaultValue="5"
+                    // defaultValue="5"
                     className="select select-sm w-15 flex-none"
                     options={pageSizeOptions}
                     onChange={handleChange}
+                    value={pagination.pageSize}
                 />
                 <span className="content-center">
                     {t("STAFF.list.table.label.entryCount2")}
