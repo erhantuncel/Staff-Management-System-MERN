@@ -51,7 +51,13 @@ const createStaff = async (req, res, next) => {
 const updateStaff = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const newStaffObjectToUpdate = req.body;
+        let newStaffObjectToUpdate = req.body;
+        if (req.file) {
+            newStaffObjectToUpdate.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            };
+        }
         const updatedStaff = await staffService.update(
             id,
             newStaffObjectToUpdate
