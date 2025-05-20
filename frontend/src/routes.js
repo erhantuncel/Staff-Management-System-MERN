@@ -4,6 +4,7 @@ import UserDashboard from "./layouts/UserDashboard";
 import App from "./App";
 import DeparmentList from "./pages/departments/DeparmentList";
 import StaffList from "./pages/staffs/StaffList";
+import NotFound from "./pages/errors/NotFound";
 
 export const getRouter = () =>
     createBrowserRouter([
@@ -32,6 +33,10 @@ export const getRouter = () =>
                             Component: StaffList,
                         },
                     ],
+                },
+                {
+                    path: "*",
+                    Component: NotFound,
                 },
             ],
         },
