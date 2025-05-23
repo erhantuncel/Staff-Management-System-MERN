@@ -10,27 +10,27 @@ const getAllStaff = async (req, res, next) => {
     }
 };
 
-const getAllStaffWithPagination = async (req, res, next) => {
-    let { page, pageSize } = req.query;
-    page = parseInt(page, 10) || 1;
-    pageSize = parseInt(pageSize, 10) || 10;
-    try {
-        const staffsWithPagination = await staffService.getAllWithPagination(
-            page,
-            pageSize
-        );
-        res.status(200).json(
-            utils.createSuccessDataResult(
-                200,
-                staffsWithPagination.data,
-                staffsWithPagination.metadata,
-                "Paginated staffs are listed successfully."
-            )
-        );
-    } catch (error) {
-        next(error);
-    }
-};
+// const getAllStaffWithPagination = async (req, res, next) => {
+//     let { page, pageSize } = req.query;
+//     page = parseInt(page, 10) || 1;
+//     pageSize = parseInt(pageSize, 10) || 10;
+//     try {
+//         const staffsWithPagination = await staffService.getAllWithPagination(
+//             page,
+//             pageSize
+//         );
+//         res.status(200).json(
+//             utils.createSuccessDataResult(
+//                 200,
+//                 staffsWithPagination.data,
+//                 staffsWithPagination.metadata,
+//                 "Paginated staffs are listed successfully."
+//             )
+//         );
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 
 const createStaff = async (req, res, next) => {
     try {
@@ -116,12 +116,56 @@ const getDepartmentList = async (req, res, next) => {
     }
 };
 
+const getStaffsByDepartmentAndQueryParamsPaginated = async (req, res, next) => {
+    let { firstName, lastName, department, page, pageSize } = req.query;
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 5;
+    let filter = { keyword: null, fieldName: null };
+    if (firstName || lastName) {
+        if (firstName) {
+            filter = { ...filter, keyword: firstName, fieldName: "firstName" };
+        } else {
+            filter = { ...filter, keyword: lastName, fieldName: "lastName" };
+        }
+    }
+    console.log(filter);
+    try {
+        let staffsWithPagination = null;
+        if (!department && !filter.keyword) {
+            staffsWithPagination = await staffService.getAllWithPagination(
+                page,
+                pageSize
+            );
+        } else {
+            staffsWithPagination =
+                await staffService.getStaffByDepartmentAndFirstOrLastNamePaginated(
+                    filter.keyword,
+                    filter.fieldName,
+                    department,
+                    page,
+                    pageSize
+                );
+        }
+        res.status(200).json(
+            utils.createSuccessDataResult(
+                200,
+                staffsWithPagination.data,
+                staffsWithPagination.metadata,
+                "Paginated staffs by first name and department are listed successfully."
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     getAllStaff,
     createStaff,
     updateStaff,
     removeStaff,
-    getAllStaffWithPagination,
+    // getAllStaffWithPagination,
     getStaffWithId,
     getDepartmentList,
+    getStaffsByDepartmentAndQueryParamsPaginated,
 };

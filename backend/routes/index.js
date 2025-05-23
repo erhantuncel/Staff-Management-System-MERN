@@ -5,7 +5,7 @@ import utils from "../utils/index.js";
 
 import {
     staffValidatorToCreate,
-    pageValidatorForGetAllStaffWithPagination,
+    pageValidatorForgetStaffsByDepartmentAndQueryParamsPaginated,
     staffValidatorToUpdate,
     idValidator,
 } from "../validations/staff.validation.js";
@@ -55,9 +55,9 @@ router.get("/staffs", staffController.getAllStaff);
  */
 router.get(
     "/staffs/pagination",
-    pageValidatorForGetAllStaffWithPagination,
+    pageValidatorForgetStaffsByDepartmentAndQueryParamsPaginated,
     validate,
-    staffController.getAllStaffWithPagination
+    staffController.getStaffsByDepartmentAndQueryParamsPaginated
 );
 
 /**
@@ -222,5 +222,7 @@ router.delete(
  *                  description: "Internal server error."
  */
 router.get("/departments", staffController.getDepartmentList);
+
+router.get("/staffs/");
 
 export default router;

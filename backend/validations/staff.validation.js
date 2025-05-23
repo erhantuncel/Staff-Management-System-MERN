@@ -41,14 +41,25 @@ export const staffValidatorToCreate = [
         .withMessage("Department should be string"),
 ];
 
-export const pageValidatorForGetAllStaffWithPagination = [
+export const pageValidatorForgetStaffsByDepartmentAndQueryParamsPaginated = [
     query("page")
         .isNumeric({ no_symbols: false })
         .withMessage("page should be numeric"),
-
     query("pageSize")
         .isNumeric({ no_symbols: true })
         .withMessage("pageSize should be numeric"),
+    query("firstName")
+        .optional()
+        .isString()
+        .withMessage("firstName should be string"),
+    query("lastName")
+        .optional()
+        .isString()
+        .withMessage("lastName should be string"),
+    query("department")
+        .optional()
+        .isString()
+        .withMessage("department should be string."),
 ];
 
 export const staffValidatorToUpdate = [

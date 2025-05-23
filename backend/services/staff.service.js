@@ -77,6 +77,56 @@ const getDepartmentList = async () => {
     return departmentList;
 };
 
+const getStaffByDepartmentAndFirstOrLastNamePaginated = async (
+    keyword,
+    firstOrLast,
+    department,
+    page,
+    pageSize
+) => {
+    console.log(`department: ${department} keyword: ${keyword}`);
+    if (!department || !keyword) {
+        throw new NotFoundError("Staff list not found");
+    }
+    let matchCriterias = { department: department };
+    matchCriterias[firstOrLast] = { $regex: keyword };
+    const pipeLine = [
+        {
+            $match: matchCriterias,
+        },
+        {
+            $facet: {
+                metadata: [{ $count: "totalCount" }],
+                data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+            },
+        },
+        {
+            $project: {
+                metadata: {
+                    totalCount: {
+                        $ifNull: [{ $first: "$metadata.totalCount" }, 0],
+                    },
+                },
+                data: "$data",
+            },
+        },
+    ];
+
+    const aggregationCursor = await Staff.aggregate(pipeLine);
+
+    let result = null;
+    aggregationCursor.forEach((staff) => {
+        if (staff.data.length === 0) {
+            throw new NotFoundError("Staff list not found.");
+        }
+        result = {
+            ...staff,
+            metadata: { ...staff.metadata[0], page: page, pageSize: pageSize },
+        };
+    });
+    return result;
+};
+
 export default {
     create,
     update,
@@ -85,4 +135,5 @@ export default {
     getAllWithPagination,
     getStaffWithId,
     getDepartmentList,
+    getStaffByDepartmentAndFirstOrLastNamePaginated,
 };
