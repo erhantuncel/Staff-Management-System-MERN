@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import { useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../../components/form/Button";
 import PlusCircleIcon from "../../components/icons/PlusCircleIcon";

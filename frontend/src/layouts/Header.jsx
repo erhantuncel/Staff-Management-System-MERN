@@ -1,4 +1,3 @@
-import React from "react";
 import { Translation } from "react-i18next";
 import { NavLink } from "react-router";
 

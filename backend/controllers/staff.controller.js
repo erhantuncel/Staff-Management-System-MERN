@@ -10,28 +10,6 @@ const getAllStaff = async (req, res, next) => {
     }
 };
 
-// const getAllStaffWithPagination = async (req, res, next) => {
-//     let { page, pageSize } = req.query;
-//     page = parseInt(page, 10) || 1;
-//     pageSize = parseInt(pageSize, 10) || 10;
-//     try {
-//         const staffsWithPagination = await staffService.getAllWithPagination(
-//             page,
-//             pageSize
-//         );
-//         res.status(200).json(
-//             utils.createSuccessDataResult(
-//                 200,
-//                 staffsWithPagination.data,
-//                 staffsWithPagination.metadata,
-//                 "Paginated staffs are listed successfully."
-//             )
-//         );
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
 const createStaff = async (req, res, next) => {
     try {
         let staffObjectToSave = req.body;
@@ -164,7 +142,6 @@ export default {
     createStaff,
     updateStaff,
     removeStaff,
-    // getAllStaffWithPagination,
     getStaffWithId,
     getDepartmentList,
     getStaffsByDepartmentAndQueryParamsPaginated,
