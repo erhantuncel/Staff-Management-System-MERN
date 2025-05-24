@@ -14,6 +14,21 @@ export const getAllStaffWithPagination = async (page, pageSize) => {
     return response.data;
 };
 
+export const getStaffsByDepartmentAndQueryParamsPaginated = async (
+    page,
+    pageSize,
+    department,
+    columnName,
+    keyword,
+) => {
+    let params = { page: page, pageSize: pageSize, department: department };
+    params[columnName] = keyword;
+    const response = await apiClient.get(`${baseURL}/pagination`, {
+        params: params,
+    });
+    return response.data;
+};
+
 export const createStaff = async (data) => {
     const response = await apiClient.post(baseURL, data, {
         headers: {

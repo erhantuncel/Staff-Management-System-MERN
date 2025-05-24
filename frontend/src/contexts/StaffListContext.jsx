@@ -4,10 +4,19 @@ import staffListReducer from "../reducers/staffListReducer";
 export const StaffListContext = createContext();
 
 export const StaffListContextProvider = ({ children }) => {
+    const searchFilterInitialValues = {
+        department: "",
+        column: "",
+        keyword: "",
+    };
+
     const [selectedStaff, setSelectedStaff] = useState({});
     const [items, dispatch] = useReducer(staffListReducer, []);
     const [pagination, setPagination] = useState({ page: 1, pageSize: 5 });
     const [totalCount, setTotalCount] = useState(0);
+    const [searchFilters, setSearchFilters] = useState(
+        searchFilterInitialValues,
+    );
 
     const selectStaff = (staff) => {
         setSelectedStaff(staff);
@@ -26,6 +35,8 @@ export const StaffListContextProvider = ({ children }) => {
         setPagination,
         totalCount,
         setTotalCount,
+        searchFilters,
+        setSearchFilters,
     };
 
     return (

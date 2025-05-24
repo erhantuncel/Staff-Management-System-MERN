@@ -7,9 +7,9 @@ const PageSizeFilter = () => {
     const { t } = useTranslation();
 
     const pageSizeOptions = [
-        { key: "1", value: 5 },
-        { key: "2", value: 10 },
-        { key: "3", value: 15 },
+        { key: "1", label: "5", value: 5 },
+        { key: "2", label: "10", value: 10 },
+        { key: "3", label: "15", value: 15 },
     ];
 
     const { pagination, setPagination } = useContext(StaffListContext);

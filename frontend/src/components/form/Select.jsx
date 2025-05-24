@@ -1,6 +1,13 @@
 import React from "react";
 
-const Select = ({ className, defaultValue, options, error, ...rest }) => {
+const Select = ({
+    className,
+    defaultValue,
+    options,
+    error,
+    showErrorMessage = true,
+    ...rest
+}) => {
     return (
         <>
             <select
@@ -10,10 +17,16 @@ const Select = ({ className, defaultValue, options, error, ...rest }) => {
             >
                 <option disabled={true}>{defaultValue}</option>
                 {options.map((option) => {
-                    return <option key={option.key}>{option.value}</option>;
+                    return (
+                        <option key={option.key} value={option.value}>
+                            {option.label}
+                        </option>
+                    );
                 })}
             </select>
-            {error && <div className="validator-hint text-error">{error}</div>}
+            {error && showErrorMessage && (
+                <div className="validator-hint text-error">{error}</div>
+            )}
         </>
     );
 };

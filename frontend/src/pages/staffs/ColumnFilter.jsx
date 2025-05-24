@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Select from "../../components/form/Select";
 import Input from "../../components/form/Input";
 import Button from "../../components/form/Button";
@@ -6,44 +6,79 @@ import MagnifyingGlassIcon from "../../components/icons/MagnifyingGlassIcon";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { StaffListContext } from "../../contexts/StaffListContext";
+import { getDistinctDepartments } from "../../api/services/DepartmentService";
+import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
+import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import getFilterValidation from "./FilterValidationSchema";
 
-const ColumnFilter = ({ staffFilter, setStaffFilter }) => {
+const ColumnFilter = () => {
     const { t } = useTranslation();
 
-    const departments = [
-        { key: "1", value: "R&D" },
-        { key: "2", value: "Finance" },
-        { key: "3", value: "Stock" },
-    ];
+    const { searchFilters, setSearchFilters, pagination } =
+        useContext(StaffListContext);
+
+    const [departments, setDepartments] = useState([]);
 
     const columnsForSelect = [
-        { key: "1", value: t("STAFF.list.table.searchType.firstName") },
-        { key: "2", value: t("STAFF.list.table.searchType.lastName") },
+        {
+            key: "1",
+            label: t("STAFF.list.table.searchType.firstName"),
+            value: "firstName",
+        },
+        {
+            key: "2",
+            label: t("STAFF.list.table.searchType.lastName"),
+            value: "lastName",
+        },
     ];
 
-    const formInitialValues = {
-        department: t("STAFF.select.department.label"),
-        column: t("STAFF.select.column.label"),
-        keyword: "",
-    };
+    useEffect(() => {
+        getDistinctDepartments().then((response) => {
+            const departments = response.data;
+            let departmentsArray = [];
+            departments.map((department, index) => {
+                departmentsArray.push({
+                    key: index + 1,
+                    label: department,
+                    value: department,
+                });
+            });
+            setDepartments(departmentsArray);
+        });
+    }, []);
 
     const { populateStaffListItems } = useContext(StaffListContext);
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm({
         mode: "onTouched",
+        resolver: yupResolver(getFilterValidation()),
     });
 
     const onSubmit = (data) => {
         console.log("On Submit");
         console.log(data);
-        setStaffFilter({ ...staffFilter, ...data });
-        populateStaffListItems([]);
-        reset(formInitialValues);
+        setSearchFilters({ ...searchFilters, ...data });
+        getStaffsByDepartmentAndQueryParamsPaginated(
+            pagination.page,
+            pagination.pageSize,
+            data.department,
+            data.column,
+            data.keyword,
+        )
+            .then((response) => {
+                console.log(response);
+                populateStaffListItems(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("Staff not found based on the filters");
+                populateStaffListItems([]);
+            });
     };
 
     return (
@@ -55,6 +90,7 @@ const ColumnFilter = ({ staffFilter, setStaffFilter }) => {
                     options={departments}
                     {...register("department")}
                     error={errors && errors["department"]?.message}
+                    showErrorMessage={false}
                 />
                 <Select
                     defaultValue={t("STAFF.select.column.label")}
@@ -62,6 +98,7 @@ const ColumnFilter = ({ staffFilter, setStaffFilter }) => {
                     options={columnsForSelect}
                     {...register("column")}
                     error={errors && errors["column"]?.message}
+                    showErrorMessage={false}
                 />
                 <Input
                     type="text"
@@ -69,6 +106,7 @@ const ColumnFilter = ({ staffFilter, setStaffFilter }) => {
                     className="input input-sm"
                     {...register("keyword")}
                     error={errors && errors["keyword"]?.message}
+                    showErrorMessage={false}
                 />
                 <Button
                     className="btn btn-neutral btn-sm"

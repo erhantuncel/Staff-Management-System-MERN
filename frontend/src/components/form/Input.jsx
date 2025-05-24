@@ -9,6 +9,7 @@ const Input = ({
     isHidden,
     onChange,
     error,
+    showErrorMessage = true,
     readOnly,
     ...rest
 }) => {
@@ -25,7 +26,7 @@ const Input = ({
                 hidden={isHidden}
                 {...rest}
             />
-            {error && (
+            {error && showErrorMessage && (
                 <div hidden={isHidden} className={"validator-hint text-error"}>
                     {error}
                 </div>
