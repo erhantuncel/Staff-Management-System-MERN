@@ -32,7 +32,7 @@ const StaffImage = ({ setValue, image, setImage, error, register }) => {
 
     const handleRemoveClick = () => {
         setImage(null);
-        setValue("image", null);
+        setValue("image", "");
     };
 
     return (
