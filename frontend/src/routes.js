@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router";
 import GuestDashboard from "./layouts/GuestDashboard";
 import UserDashboard from "./layouts/UserDashboard";
 import App from "./App";
-import DeparmentList from "./pages/departments/DeparmentList";
 import StaffList from "./pages/staffs/StaffList";
 import NotFound from "./pages/errors/NotFound";
 
@@ -22,11 +21,7 @@ export const getRouter = () =>
                     children: [
                         {
                             index: true,
-                            Component: DeparmentList,
-                        },
-                        {
-                            path: "departments",
-                            Component: DeparmentList,
+                            Component: StaffList,
                         },
                         {
                             path: "staffs",
