@@ -106,7 +106,6 @@ const getStaffsByDepartmentAndQueryParamsPaginated = async (req, res, next) => {
             filter = { ...filter, keyword: lastName, fieldName: "lastName" };
         }
     }
-    console.log(filter);
     try {
         let staffsWithPagination = null;
         if (!department && !filter.keyword) {

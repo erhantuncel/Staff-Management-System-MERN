@@ -84,7 +84,6 @@ const getStaffByDepartmentAndFirstOrLastNamePaginated = async (
     page,
     pageSize
 ) => {
-    console.log(`department: ${department} keyword: ${keyword}`);
     if (!department || !keyword) {
         throw new NotFoundError("Staff list not found");
     }
