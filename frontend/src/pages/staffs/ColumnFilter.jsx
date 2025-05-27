@@ -3,22 +3,26 @@ import Select from "../../components/form/Select";
 import Input from "../../components/form/Input";
 import Button from "../../components/form/Button";
 import MagnifyingGlassIcon from "../../components/icons/MagnifyingGlassIcon";
+import ArrowPathIcon from "../../components/icons/ArrowPathIcon";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { getDistinctDepartments } from "../../api/services/DepartmentService";
-import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
-import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import getFilterValidation from "./FilterValidationSchema";
 
 const ColumnFilter = () => {
     const { t } = useTranslation();
 
-    const { searchFilters, setSearchFilters, pagination } =
-        useContext(StaffListContext);
+    const { searchFilters, setSearchFilters } = useContext(StaffListContext);
 
     const [departments, setDepartments] = useState([]);
+
+    const controlsDefaultValues = {
+        department: "",
+        column: "",
+        keyword: "",
+    };
 
     const columnsForSelect = [
         {
@@ -48,11 +52,10 @@ const ColumnFilter = () => {
         });
     }, []);
 
-    const { populateStaffListItems } = useContext(StaffListContext);
-
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         mode: "onTouched",
@@ -63,29 +66,19 @@ const ColumnFilter = () => {
         console.log("On Submit");
         console.log(data);
         setSearchFilters({ ...searchFilters, ...data });
-        getStaffsByDepartmentAndQueryParamsPaginated(
-            pagination.page,
-            pagination.pageSize,
-            data.department,
-            data.column,
-            data.keyword,
-        )
-            .then((response) => {
-                console.log(response);
-                populateStaffListItems(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error("Staff not found based on the filters");
-                populateStaffListItems([]);
-            });
+    };
+
+    const handleReset = () => {
+        reset({ ...controlsDefaultValues });
+        setSearchFilters({ ...controlsDefaultValues });
     };
 
     return (
         <form noValidate>
             <div className="flex justify-end gap-1">
                 <Select
-                    defaultValue={t("STAFF.select.department.label")}
+                    defaultOptionLabel={t("STAFF.select.department.label")}
+                    defaultOptionValue=""
                     className="select select-sm"
                     options={departments}
                     {...register("department")}
@@ -93,7 +86,8 @@ const ColumnFilter = () => {
                     showErrorMessage={false}
                 />
                 <Select
-                    defaultValue={t("STAFF.select.column.label")}
+                    defaultOptionLabel={t("STAFF.select.column.label")}
+                    defaultOptionValue=""
                     className="select select-sm"
                     options={columnsForSelect}
                     {...register("column")}
@@ -114,6 +108,14 @@ const ColumnFilter = () => {
                 >
                     <MagnifyingGlassIcon type="micro" />
                     {t("STAFF.list.table.button.searchStaff")}
+                </Button>
+                <Button
+                    hidden={!searchFilters.keyword}
+                    className="btn btn-neutral btn-sm"
+                    onClick={handleReset}
+                >
+                    <ArrowPathIcon type="micro" />
+                    {t("STAFF.list.table.button.resetFilters")}
                 </Button>
             </div>
         </form>

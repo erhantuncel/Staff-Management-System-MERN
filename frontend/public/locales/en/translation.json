@@ -33,6 +33,7 @@
         "list.table.searchType.firstName": "First Name",
         "list.table.searchType.lastName": "Last Name",
         "list.table.button.searchStaff": "Search",
+        "list.table.button.resetFilters": "Reset",
         "button.addStaff": "Add Staff",
         "select.department.label": "Select Department",
         "select.column.label": "Select Column",

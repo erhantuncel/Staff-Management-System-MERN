@@ -1,8 +1,7 @@
-import React from "react";
-
 const Select = ({
     className,
-    defaultValue,
+    defaultOptionValue,
+    defaultOptionLabel,
     options,
     error,
     showErrorMessage = true,
@@ -11,11 +10,13 @@ const Select = ({
     return (
         <>
             <select
-                defaultValue={defaultValue}
+                defaultValue={defaultOptionValue}
                 className={`select ${className} ${error && "input-error"}`}
                 {...rest}
             >
-                <option disabled={true}>{defaultValue}</option>
+                <option disabled={true} value={defaultOptionValue}>
+                    {defaultOptionLabel}
+                </option>
                 {options.map((option) => {
                     return (
                         <option key={option.key} value={option.value}>

@@ -33,6 +33,7 @@
         "list.table.searchType.firstName": "Ad",
         "list.table.searchType.lastName": "Soyad",
         "list.table.button.searchStaff": "Ara",
+        "list.table.button.resetFilters": "Sıfırla",
         "button.addStaff": "Personel Ekle",
         "select.department.label": "Departman Seçiniz",
         "select.column.label": "Sütun Seçiniz",

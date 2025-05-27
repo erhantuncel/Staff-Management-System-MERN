@@ -5,26 +5,37 @@ import StaffTable from "./StaffTable";
 import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 import StaffFilterContainer from "./StaffFilterContainer";
 import { StaffListContext } from "../../contexts/StaffListContext";
-import { getAllStaffWithPagination } from "../../api/services/StaffService";
+import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
 import { toast } from "react-toastify";
 
 const StaffList = () => {
-    const { populateStaffListItems, pagination, totalCount, setTotalCount } =
-        useContext(StaffListContext);
+    const {
+        populateStaffListItems,
+        items,
+        pagination,
+        totalCount,
+        setTotalCount,
+        searchFilters,
+    } = useContext(StaffListContext);
 
     useEffect(() => {
-        getAllStaffWithPagination(pagination.page, pagination.pageSize)
+        getStaffsByDepartmentAndQueryParamsPaginated(
+            pagination.page,
+            pagination.pageSize,
+            searchFilters.department,
+            searchFilters.column,
+            searchFilters.keyword,
+        )
             .then((response) => {
                 populateStaffListItems(response.data);
                 setTotalCount(response.metadata.totalCount);
             })
             .catch((error) => {
                 console.log(error);
-                toast.error(
-                    "There was an issue while fetching staffs from server.",
-                );
+                toast.error("Staff not found based on the filters");
+                populateStaffListItems([]);
             });
-    }, [pagination, totalCount]);
+    }, [pagination, searchFilters]);
 
     return (
         <>
