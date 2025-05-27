@@ -45,7 +45,6 @@ const StaffAddUpdateDetailModal = () => {
         register,
         setValue,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm({
         mode: "onTouched",
@@ -93,7 +92,6 @@ const StaffAddUpdateDetailModal = () => {
     };
 
     const handleClose = () => {
-        reset();
         setImage(null);
         hideModal();
     };
