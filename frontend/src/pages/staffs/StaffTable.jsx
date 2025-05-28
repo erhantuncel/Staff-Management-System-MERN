@@ -26,9 +26,6 @@ const StaffTable = () => {
         setTotalCount,
     } = useContext(StaffListContext);
 
-    const [confirmationModalMessage, setConfirmationModalMessage] =
-        useState(null);
-
     const handleDeleteConfirmationAccept = () => {
         console.log(`Staff has id: ${selectedStaff?._id} is deleted.`);
         removeStaff(selectedStaff._id)
@@ -73,13 +70,6 @@ const StaffTable = () => {
 
     const handleShowDeleteModal = (staff) => {
         selectStaff(staff);
-        setConfirmationModalMessage(
-            t("DELETECONFIRMATIONMODAL.warningMessage", {
-                staffId: staff.id,
-                firstName: staff.firstName,
-                lastName: staff.lastName,
-            }),
-        );
         showDeleteModal();
     };
 
@@ -143,7 +133,12 @@ const StaffTable = () => {
                 </tbody>
             </table>
             <ConfirmationModal
-                message={confirmationModalMessage}
+                i18nKeyMessageKey="DELETECONFIRMATIONMODAL.warningMessage"
+                i18nMessageParams={{
+                    staffId: selectedStaff.id,
+                    firstName: selectedStaff.firstName,
+                    lastName: selectedStaff.lastName,
+                }}
                 title={t("DELETECONFIRMATIONMODAL.header.title")}
                 acceptButtonLabel={t(
                     "DELETECONFIRMATIONMODAL.acceptButton.label",
