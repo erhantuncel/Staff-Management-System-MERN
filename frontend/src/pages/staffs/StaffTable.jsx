@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Button from "../../components/form/Button";
@@ -7,40 +7,35 @@ import DocumentMagnifyingGlassIcon from "../../components/icons/DocumentMagnifyi
 import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
-import {
-    getAllStaffWithPagination,
-    removeStaff,
-} from "../../api/services/StaffService";
+import { removeStaff } from "../../api/services/StaffService";
 
 const StaffTable = () => {
     const { t } = useTranslation();
 
     const { showDetailsModal, showDeleteModal, hideModal } =
         useContext(UIContext);
-    const {
-        selectedStaff,
-        selectStaff,
-        items,
-        populateStaffListItems,
-        pagination,
-        setTotalCount,
-    } = useContext(StaffListContext);
+    const { selectedStaff, selectStaff, items, pagination, setPagination } =
+        useContext(StaffListContext);
 
     const handleDeleteConfirmationAccept = () => {
         console.log(`Staff has id: ${selectedStaff?._id} is deleted.`);
         removeStaff(selectedStaff._id)
             .then((response) => {
-                toast.success(
-                    t(
-                        "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
-                        {
-                            firstName: selectedStaff?.firstName,
-                            lastName: selectedStaff?.lastName,
-                        },
-                    ),
-                );
+                if (response.statusCode === 200) {
+                    toast.success(
+                        t(
+                            "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.success.message",
+                            {
+                                firstName: selectedStaff?.firstName,
+                                lastName: selectedStaff?.lastName,
+                            },
+                        ),
+                    );
+                }
+                setPagination({ ...pagination, page: 1 });
             })
             .catch((error) => {
+                console.error(error);
                 toast.error(
                     t(
                         "DELETECONFIRMATIONMODAL.toastify.deleteDepartment.error.message",
@@ -53,13 +48,6 @@ const StaffTable = () => {
             })
             .finally(() => {
                 hideModal();
-                getAllStaffWithPagination(
-                    pagination.page,
-                    pagination.pageSize,
-                ).then((response) => {
-                    populateStaffListItems(response.data);
-                    setTotalCount(response.metadata.totalCount);
-                });
             });
     };
 
