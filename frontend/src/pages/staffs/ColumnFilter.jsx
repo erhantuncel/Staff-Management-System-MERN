@@ -58,7 +58,6 @@ const ColumnFilter = () => {
         reset,
         formState: { errors },
     } = useForm({
-        mode: "onTouched",
         resolver: yupResolver(getFilterValidation()),
     });
 
@@ -74,7 +73,7 @@ const ColumnFilter = () => {
     };
 
     return (
-        <form noValidate>
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <div className="flex justify-end gap-1">
                 <Select
                     defaultOptionLabel={t("STAFF.select.department.label")}
@@ -98,18 +97,16 @@ const ColumnFilter = () => {
                     type="text"
                     placeholder=""
                     className="input input-sm"
-                    {...register("keyword")}
                     error={errors && errors["keyword"]?.message}
                     showErrorMessage={false}
+                    {...register("keyword")}
                 />
-                <Button
-                    className="btn btn-neutral btn-sm"
-                    onClick={handleSubmit(onSubmit)}
-                >
+                <Button type="submit" className="btn btn-neutral btn-sm">
                     <MagnifyingGlassIcon type="micro" />
                     {t("STAFF.list.table.button.searchStaff")}
                 </Button>
                 <Button
+                    type="button"
                     hidden={!searchFilters.keyword}
                     className="btn btn-neutral btn-sm"
                     onClick={handleReset}
