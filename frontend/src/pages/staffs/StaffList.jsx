@@ -7,15 +7,16 @@ import StaffFilterContainer from "./StaffFilterContainer";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
 import { toast } from "react-toastify";
+import { getDistinctDepartments } from "../../api/services/DepartmentService";
 
 const StaffList = () => {
     const {
         populateStaffListItems,
         items,
         pagination,
-        totalCount,
         setTotalCount,
         searchFilters,
+        setDepartments,
     } = useContext(StaffListContext);
 
     useEffect(() => {
@@ -36,6 +37,20 @@ const StaffList = () => {
                 populateStaffListItems([]);
             });
     }, [pagination, searchFilters]);
+
+    useEffect(() => {
+        getDistinctDepartments().then((departmentResponse) => {
+            let departmentsArray = [];
+            departmentResponse.data.map((department, index) => {
+                departmentsArray.push({
+                    key: index + 1,
+                    label: department,
+                    value: department,
+                });
+            });
+            setDepartments(departmentsArray);
+        });
+    }, [items]);
 
     return (
         <>

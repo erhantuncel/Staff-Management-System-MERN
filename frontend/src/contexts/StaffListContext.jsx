@@ -17,6 +17,7 @@ export const StaffListContextProvider = ({ children }) => {
     const [searchFilters, setSearchFilters] = useState(
         searchFilterInitialValues,
     );
+    const [departments, setDepartments] = useState([]);
 
     const selectStaff = (staff) => {
         setSelectedStaff(staff);
@@ -37,6 +38,8 @@ export const StaffListContextProvider = ({ children }) => {
         setTotalCount,
         searchFilters,
         setSearchFilters,
+        departments,
+        setDepartments,
     };
 
     return (

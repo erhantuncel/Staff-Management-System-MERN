@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Input from "../../components/form/Input";
 import ControllerSelect from "../../components/form/ControllerSelect";
 import { useTranslation } from "react-i18next";
@@ -9,12 +9,7 @@ const StaffDetailsForm = ({ register, control, errors }) => {
     const { t } = useTranslation();
     const { modalToShow } = useContext(UIContext);
 
-    const departments = Array.from({ length: 26 }, (val, i) => ({
-        value: `Department${i}`,
-        label: `Department${i}`,
-    }));
-
-    const { selectedStaff } = useContext(StaffListContext);
+    const { selectedStaff, departments } = useContext(StaffListContext);
     const fields = ["firstName", "lastName", "email", "phone", "department"];
     const editableFields = ["phone", "email", "department"];
 

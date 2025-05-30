@@ -7,16 +7,14 @@ import ArrowPathIcon from "../../components/icons/ArrowPathIcon";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { StaffListContext } from "../../contexts/StaffListContext";
-import { getDistinctDepartments } from "../../api/services/DepartmentService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import getFilterValidation from "./FilterValidationSchema";
 
 const ColumnFilter = () => {
     const { t } = useTranslation();
 
-    const { searchFilters, setSearchFilters } = useContext(StaffListContext);
-
-    const [departments, setDepartments] = useState([]);
+    const { searchFilters, setSearchFilters, departments } =
+        useContext(StaffListContext);
 
     const controlsDefaultValues = {
         department: "",
@@ -36,21 +34,6 @@ const ColumnFilter = () => {
             value: "lastName",
         },
     ];
-
-    useEffect(() => {
-        getDistinctDepartments().then((response) => {
-            const departments = response.data;
-            let departmentsArray = [];
-            departments.map((department, index) => {
-                departmentsArray.push({
-                    key: index + 1,
-                    label: department,
-                    value: department,
-                });
-            });
-            setDepartments(departmentsArray);
-        });
-    }, []);
 
     const {
         register,
