@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { removeStaff } from "../../api/services/StaffService";
 
 const StaffTable = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const { showDetailsModal, showDeleteModal, hideModal } =
         useContext(UIContext);
@@ -67,6 +67,18 @@ const StaffTable = () => {
         return page * pageSize - pageSize + 1;
     };
 
+    const getFormattedDate = (dateStr) => {
+        const dateObj = new Date(dateStr);
+        const formatter = new Intl.DateTimeFormat(i18n.language, {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "numeric",
+            minute: "numeric",
+        });
+        return formatter.format(dateObj);
+    };
+
     return (
         <div className="rounded-box border-base-content/5 mb-5 max-h-[calc(100vh-300px)] overflow-scroll border">
             <table className="table">
@@ -89,7 +101,7 @@ const StaffTable = () => {
                             <td>{staff.firstName}</td>
                             <td>{staff.lastName}</td>
                             <td>{staff.department}</td>
-                            <td>{staff.createDate}</td>
+                            <td>{getFormattedDate(staff.createdAt)}</td>
                             <td className="text-right">
                                 <Button
                                     className="btn btn-sm btn-soft mr-1"
