@@ -13,8 +13,13 @@ import getFilterValidation from "./FilterValidationSchema";
 const ColumnFilter = () => {
     const { t } = useTranslation();
 
-    const { searchFilters, setSearchFilters, departments } =
-        useContext(StaffListContext);
+    const {
+        searchFilters,
+        setSearchFilters,
+        departments,
+        pagination,
+        setPagination,
+    } = useContext(StaffListContext);
 
     const controlsDefaultValues = {
         department: "",
@@ -47,6 +52,7 @@ const ColumnFilter = () => {
     const onSubmit = (data) => {
         console.log("On Submit");
         console.log(data);
+        setPagination({ ...pagination, page: 1 });
         setSearchFilters({ ...searchFilters, ...data });
     };
 
