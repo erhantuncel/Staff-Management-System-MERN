@@ -37,6 +37,7 @@
         "button.addStaff": "Add Staff",
         "select.department.label": "Select Department",
         "select.column.label": "Select Column",
+        "alert.staff.not.found": "There is no staff found.",
         "ADDUPDATEDETAILMODAL": {
             "title.add": "Add Staff",
             "title.update": "Update Staff",

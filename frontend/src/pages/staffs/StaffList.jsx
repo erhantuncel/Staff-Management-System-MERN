@@ -6,10 +6,13 @@ import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 import StaffFilterContainer from "./StaffFilterContainer";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
-import { toast } from "react-toastify";
 import { getDistinctDepartments } from "../../api/services/DepartmentService";
+import Alert from "../../components/Alert";
+import { useTranslation } from "react-i18next";
 
 const StaffList = () => {
+    const { t } = useTranslation();
+
     const {
         populateStaffListItems,
         items,
@@ -33,7 +36,6 @@ const StaffList = () => {
             })
             .catch((error) => {
                 console.log(error);
-                toast.error("Staff not found based on the filters");
                 populateStaffListItems([]);
             });
     }, [pagination, searchFilters]);
@@ -56,8 +58,14 @@ const StaffList = () => {
         <>
             <StaffActionBar />
             <StaffFilterContainer />
-            <StaffTable />
-            <Pagination />
+            {items.length > 0 ? (
+                <>
+                    <StaffTable />
+                    <Pagination />
+                </>
+            ) : (
+                <Alert message={t("STAFF.alert.staff.not.found")} />
+            )}
             <StaffAddUpdateDetailModal />
         </>
     );

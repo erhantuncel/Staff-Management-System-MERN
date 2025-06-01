@@ -37,6 +37,7 @@
         "button.addStaff": "Personel Ekle",
         "select.department.label": "Departman Seçiniz",
         "select.column.label": "Sütun Seçiniz",
+        "alert.staff.not.found": "Personel bulunamadı.",
         "ADDUPDATEDETAILMODAL": {
             "title.add": "Personel Ekle",
             "title.update": "Personel Güncelle",
