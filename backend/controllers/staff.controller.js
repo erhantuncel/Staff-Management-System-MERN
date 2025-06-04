@@ -1,5 +1,14 @@
 import staffService from "../services/staff.service.js";
 import utils from "../utils/index.js";
+import { v2 as cloudinary } from "cloudinary";
+
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 const getAllStaff = async (req, res, next) => {
     try {
@@ -14,9 +23,14 @@ const createStaff = async (req, res, next) => {
     try {
         let staffObjectToSave = req.body;
         if (req.file) {
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataUri = "data:" + req.file.mimetype + ";base64," + b64;
+            const cloudinaryResponse = await cloudinary.uploader.upload(
+                dataUri
+            );
             staffObjectToSave.image = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype,
+                publicId: cloudinaryResponse.public_id,
+                url: cloudinaryResponse.url,
             };
         }
         const newStaff = await staffService.create(staffObjectToSave);
