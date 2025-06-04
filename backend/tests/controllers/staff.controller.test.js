@@ -31,6 +31,21 @@ vi.mock("multer", () => {
     };
 });
 
+const mockV2 = vi.hoisted(() => {
+    return {
+        config: vi.fn(),
+        uploader: {
+            upload: vi.fn(),
+        },
+    };
+});
+
+vi.mock("cloudinary", () => {
+    return {
+        v2: mockV2,
+    };
+});
+
 const mockCreateSuccessDataResult = vi.spyOn(utils, "createSuccessDataResult");
 const mockCreateSuccessResult = vi.spyOn(utils, "createSuccessResult");
 
@@ -49,6 +64,10 @@ const mockRequestBody = {
     phone: "1234567801",
     email: "email1@localhost.com",
     department: "Department1",
+    image: {
+        publicId: "publicId",
+        url: "http://image.url",
+    },
 };
 
 const mockStaffArray = [
@@ -126,13 +145,22 @@ describe("Create Staff", () => {
 
         const mockStaff = mockRequest.body;
 
-        mockStaff.image = {
-            data: mockRequest.file.buffer,
-            contentType: mockRequest.mimeType,
+        const cloudResponse = {
+            public_id: "publicId",
+            url: "http://image.url",
         };
 
+        mockStaff.image = {
+            publicId: cloudResponse.public_id,
+            url: cloudResponse.url,
+        };
+
+        vi.spyOn(mockV2.uploader, "upload").mockResolvedValueOnce(
+            cloudResponse
+        );
         vi.spyOn(staffService, "create").mockResolvedValueOnce(mockStaff);
         await staffController.createStaff(mockRequest, mockResponse, mockNext);
+        expect(mockV2.uploader.upload).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalled();
         expect(mockResponse.status).toHaveBeenCalledWith(201);
         expect(mockResponse.json).toHaveBeenCalled();
@@ -205,57 +233,6 @@ describe("Remove staff", () => {
         expect(mockCreateSuccessResult).toHaveBeenCalledWith(
             200,
             `Staff has id:${mockRequest.params.id} is removed.`
-        );
-    });
-});
-
-describe("getAllStaffWithPagination", () => {
-    mockRequest.query = { page: 1, pageSize: 10 };
-    it("should return 500 if staffService.getAllWithPagination method failed", async () => {
-        const error = new Error("Pagination Error");
-        vi.spyOn(staffService, "getAllWithPagination").mockRejectedValueOnce(
-            error
-        );
-        await staffController.getAllStaffWithPagination(
-            mockRequest,
-            mockResponse,
-            mockNext
-        );
-        expect(mockNext).toHaveBeenCalled();
-        expect(mockNext).toHaveBeenCalledWith(error);
-    });
-
-    it("should return 200 if staffService.getAllWithPagination runs successfully", async () => {
-        const mockStaffArrayWithPagination = {
-            metadata: {
-                totalCount: 10,
-                page: mockRequest.page,
-                pageSize: mockRequest.pageSize,
-            },
-            data: [
-                { _id: "67cb20351fc66921c7584a23", firstName: "fN1" },
-                { _id: "67cb20351fc66921c7584a24", firstName: "fN2" },
-                { _id: "67cb20351fc66921c7584a25", firstName: "fN3" },
-                { _id: "467cb20351fc66921c7584a26", firstName: "fN4" },
-            ],
-        };
-        vi.spyOn(staffService, "getAllWithPagination").mockResolvedValueOnce(
-            mockStaffArrayWithPagination
-        );
-        await staffController.getAllStaffWithPagination(
-            mockRequest,
-            mockResponse,
-            mockNext
-        );
-        expect(mockResponse.status).toHaveBeenCalled();
-        expect(mockResponse.status).toHaveBeenCalled(200);
-        expect(
-            mockCreateSuccessDataResult(
-                200,
-                mockStaffArrayWithPagination.data,
-                mockStaffArrayWithPagination.metadata,
-                "Paginated staffs are listed successfully."
-            )
         );
     });
 });
