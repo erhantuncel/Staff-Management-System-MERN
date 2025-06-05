@@ -37,7 +37,7 @@ const StaffAddUpdateDetailModal = () => {
                     setValue(key, selectedStaff[key]);
                 }
             });
-        selectedStaff && setImage(selectedStaff.image);
+        selectedStaff && setImage(selectedStaff.image?.url);
     }, [selectedStaff]);
 
     const {
@@ -55,6 +55,7 @@ const StaffAddUpdateDetailModal = () => {
     const onSubmit = (data) => {
         console.log("On Submit");
         data = { ...data, department: data.department.value };
+        console.log(data);
 
         let serviceResponse = null;
         switch (modalToShow) {

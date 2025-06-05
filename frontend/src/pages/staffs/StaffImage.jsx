@@ -19,14 +19,7 @@ const StaffImage = ({ setValue, image, setImage, error, register }) => {
 
     const handleInputFileOnchange = (event) => {
         const imageFile = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64String = reader.result
-                .replace("data:", "")
-                .replace(/^.+,/, "");
-            setImage({ data: base64String, type: imageFile.type });
-        };
-        reader.readAsDataURL(imageFile);
+        setImage(URL.createObjectURL(imageFile));
         setValue("image", imageFile);
     };
 
@@ -40,7 +33,7 @@ const StaffImage = ({ setValue, image, setImage, error, register }) => {
             <div className="avatar">
                 <div className="w-48 rounded">
                     {image ? (
-                        <img src={`data:image/png;base64, ${image.data}`} />
+                        <img src={image} />
                     ) : (
                         <img src="../../../assets/img/no_profile_photo.jpg" />
                     )}
