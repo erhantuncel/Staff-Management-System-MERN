@@ -45,9 +45,14 @@ const updateStaff = async (req, res, next) => {
         const { id } = req.params;
         let newStaffObjectToUpdate = req.body;
         if (req.file) {
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataUri = "data:" + req.file.mimetype + ";base64," + b64;
+            const cloudinaryResponse = await cloudinary.uploader.upload(
+                dataUri
+            );
             newStaffObjectToUpdate.image = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype,
+                publicId: cloudinaryResponse.public_id,
+                url: cloudinaryResponse.url,
             };
         }
         const updatedStaff = await staffService.update(

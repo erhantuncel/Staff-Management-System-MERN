@@ -40,6 +40,11 @@ const mockV2 = vi.hoisted(() => {
     };
 });
 
+const cloudResponse = {
+    public_id: "publicId",
+    url: "http://image.url",
+};
+
 vi.mock("cloudinary", () => {
     return {
         v2: mockV2,
@@ -145,11 +150,6 @@ describe("Create Staff", () => {
 
         const mockStaff = mockRequest.body;
 
-        const cloudResponse = {
-            public_id: "publicId",
-            url: "http://image.url",
-        };
-
         mockStaff.image = {
             publicId: cloudResponse.public_id,
             url: cloudResponse.url,
@@ -176,6 +176,10 @@ describe("Update Staff", () => {
         const error = new Error("Update Error");
         mockRequest.params = { id: "67cb20351fc66921c7584a23" };
         mockRequest.body = mockRequestBody;
+
+        vi.spyOn(mockV2.uploader, "upload").mockResolvedValueOnce(
+            cloudResponse
+        );
         vi.spyOn(staffService, "update").mockRejectedValueOnce(error);
         await staffController.updateStaff(mockRequest, mockResponse, mockNext);
         expect(mockNext).toHaveBeenCalled();
@@ -198,8 +202,8 @@ describe("Update Staff", () => {
 
         mockRequest.body = {
             image: {
-                data: Buffer.from("2131231231", "hex"),
-                contentType: "image/png",
+                publicId: "publicId",
+                url: "http://image.url",
             },
         };
 
