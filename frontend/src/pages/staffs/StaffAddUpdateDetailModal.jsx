@@ -24,6 +24,7 @@ const StaffAddUpdateDetailModal = () => {
         useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         selectedStaff &&
@@ -57,6 +58,7 @@ const StaffAddUpdateDetailModal = () => {
         data = { ...data, department: data.department.value };
         console.log(data);
 
+        setLoading(true);
         let serviceResponse = null;
         switch (modalToShow) {
             case "add":
@@ -82,6 +84,7 @@ const StaffAddUpdateDetailModal = () => {
             })
             .finally(() => {
                 setImage(null);
+                setLoading(false);
                 hideModal();
                 getAllStaffWithPagination(
                     pagination.page,
@@ -155,14 +158,22 @@ const StaffAddUpdateDetailModal = () => {
                     className={"btn btn-sm btn-neutral"}
                     hidden={modalToShow !== "add"}
                     onClick={handleSubmit(onSubmit)}
+                    disabled={loading}
                 >
+                    {loading && (
+                        <span className="loading loading-spinner loading-xs" />
+                    )}
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.add")}
                 </Button>
                 <Button
                     className={"btn btn-sm btn-neutral"}
                     hidden={modalToShow !== "update"}
                     onClick={handleSubmit(onSubmit)}
+                    disabled={loading}
                 >
+                    {loading && (
+                        <span className="loading loading-spinner loading-xs" />
+                    )}
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.accept.update")}
                 </Button>
                 <Button
@@ -172,7 +183,11 @@ const StaffAddUpdateDetailModal = () => {
                 >
                     {t("STAFF.ADDUPDATEDETAILMODAL.button.update")}
                 </Button>
-                <Button className="btn btn-sm btn-soft" onClick={handleClose}>
+                <Button
+                    className="btn btn-sm btn-soft"
+                    onClick={handleClose}
+                    disabled={loading}
+                >
                     {modalToShow === "details"
                         ? t("STAFF.ADDUPDATEDETAILMODAL.button.close")
                         : t("STAFF.ADDUPDATEDETAILMODAL.button.cancel")}
