@@ -1,5 +1,5 @@
 import express from "express";
-import { staffController } from "../controllers/index.js";
+import { staffController, userController } from "../controllers/index.js";
 import { validate } from "../middlewares/validate.js";
 import utils from "../utils/index.js";
 
@@ -9,7 +9,7 @@ import {
     staffValidatorToUpdate,
     idValidator,
 } from "../validations/staff.validation.js";
-
+import { userValidatorToCreate } from "../validations/user.validation.js";
 const router = express.Router();
 
 /**
@@ -224,5 +224,41 @@ router.delete(
 router.get("/departments", staffController.getDepartmentList);
 
 router.get("/staffs/");
+
+/**
+ *  @swagger
+ *  /users:
+ *      post:
+ *          summary: Create new user.
+ *          description: Create new user.
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              userName:
+ *                                  type: string
+ *                              password:
+ *                                  type: string
+ *                              passwordToConfirm:
+ *                                  type: string
+ *                          required:
+ *                              - userName
+ *                              - password
+ *                              - passwordToConfirm
+ *          responses:
+ *              "201":
+ *                  description: "A successful response"
+ *              "500":
+ *                  description: "Internal server error."
+ */
+router.post(
+    "/users",
+    userValidatorToCreate,
+    validate,
+    userController.createUser
+);
 
 export default router;
