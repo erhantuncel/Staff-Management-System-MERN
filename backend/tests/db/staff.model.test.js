@@ -9,8 +9,8 @@ const staffObj = {
     email: "email@localhost.com",
     department: "Department",
     image: {
-        data: Buffer.from("7123jasxs89812", "hex"),
-        contentType: "image/png",
+        publicId: "publicId",
+        url: "http://image.url",
     },
 };
 const staff = new Staff(staffObj);
@@ -52,8 +52,8 @@ describe("Staff model testing", () => {
             email: "emailUpd@localhost.com",
             department: "DepartmentUpd",
             image: {
-                data: Buffer.from("7123jasxs89812", "hex"),
-                contentType: "image/png",
+                publicId: "publicId",
+                url: "http://image.url",
             },
         };
 
