@@ -1,4 +1,4 @@
 import staffController from "./staff.controller.js";
-import userController from "./user.controller.js";
+import authenticationController from "./authentication.controller.js";
 
-export { staffController, userController };
+export { staffController, authenticationController };

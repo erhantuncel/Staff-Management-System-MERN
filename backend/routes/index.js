@@ -1,5 +1,8 @@
 import express from "express";
-import { staffController, userController } from "../controllers/index.js";
+import {
+    staffController,
+    authenticationController,
+} from "../controllers/index.js";
 import { validate } from "../middlewares/validate.js";
 import utils from "../utils/index.js";
 
@@ -10,12 +13,15 @@ import {
     idValidator,
 } from "../validations/staff.validation.js";
 import { userValidatorToCreate } from "../validations/user.validation.js";
+import { verifyToken } from "../middlewares/jwtAuthentication.js";
 const router = express.Router();
 
 /**
  *  @swagger
  *  /staffs:
  *      get:
+ *          security:
+ *              - bearer-key: []
  *          summary: Get all staffs.
  *          description: Get all staffs.
  *          responses:
@@ -26,7 +32,7 @@ const router = express.Router();
  *              "500":
  *                  description: "Internal server error."
  */
-router.get("/staffs", staffController.getAllStaff);
+router.get("/staffs", verifyToken, staffController.getAllStaff);
 
 /**
  *  @swagger
@@ -227,7 +233,7 @@ router.get("/staffs/");
 
 /**
  *  @swagger
- *  /users:
+ *  /register:
  *      post:
  *          summary: Create new user.
  *          description: Create new user.
@@ -255,10 +261,42 @@ router.get("/staffs/");
  *                  description: "Internal server error."
  */
 router.post(
-    "/users",
+    "/register",
     userValidatorToCreate,
     validate,
-    userController.createUser
+    authenticationController.register
 );
+
+/**
+ *  @swagger
+ *  /login:
+ *      post:
+ *          summary: Login user.
+ *          description: Login user.
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              userName:
+ *                                  type: string
+ *                              password:
+ *                                  type: string
+ *                          required:
+ *                              - userName
+ *                              - password
+ *          responses:
+ *              "200":
+ *                  description: "A successful response"
+ *              "401":
+ *                  description: "Invalid password"
+ *              "404":
+ *                  description: "User not found"
+ *              "500":
+ *                  description: "Internal server error."
+ */
+router.post("/login", authenticationController.login);
 
 export default router;

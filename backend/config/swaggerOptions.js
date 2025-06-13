@@ -7,6 +7,16 @@ export const swaggerOptions = {
             title: "Staff Management API",
             description: "Staff Management API",
         },
+        components: {
+            securitySchemes: {
+                "bearer-key": {
+                    // bearerAuth: "JWT Bearer Auth",
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
         servers: [
             {
                 url: `http://localhost:${process.env.PORT || 5000}/api`,
