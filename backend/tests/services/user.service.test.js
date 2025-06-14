@@ -74,7 +74,9 @@ describe("User Service", () => {
 
         it("should thrown NotFoundError if user not found", async () => {
             const missingUser = "userNotExist";
-            vi.spyOn(User, "findOne").mockReturnValueOnce(null);
+            vi.spyOn(User, "findOne").mockImplementationOnce(() => ({
+                lean: vi.fn().mockReturnValueOnce(null),
+            }));
             await expect(
                 userService.findByUserName(missingUser)
             ).rejects.toThrow(
@@ -93,7 +95,9 @@ describe("User Service", () => {
 
             const mockUserFindByUserName = vi
                 .spyOn(User, "findOne")
-                .mockResolvedValueOnce(mockUserReturnedFromDb);
+                .mockImplementationOnce(() => ({
+                    lean: vi.fn().mockResolvedValueOnce(mockUserReturnedFromDb),
+                }));
 
             const userFound = await userService.findByUserName(
                 mockUserReturnedFromDb.userName

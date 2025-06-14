@@ -19,10 +19,11 @@ const findByUserName = async (userName) => {
     if (!userName) {
         throw new ValidationError("Invalid or missing userName");
     }
-    const userFound = await User.findOne({ userName: userName });
+    const userFound = await User.findOne({ userName: userName }).lean();
     if (!userFound) {
         throw new NotFoundError(`User with username ${userName} not found.`);
     }
+    console.log(userFound);
     return userFound;
 };
 
