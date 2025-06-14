@@ -41,10 +41,11 @@ const login = async (req, res, next) => {
             }
         );
 
+        const userFoundWithToken = { ...userFound, token };
         res.status(200).json(
             utils.createSuccessDataResult(
                 200,
-                { ...userFound._doc, token: token },
+                userFoundWithToken,
                 null,
                 "Login successful."
             )
