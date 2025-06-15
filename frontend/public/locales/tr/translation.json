@@ -18,6 +18,25 @@
         }
     },
 
+    "LOGIN": {
+        "hero.title": "Kullanıcı Girişi",
+        "input.label.userName": "Kullanıcı Adı",
+        "input.label.password": "Şifre",
+        "button.label": "Giriş",
+        "not.exist.account.message": "Hesabınız yok mu?",
+        "link.register": "Kayıt Ol"
+    },
+
+    "REGISTRATION": {
+        "hero.title": "Kullanıcı Kayıt",
+        "input.label.userName": "Kullanıcı Adı",
+        "input.label.password": "Şifre",
+        "input.label.passwordConfirm": "Şifre Onayla",
+        "button.label": "Kayıt Ol",
+        "existing.account.message": "Hesabın var mı?",
+        "link.login": "Giriş"
+    },
+
     "STAFF": {
         "list.table.title.no": "No",
         "list.table.title.firstName": "Ad",

@@ -18,6 +18,25 @@
         }
     },
 
+    "LOGIN": {
+        "hero.title": "User Login",
+        "input.label.userName": "User Name",
+        "input.label.password": "Password",
+        "button.label": "Login",
+        "not.exist.account.message": "Don't have an account yet?",
+        "link.register": "Register"
+    },
+
+    "REGISTRATION": {
+        "hero.title": "User Registration",
+        "input.label.userName": "User Name",
+        "input.label.password": "Password",
+        "input.label.passwordConfirm": "Confirm Password",
+        "button.label": "Register",
+        "existing.account.message": "Already have an account?",
+        "link.login": "Login"
+    },
+
     "STAFF": {
         "list.table.title.no": "Id",
         "list.table.title.firstName": "First Name",
