@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import LanguageSelection from "../components/LanguageSelection";
 
 const RegistrationPage = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     return (
         <div className="hero bg-base-200 min-h-screen">
             <div className="hero-content flex-col">
                 <div className="text-center lg:text-left">
-                    <h1 className="mb-10 text-4xl font-bold">
+                    <h1 className="mb-15 text-4xl font-bold">
                         {t("REGISTRATION.hero.title")}
                     </h1>
                 </div>
@@ -36,20 +37,8 @@ const RegistrationPage = () => {
                         {t("REGISTRATION.link.login")}
                     </Link>
                 </div>
-                <div className="mt-10 flex justify-center gap-1.5 text-center text-xs">
-                    <a
-                        className={i18n.language === "tr" ? "" : "link"}
-                        onClick={() => i18n.changeLanguage("tr")}
-                    >
-                        {t("TEMPLATE.FOOTER.link.turkish")}
-                    </a>
-                    |
-                    <a
-                        className={i18n.language === "en" ? "" : "link"}
-                        onClick={() => i18n.changeLanguage("en")}
-                    >
-                        {t("TEMPLATE.FOOTER.link.english")}
-                    </a>
+                <div className="mt-5 flex justify-center gap-1.5 text-center text-xs">
+                    <LanguageSelection />
                 </div>
             </div>
         </div>
