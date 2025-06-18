@@ -46,7 +46,7 @@ const LoginPage = () => {
                                 {t("LOGIN.input.label.password")}
                             </label>
                             <Input
-                                type="text"
+                                type="password"
                                 className={"input"}
                                 error={errors && errors["password"]?.message}
                                 {...register("password")}
