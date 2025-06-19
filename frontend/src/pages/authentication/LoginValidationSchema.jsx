@@ -1,15 +1,24 @@
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 
 const getLoginValidations = () => {
+    const { t } = useTranslation();
+
     return yup.object().shape({
         userName: yup
             .string()
-            .required("User name is required.")
-            .max(40, "Must be maximum 40 characters"),
+            .required(t("LOGIN.invalid.message.userName.required"))
+            .max(
+                40,
+                t("LOGIN.invalid.message.userName.maxLenght", { maxChar: 40 }),
+            ),
         password: yup
             .string()
-            .required("Password is required.")
-            .min(8, "Must be minimum 8 characters"),
+            .required(t("LOGIN.invalid.message.password.required"))
+            .min(
+                8,
+                t("LOGIN.invalid.message.password.minLenght", { minChar: 8 }),
+            ),
     });
 };
 

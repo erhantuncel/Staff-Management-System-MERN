@@ -24,7 +24,11 @@
         "input.label.password": "Şifre",
         "button.label": "Giriş",
         "not.exist.account.message": "Hesabınız yok mu?",
-        "link.register": "Kayıt Ol"
+        "link.register": "Kayıt Ol",
+        "invalid.message.userName.required": "Kullanıcı adı boş olmamalı.",
+        "invalid.message.userName.maxLenght": "En fazla {{maxChar}} karakter olmalı..",
+        "invalid.message.password.required": "Şifre boş olmamalı.",
+        "invalid.message.password.minLenght": "En az {{minChar}} karakter olmalı."
     },
 
     "REGISTRATION": {
@@ -34,7 +38,13 @@
         "input.label.passwordConfirm": "Şifre Onayla",
         "button.label": "Kayıt Ol",
         "existing.account.message": "Hesabın var mı?",
-        "link.login": "Giriş"
+        "link.login": "Giriş",
+        "invalid.message.userName.required": "Kullanıcı adı boş olmamalı.",
+        "invalid.message.userName.maxLenght": "En fazla {{maxChar}} karakter olmalı..",
+        "invalid.message.password.required": "Şifre boş olmamalı.",
+        "invalid.message.password.minLenght": "En az {{minChar}} karakter olmalı.",
+        "invalid.message.passwordToConfirm.required": "Şifre onayı boş olmamalı.",
+        "invalid.message.passwordToConfirm.notMatch": "Şifre ile aynı olmalı"
     },
 
     "STAFF": {

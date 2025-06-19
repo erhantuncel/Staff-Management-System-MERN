@@ -24,7 +24,11 @@
         "input.label.password": "Password",
         "button.label": "Login",
         "not.exist.account.message": "Don't have an account yet?",
-        "link.register": "Register"
+        "link.register": "Register",
+        "invalid.message.userName.required": "User name is required.",
+        "invalid.message.userName.maxLenght": "Must be maximum {{maxChar}} characters.",
+        "invalid.message.password.required": "Password is required.",
+        "invalid.message.password.minLenght": "Must be minimum {{minChar}} characters."
     },
 
     "REGISTRATION": {
@@ -34,7 +38,13 @@
         "input.label.passwordConfirm": "Confirm Password",
         "button.label": "Register",
         "existing.account.message": "Already have an account?",
-        "link.login": "Login"
+        "link.login": "Login",
+        "invalid.message.userName.required": "User name is required.",
+        "invalid.message.userName.maxLenght": "Must be maximum {{maxChar}} characters.",
+        "invalid.message.password.required": "Password is required.",
+        "invalid.message.password.minLenght": "Must be minimum {{minChar}} characters.",
+        "invalid.message.passwordToConfirm.required": "Confirm Password is required.",
+        "invalid.message.passwordToConfirm.notMatch": "Must be same as Password."
     },
 
     "STAFF": {
