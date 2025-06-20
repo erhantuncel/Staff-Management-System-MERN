@@ -44,7 +44,8 @@
         "invalid.message.password.required": "Şifre boş olmamalı.",
         "invalid.message.password.minLenght": "En az {{minChar}} karakter olmalı.",
         "invalid.message.passwordToConfirm.required": "Şifre onayı boş olmamalı.",
-        "invalid.message.passwordToConfirm.notMatch": "Şifre ile aynı olmalı"
+        "invalid.message.passwordToConfirm.notMatch": "Şifre ile aynı olmalı",
+        "toastify.register.failed.message": "Kullanıcı kayıt işlemi başarısız oldu. Lütfen tekrar deneyin."
     },
 
     "STAFF": {

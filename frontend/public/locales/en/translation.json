@@ -44,7 +44,8 @@
         "invalid.message.password.required": "Password is required.",
         "invalid.message.password.minLenght": "Must be minimum {{minChar}} characters.",
         "invalid.message.passwordToConfirm.required": "Confirm Password is required.",
-        "invalid.message.passwordToConfirm.notMatch": "Must be same as Password."
+        "invalid.message.passwordToConfirm.notMatch": "Must be same as Password.",
+        "toastify.register.failed.message": "Registration is failed. Please try again."
     },
 
     "STAFF": {

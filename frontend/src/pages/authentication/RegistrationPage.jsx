@@ -1,13 +1,16 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import LanguageSelection from "../../components/LanguageSelection";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import getRegistrationValidations from "./RegistrationValidationSchema";
 import Input from "../../components/form/Input";
+import { registerUser } from "../../api/services/AuthenticationService";
+import { toast } from "react-toastify";
 
 const RegistrationPage = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const {
         register,
@@ -19,7 +22,17 @@ const RegistrationPage = () => {
     });
 
     const onSubmit = (data) => {
-        console.log(data);
+        registerUser(data)
+            .then((response) => {
+                console.log(response);
+                if (response.status === "success") {
+                    navigate("/login", { replace: true });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error(t("REGISTRATION.toastify.register.failed.message"));
+            });
     };
 
     return (
