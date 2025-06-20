@@ -233,7 +233,7 @@ router.get("/staffs/");
 
 /**
  *  @swagger
- *  /register:
+ *  /users/register:
  *      post:
  *          summary: Create new user.
  *          description: Create new user.
@@ -261,7 +261,7 @@ router.get("/staffs/");
  *                  description: "Internal server error."
  */
 router.post(
-    "/register",
+    "/users/register",
     userValidatorToCreate,
     validate,
     authenticationController.register
@@ -269,7 +269,7 @@ router.post(
 
 /**
  *  @swagger
- *  /login:
+ *  /users/login:
  *      post:
  *          summary: Login user.
  *          description: Login user.
@@ -297,6 +297,6 @@ router.post(
  *              "500":
  *                  description: "Internal server error."
  */
-router.post("/login", authenticationController.login);
+router.post("/users/login", authenticationController.login);
 
 export default router;
