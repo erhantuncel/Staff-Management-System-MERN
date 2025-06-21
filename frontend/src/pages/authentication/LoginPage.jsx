@@ -5,9 +5,13 @@ import { useForm } from "react-hook-form";
 import Input from "../../components/form/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import getLoginValidations from "./LoginValidationSchema";
+import { loginUser } from "../../api/services/AuthenticationService";
+import { AuthenticationContext } from "../../contexts/AuthenticationContext";
+import { useContext } from "react";
 
 const LoginPage = () => {
     const { t } = useTranslation();
+    const { loginAction } = useContext(AuthenticationContext);
 
     const {
         register,
@@ -20,6 +24,7 @@ const LoginPage = () => {
 
     const onSubmit = (data) => {
         console.log(data);
+        loginAction(data);
     };
 
     return (
