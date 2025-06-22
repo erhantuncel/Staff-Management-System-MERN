@@ -31,6 +31,10 @@
         "invalid.message.password.minLenght": "En az {{minChar}} karakter olmalı."
     },
 
+    "LOGOUT": {
+        "button.logout.label": "Oturumu Kapat"
+    },
+
     "REGISTRATION": {
         "hero.title": "Kullanıcı Kayıt",
         "input.label.userName": "Kullanıcı Adı",

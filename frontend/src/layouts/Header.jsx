@@ -1,8 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router";
+import ArrowLeftStartOnRectangleIcon from "../components/icons/ArrowLeftStartOnRectangleIcon";
+import { useContext } from "react";
+import { AuthenticationContext } from "../contexts/AuthenticationContext";
 
 const Header = () => {
     const { t } = useTranslation();
+
+    const { logOutAction } = useContext(AuthenticationContext);
 
     const handleDropDownItemClick = () => {
         const elem = document.activeElement;
@@ -79,7 +84,13 @@ const Header = () => {
                 </ul>
             </div>
             <div className="navbar-end lg:w-3/12">
-                <a className="btn btn-outline">Button</a>
+                <a
+                    className="btn btn-outline btn-md border-gray-500"
+                    onClick={logOutAction}
+                >
+                    <ArrowLeftStartOnRectangleIcon type="mini" />
+                    {t("LOGOUT.button.logout.label")}
+                </a>
             </div>
         </div>
     );

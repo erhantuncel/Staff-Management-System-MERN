@@ -31,6 +31,10 @@
         "invalid.message.password.minLenght": "Must be minimum {{minChar}} characters."
     },
 
+    "LOGOUT": {
+        "button.logout.label": "Log Out"
+    },
+
     "REGISTRATION": {
         "hero.title": "User Registration",
         "input.label.userName": "User Name",
