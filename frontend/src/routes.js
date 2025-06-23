@@ -5,6 +5,7 @@ import StaffList from "./pages/staffs/StaffList";
 import NotFound from "./pages/errors/NotFound";
 import RegistrationPage from "./pages/authentication/RegistrationPage";
 import LoginPage from "./pages/authentication/LoginPage";
+import PrivateRoute from "./components/PrivateRoute";
 
 export const getRouter = () =>
     createBrowserRouter([
@@ -26,15 +27,20 @@ export const getRouter = () =>
                 },
                 {
                     path: "/user",
-                    Component: UserDashboard,
+                    Component: PrivateRoute,
                     children: [
                         {
-                            index: true,
-                            Component: StaffList,
-                        },
-                        {
-                            path: "staffs",
-                            Component: StaffList,
+                            Component: UserDashboard,
+                            children: [
+                                {
+                                    index: true,
+                                    Component: StaffList,
+                                },
+                                {
+                                    path: "staffs",
+                                    Component: StaffList,
+                                },
+                            ],
                         },
                     ],
                 },
