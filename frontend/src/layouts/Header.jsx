@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import ArrowLeftStartOnRectangleIcon from "../components/icons/ArrowLeftStartOnRectangleIcon";
 import { useContext } from "react";
 import { AuthenticationContext } from "../contexts/AuthenticationContext";
 
 const Header = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
-    const { logOutAction } = useContext(AuthenticationContext);
+    const { setUser, setToken } = useContext(AuthenticationContext);
 
     const handleDropDownItemClick = () => {
         const elem = document.activeElement;
@@ -22,6 +23,13 @@ const Header = () => {
             route: "/user/staffs",
         },
     ];
+
+    const handleLogOut = () => {
+        setUser(null);
+        setToken("");
+        localStorage.removeItem("jwtToken");
+        navigate("/login");
+    };
 
     return (
         <div className="navbar bg-neutral text-neutral-content shadow-sm">
@@ -86,7 +94,7 @@ const Header = () => {
             <div className="navbar-end lg:w-3/12">
                 <a
                     className="btn btn-outline btn-md border-gray-500"
-                    onClick={logOutAction}
+                    onClick={handleLogOut}
                 >
                     <ArrowLeftStartOnRectangleIcon type="mini" />
                     {t("LOGOUT.button.logout.label")}

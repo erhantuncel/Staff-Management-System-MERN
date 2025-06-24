@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import LanguageSelection from "../../components/LanguageSelection";
 import { useForm } from "react-hook-form";
 import Input from "../../components/form/Input";
@@ -8,10 +8,12 @@ import getLoginValidations from "./LoginValidationSchema";
 import { loginUser } from "../../api/services/AuthenticationService";
 import { AuthenticationContext } from "../../contexts/AuthenticationContext";
 import { useContext } from "react";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
     const { t } = useTranslation();
-    const { loginAction } = useContext(AuthenticationContext);
+    const navigate = useNavigate();
+    const { setUser, setToken } = useContext(AuthenticationContext);
 
     const {
         register,
@@ -23,8 +25,20 @@ const LoginPage = () => {
     });
 
     const onSubmit = (data) => {
-        console.log(data);
-        loginAction(data);
+        loginUser(data)
+            .then((response) => {
+                if (response.status === "success") {
+                    const { token, ...user } = response.data;
+                    setUser(user);
+                    setToken(token);
+                    localStorage.setItem("jwtToken", token);
+                    navigate("/user");
+                    return;
+                }
+            })
+            .catch((error) => {
+                toast.error("Login failed.");
+            });
     };
 
     return (
