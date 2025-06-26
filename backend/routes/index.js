@@ -24,6 +24,8 @@ const router = express.Router();
  *              - bearer-key: []
  *          summary: Get all staffs.
  *          description: Get all staffs.
+ *          tags:
+ *              - Staffs
  *          responses:
  *              "200":
  *                  description: "A successful response"
@@ -38,8 +40,12 @@ router.get("/staffs", verifyToken, staffController.getAllStaff);
  *  @swagger
  *  /staffs/pagination:
  *      get:
+ *          security:
+ *              - bearer-key: []
  *          summary: Get all staffs with paginatation.
  *          description: Get all staffs with paginatation.
+ *          tags:
+ *              - Staffs
  *          parameters:
  *              - in: query
  *                name: page
@@ -61,6 +67,7 @@ router.get("/staffs", verifyToken, staffController.getAllStaff);
  */
 router.get(
     "/staffs/pagination",
+    verifyToken,
     pageValidatorForgetStaffsByDepartmentAndQueryParamsPaginated,
     validate,
     staffController.getStaffsByDepartmentAndQueryParamsPaginated
@@ -70,8 +77,12 @@ router.get(
  *  @swagger
  *  /staffs/{id}:
  *      get:
+ *          security:
+ *              - bearer-key: []
  *          summary: Get staff with id.
  *          description: Get staff with id.
+ *          tags:
+ *              - Staffs
  *          parameters:
  *              - in: path
  *                name: id
@@ -88,6 +99,7 @@ router.get(
  */
 router.get(
     "/staffs/:id",
+    verifyToken,
     idValidator,
     validate,
     staffController.getStaffWithId
@@ -97,8 +109,12 @@ router.get(
  *  @swagger
  *  /staffs:
  *      post:
+ *          security:
+ *              - bearer-key: []
  *          summary: Create new staff.
  *          description: Create new staff.
+ *          tags:
+ *              - Staffs
  *          requestBody:
  *              required: true
  *              content:
@@ -133,6 +149,7 @@ router.get(
  */
 router.post(
     "/staffs",
+    verifyToken,
     utils.getMulterForCreateStaff().single("image"),
     staffValidatorToCreate,
     staffController.createStaff
@@ -142,8 +159,12 @@ router.post(
  *  @swagger
  *  /staffs/{id}:
  *      put:
+ *          security:
+ *              - bearer-key: []
  *          summary: Update staff.
  *          description: Update new staff.
+ *          tags:
+ *              - Staffs
  *          parameters:
  *              - in: path
  *                name: id
@@ -180,6 +201,7 @@ router.post(
  */
 router.put(
     "/staffs/:id",
+    verifyToken,
     utils.getMulterForCreateStaff().single("image"),
     staffValidatorToUpdate,
     validate,
@@ -190,8 +212,12 @@ router.put(
  *  @swagger
  *  /staffs/{id}:
  *      delete:
+ *          security:
+ *              - bearer-key: []
  *          summary: Remove staff with id.
  *          description: Remove staff with id.
+ *          tags:
+ *              - Staffs
  *          parameters:
  *              - in: path
  *                name: id
@@ -208,6 +234,7 @@ router.put(
  */
 router.delete(
     "/staffs/:id",
+    verifyToken,
     idValidator,
     validate,
     staffController.removeStaff
@@ -217,8 +244,12 @@ router.delete(
  *  @swagger
  *  /departments:
  *      get:
+ *          security:
+ *              - bearer-key: []
  *          summary: Get department list.
  *          description: Get department list.
+ *          tags:
+ *              - Departments
  *          responses:
  *              "200":
  *                  description: "A successful response"
@@ -227,7 +258,7 @@ router.delete(
  *              "500":
  *                  description: "Internal server error."
  */
-router.get("/departments", staffController.getDepartmentList);
+router.get("/departments", verifyToken, staffController.getDepartmentList);
 
 router.get("/staffs/");
 
@@ -237,6 +268,8 @@ router.get("/staffs/");
  *      post:
  *          summary: Create new user.
  *          description: Create new user.
+ *          tags:
+ *              - Users
  *          requestBody:
  *              required: true
  *              content:
@@ -273,6 +306,8 @@ router.post(
  *      post:
  *          summary: Login user.
  *          description: Login user.
+ *          tags:
+ *              - Users
  *          requestBody:
  *              required: true
  *              content:
