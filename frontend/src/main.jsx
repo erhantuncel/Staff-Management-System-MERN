@@ -8,6 +8,7 @@ import { getRouter } from "./routes";
 import "./i18n";
 import { UIContextProvider } from "./contexts/UIContext";
 import { StaffListContextProvider } from "./contexts/StaffListContext";
+import { AuthenticationContextProvider } from "./contexts/AuthenticationContext";
 
 const router = getRouter();
 
@@ -16,7 +17,9 @@ createRoot(document.getElementById("root")).render(
         <StrictMode>
             <UIContextProvider>
                 <StaffListContextProvider>
-                    <RouterProvider router={router} />
+                    <AuthenticationContextProvider>
+                        <RouterProvider router={router} />
+                    </AuthenticationContextProvider>
                 </StaffListContextProvider>
             </UIContextProvider>
         </StrictMode>
