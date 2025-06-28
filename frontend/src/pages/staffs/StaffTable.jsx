@@ -12,7 +12,7 @@ import { removeStaff } from "../../api/services/StaffService";
 const StaffTable = () => {
     const { t, i18n } = useTranslation();
 
-    const { showDetailsModal, showDeleteModal, hideModal } =
+    const { showDetailsModal, showConfirmationModal, hideConfirmationModal } =
         useContext(UIContext);
     const { selectedStaff, selectStaff, items, pagination, setPagination } =
         useContext(StaffListContext);
@@ -47,7 +47,7 @@ const StaffTable = () => {
                 );
             })
             .finally(() => {
-                hideModal();
+                hideConfirmationModal();
             });
     };
 
@@ -58,7 +58,7 @@ const StaffTable = () => {
 
     const handleShowDeleteModal = (staff) => {
         selectStaff(staff);
-        showDeleteModal();
+        showConfirmationModal();
     };
 
     const calculateStartingNumber = () => {

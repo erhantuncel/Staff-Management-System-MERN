@@ -19,7 +19,12 @@ import {
 const StaffAddUpdateDetailModal = () => {
     const { t } = useTranslation();
 
-    const { modalToShow, showUpdateModal, hideModal } = useContext(UIContext);
+    const {
+        isAddUpdateDetailsModalOpen,
+        modalToShow,
+        showUpdateModal,
+        hideAddUpdateDetailsModal,
+    } = useContext(UIContext);
     const { selectedStaff, populateStaffListItems, pagination, setTotalCount } =
         useContext(StaffListContext);
 
@@ -85,7 +90,7 @@ const StaffAddUpdateDetailModal = () => {
             .finally(() => {
                 setImage(null);
                 setLoading(false);
-                hideModal();
+                hideAddUpdateDetailsModal();
                 getAllStaffWithPagination(
                     pagination.page,
                     pagination.pageSize,
@@ -97,9 +102,9 @@ const StaffAddUpdateDetailModal = () => {
     };
 
     const handleClose = () => {
+        hideAddUpdateDetailsModal();
         setImage(null);
         reset();
-        hideModal();
     };
 
     const getMessageForToastify = (staff, status) => {
@@ -120,8 +125,8 @@ const StaffAddUpdateDetailModal = () => {
 
     return (
         <Modal
-            isOpen={["add", "update", "details"].includes(modalToShow)}
-            onClose={hideModal}
+            isOpen={isAddUpdateDetailsModalOpen}
+            onClose={hideAddUpdateDetailsModal}
             modalBoxClassName="w-10/12 max-w-2xl"
         >
             <Modal.Title>

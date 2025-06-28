@@ -12,7 +12,8 @@ const ConfirmationModal = ({
     i18nKeyMessageKey,
     i18nMessageParams,
 }) => {
-    const { modalToShow, hideModal } = useContext(UIContext);
+    const { isConfirmationModalOpen, hideConfirmationModal } =
+        useContext(UIContext);
 
     const handleAccept = () => {
         console.log("Confirmation Modal Accepted");
@@ -23,13 +24,13 @@ const ConfirmationModal = ({
 
     const handleCancel = () => {
         console.log("Confirmation Modal Cancelled");
-        hideModal();
+        hideConfirmationModal();
     };
 
     return (
         <Modal
-            isOpen={modalToShow === "delete"}
-            onClose={hideModal}
+            isOpen={isConfirmationModalOpen}
+            onClose={hideConfirmationModal}
             modalBoxClassName="w-10/12 max-w-md"
         >
             <Modal.Title>{title}</Modal.Title>

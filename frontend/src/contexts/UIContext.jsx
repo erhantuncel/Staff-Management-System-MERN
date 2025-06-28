@@ -4,34 +4,48 @@ export const UIContext = createContext();
 
 export const UIContextProvider = ({ children }) => {
     const [modalToShow, setModalToShow] = useState("");
+    const [isAddUpdateDetailsModalOpen, setIsAddUpdateDetailsModalOpen] =
+        useState(false);
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
+        useState(false);
 
     const showAddModal = () => {
         setModalToShow("add");
+        setIsAddUpdateDetailsModalOpen(true);
     };
 
     const showUpdateModal = () => {
         setModalToShow("update");
+        setIsAddUpdateDetailsModalOpen(true);
     };
 
     const showDetailsModal = () => {
         setModalToShow("details");
+        setIsAddUpdateDetailsModalOpen(true);
     };
 
-    const showDeleteModal = () => {
-        setModalToShow("delete");
+    const showConfirmationModal = () => {
+        setIsConfirmationModalOpen(true);
     };
 
-    const hideModal = () => {
-        setModalToShow("");
+    const hideAddUpdateDetailsModal = () => {
+        setIsAddUpdateDetailsModalOpen(false);
+    };
+
+    const hideConfirmationModal = () => {
+        setIsConfirmationModalOpen(false);
     };
 
     const UImodalToShowContext = {
         modalToShow,
+        isAddUpdateDetailsModalOpen,
+        isConfirmationModalOpen,
         showAddModal,
         showUpdateModal,
         showDetailsModal,
-        showDeleteModal,
-        hideModal,
+        showConfirmationModal,
+        hideAddUpdateDetailsModal,
+        hideConfirmationModal,
     };
 
     return (
