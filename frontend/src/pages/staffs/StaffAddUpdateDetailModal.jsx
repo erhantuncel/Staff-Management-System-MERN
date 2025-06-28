@@ -103,8 +103,6 @@ const StaffAddUpdateDetailModal = () => {
 
     const handleClose = () => {
         hideAddUpdateDetailsModal();
-        setImage(null);
-        reset();
     };
 
     const getMessageForToastify = (staff, status) => {
