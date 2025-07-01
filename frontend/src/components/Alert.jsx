@@ -1,3 +1,4 @@
+import React from "react";
 import ExclamationCircleIcon from "./icons/ExclamationCircleIcon";
 
 const Alert = ({ message }) => {
