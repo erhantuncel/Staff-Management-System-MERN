@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import {
     createStaff,
     getAllStaffWithPagination,
+    getStaffsByDepartmentAndQueryParamsPaginated,
     updateStaff,
 } from "../../api/services/StaffService";
 
@@ -25,8 +26,13 @@ const StaffAddUpdateDetailModal = () => {
         showUpdateModal,
         hideAddUpdateDetailsModal,
     } = useContext(UIContext);
-    const { selectedStaff, populateStaffListItems, pagination, setTotalCount } =
-        useContext(StaffListContext);
+    const {
+        selectedStaff,
+        populateStaffListItems,
+        pagination,
+        setTotalCount,
+        searchFilters,
+    } = useContext(StaffListContext);
 
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -91,9 +97,12 @@ const StaffAddUpdateDetailModal = () => {
                 setImage(null);
                 setLoading(false);
                 hideAddUpdateDetailsModal();
-                getAllStaffWithPagination(
+                getStaffsByDepartmentAndQueryParamsPaginated(
                     pagination.page,
                     pagination.pageSize,
+                    searchFilters.department,
+                    searchFilters.column,
+                    searchFilters.keyword,
                 ).then((response) => {
                     populateStaffListItems(response.data);
                     setTotalCount(response.metadata.totalCount);
