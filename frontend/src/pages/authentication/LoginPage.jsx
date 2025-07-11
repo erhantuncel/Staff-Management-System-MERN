@@ -9,11 +9,18 @@ import { loginUser } from "../../api/services/AuthenticationService";
 import { AuthenticationContext } from "../../contexts/AuthenticationContext";
 import { useContext } from "react";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const LoginPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { setUser, setToken } = useContext(AuthenticationContext);
+    const { setUser, setToken, token } = useContext(AuthenticationContext);
+
+    useEffect(() => {
+        if (token) {
+            navigate("/user");
+        }
+    }, []);
 
     const {
         register,
