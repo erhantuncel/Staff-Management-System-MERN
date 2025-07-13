@@ -16,8 +16,70 @@ const create = async (staffObjectToSave) => {
     return await staffToSave.save();
 };
 
-const getAll = async () => {
-    return await Staff.find({});
+// const getAll = async () => {
+//     return await Staff.find({});
+// };
+
+const getAll = async (
+    department,
+    fieldName,
+    keyword,
+    page,
+    pageSize,
+    sortField,
+    order
+) => {
+    let matchCriterias = {};
+    if (department) {
+        matchCriterias = { department: department };
+    }
+    if (fieldName) {
+        matchCriterias[fieldName] = { $regex: keyword };
+    }
+
+    const pipeLine = [
+        {
+            $match: matchCriterias,
+        },
+        {
+            $facet: {
+                metadata: [{ $count: "totalCount" }],
+                data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+            },
+        },
+        {
+            $project: {
+                metadata: {
+                    totalCount: {
+                        $ifNull: [{ $first: "$metadata.totalCount" }, 0],
+                    },
+                },
+                data: "$data",
+            },
+        },
+    ];
+
+    if (sortField !== null) {
+        let sortCriteria = {};
+        sortCriteria[sortField] = order;
+        pipeLine[1].$facet.data.push({ $sort: sortCriteria });
+    }
+
+    pipeLine.map((obj) => console.log(obj));
+
+    const aggregationCursor = await Staff.aggregate(pipeLine);
+
+    let result = null;
+    aggregationCursor.forEach((staff) => {
+        if (staff.data.length === 0) {
+            throw new NotFoundError("Staff list not found.");
+        }
+        result = {
+            ...staff,
+            metadata: { ...staff.metadata[0], page: page, pageSize: pageSize },
+        };
+    });
+    return result;
 };
 
 const getAllWithPagination = async (page, pageSize) => {
@@ -25,7 +87,11 @@ const getAllWithPagination = async (page, pageSize) => {
         {
             $facet: {
                 metadata: [{ $count: "totalCount" }],
-                data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+                data: [
+                    { $sort: { firstName: -1 } },
+                    { $skip: (page - 1) * pageSize },
+                    { $limit: pageSize },
+                ],
             },
         },
     ]);
@@ -89,6 +155,7 @@ const getStaffByDepartmentAndFirstOrLastNamePaginated = async (
     }
     let matchCriterias = { department: department };
     matchCriterias[firstOrLast] = { $regex: keyword };
+    console.log("aggregating before sort");
     const pipeLine = [
         {
             $match: matchCriterias,

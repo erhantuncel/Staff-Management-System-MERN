@@ -11,8 +11,38 @@ cloudinary.config({
 });
 
 const getAllStaff = async (req, res, next) => {
+    let { firstName, lastName, department, page, pageSize, sortField, order } =
+        req.query;
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 5;
+    let filter = { department: department, keyword: null, fieldName: null };
+    let sortCriteria = { fieldName: null, order: null };
+
+    if (firstName || lastName) {
+        if (firstName) {
+            filter = { ...filter, keyword: firstName, fieldName: "firstName" };
+        } else {
+            filter = { ...filter, keyword: lastName, fieldName: "lastName" };
+        }
+    }
+
+    if (sortField) {
+        sortCriteria = {
+            fieldName: sortField,
+            order: order ? (order === "asc" ? 1 : -1) : 1,
+        };
+    }
+
     try {
-        const staffs = await staffService.getAll();
+        const staffs = await staffService.getAll(
+            filter.department,
+            filter.fieldName,
+            filter.keyword,
+            page,
+            pageSize,
+            sortCriteria.fieldName,
+            sortCriteria.order
+        );
         res.status(200).json(utils.createSuccessDataResult(200, staffs));
     } catch (error) {
         next(error);
