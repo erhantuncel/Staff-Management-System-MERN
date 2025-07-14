@@ -95,6 +95,15 @@ const mockStaffArray = [
 ];
 
 describe("Get all staff", () => {
+    mockRequest.query = {
+        firstName: null,
+        lastName: null,
+        department: null,
+        page: null,
+        pageSize: null,
+        sortField: null,
+        order: null,
+    };
     it("should return 500 when getAll method failed", async () => {
         const error = new Error("Server Error");
         vi.mocked(staffService.getAll).mockRejectedValueOnce(error);
