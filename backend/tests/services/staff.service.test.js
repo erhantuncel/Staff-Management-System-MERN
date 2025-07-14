@@ -92,14 +92,13 @@ describe("Staff Service", () => {
     });
 
     describe("getAll", () => {
-        const mockAggregateCursor = [
-            {
-                metadata: [{ totalCount: 2 }],
-                data: mockStaffArray,
-            },
-        ];
-
         it("should return staff array", async () => {
+            const mockAggregateCursor = [
+                {
+                    metadata: [{ totalCount: 2 }],
+                    data: mockStaffArray,
+                },
+            ];
             const spyAggregate = vi
                 .spyOn(Staff, "aggregate")
                 .mockResolvedValueOnce(mockAggregateCursor);
@@ -123,7 +122,20 @@ describe("Staff Service", () => {
             });
         });
 
-        it("should return NotFoundError when staff list not found", () => {});
+        it("should return NotFoundError when staff list not found", async () => {
+            const mockAggregateCursor = [
+                {
+                    metadata: [{ totalCount: 2 }],
+                    data: [],
+                },
+            ];
+            vi.spyOn(Staff, "aggregate").mockResolvedValueOnce(
+                mockAggregateCursor
+            );
+            await expect(
+                staffService.getAll(null, null, null, 1, 5, null, null)
+            ).rejects.toThrowError(new NotFoundError("Staff list not found."));
+        });
     });
 
     describe("update", () => {
