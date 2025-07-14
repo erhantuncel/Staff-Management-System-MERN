@@ -92,14 +92,38 @@ describe("Staff Service", () => {
     });
 
     describe("getAll", () => {
+        const mockAggregateCursor = [
+            {
+                metadata: [{ totalCount: 2 }],
+                data: mockStaffArray,
+            },
+        ];
+
         it("should return staff array", async () => {
-            const spyFind = vi
-                .spyOn(Staff, "find")
-                .mockResolvedValueOnce(mockStaffArray);
-            await staffService.getAll();
-            expect(spyFind).toHaveBeenCalledWith({});
-            expect(spyFind).toHaveReturned(mockStaffArray);
+            const spyAggregate = vi
+                .spyOn(Staff, "aggregate")
+                .mockResolvedValueOnce(mockAggregateCursor);
+            const result = await staffService.getAll(
+                null,
+                null,
+                null,
+                1,
+                5,
+                null,
+                null
+            );
+            expect(spyAggregate).toHaveBeenCalled();
+            expect(result).toStrictEqual({
+                ...mockAggregateCursor[0],
+                metadata: {
+                    ...mockAggregateCursor[0].metadata[0],
+                    page: 1,
+                    pageSize: 5,
+                },
+            });
         });
+
+        it("should return NotFoundError when staff list not found", () => {});
     });
 
     describe("update", () => {
