@@ -26,6 +26,42 @@ const router = express.Router();
  *          description: Get all staffs.
  *          tags:
  *              - Staffs
+ *          parameters:
+ *              - in: query
+ *                name: department
+ *                schema:
+ *                  type: string
+ *                description: Department name.
+ *              - in: query
+ *                name: firstName
+ *                schema:
+ *                  type: string
+ *                description: Staff first name.
+ *              - in: query
+ *                name: lastName
+ *                schema:
+ *                  type: string
+ *                description: Staff last name.
+ *              - in: query
+ *                name: sortField
+ *                schema:
+ *                  type: string
+ *                description: Field name to sort.
+ *              - in: query
+ *                name: order
+ *                schema:
+ *                  type: string
+ *                description: Sort order. asc or desc
+ *              - in: query
+ *                name: page
+ *                schema:
+ *                  type: integer
+ *                description: The number of page.
+ *              - in: query
+ *                name: pageSize
+ *                schema:
+ *                  type: integer
+ *                description: Number of items of one page.
  *          responses:
  *              "200":
  *                  description: "A successful response"

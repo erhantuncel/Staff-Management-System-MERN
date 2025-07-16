@@ -16,10 +16,6 @@ const create = async (staffObjectToSave) => {
     return await staffToSave.save();
 };
 
-// const getAll = async () => {
-//     return await Staff.find({});
-// };
-
 const getAll = async (
     department,
     fieldName,

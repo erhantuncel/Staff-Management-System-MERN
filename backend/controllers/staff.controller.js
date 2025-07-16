@@ -43,7 +43,9 @@ const getAllStaff = async (req, res, next) => {
             sortCriteria.fieldName,
             sortCriteria.order
         );
-        res.status(200).json(utils.createSuccessDataResult(200, staffs));
+        res.status(200).json(
+            utils.createSuccessDataResult(200, staffs.data, staffs.metadata)
+        );
     } catch (error) {
         next(error);
     }
