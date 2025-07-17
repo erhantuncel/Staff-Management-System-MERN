@@ -17,6 +17,10 @@ export const StaffListContextProvider = ({ children }) => {
     const [searchFilters, setSearchFilters] = useState(
         searchFilterInitialValues,
     );
+    const [sorting, setSorting] = useState({
+        field: "createdAt",
+        order: "desc",
+    });
     const [departments, setDepartments] = useState([]);
 
     const selectStaff = (staff) => {
@@ -34,6 +38,8 @@ export const StaffListContextProvider = ({ children }) => {
         populateStaffListItems,
         pagination,
         setPagination,
+        sorting,
+        setSorting,
         totalCount,
         setTotalCount,
         searchFilters,

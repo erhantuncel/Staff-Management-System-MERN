@@ -20,6 +20,7 @@ const StaffList = () => {
         setTotalCount,
         searchFilters,
         setDepartments,
+        sorting,
     } = useContext(StaffListContext);
 
     useEffect(() => {
@@ -29,8 +30,8 @@ const StaffList = () => {
             searchFilters.keyword,
             pagination.page,
             pagination.pageSize,
-            null,
-            null,
+            sorting.field,
+            sorting.order,
         )
             .then((response) => {
                 populateStaffListItems(response.data);

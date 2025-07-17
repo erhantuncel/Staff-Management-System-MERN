@@ -29,6 +29,7 @@ const StaffAddUpdateDetailModal = () => {
         selectedStaff,
         populateStaffListItems,
         pagination,
+        sorting,
         setTotalCount,
         searchFilters,
     } = useContext(StaffListContext);
@@ -102,8 +103,8 @@ const StaffAddUpdateDetailModal = () => {
                     searchFilters.keyword,
                     pagination.page,
                     pagination.pageSize,
-                    null,
-                    null,
+                    sorting.field,
+                    sorting.order,
                 ).then((response) => {
                     populateStaffListItems(response.data);
                     setTotalCount(response.metadata.totalCount);
