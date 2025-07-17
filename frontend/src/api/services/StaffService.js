@@ -2,8 +2,25 @@ import { apiClient } from "../config/axios-config";
 
 const baseURL = "/staffs";
 
-export const getAllStaffs = async () => {
-    const response = await apiClient.get(baseURL, null);
+export const getAllStaffs = async (
+    department,
+    columnName,
+    keyword,
+    page,
+    pageSize,
+    sortField,
+    order,
+) => {
+    let params = {
+        department,
+        page,
+        pageSize,
+        sortField,
+        order,
+    };
+    params[columnName] = keyword;
+    const response = await apiClient.get(baseURL, { params: params });
+    // const response = await apiClient.get(baseURL, null);
     return response.data;
 };
 

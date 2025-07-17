@@ -12,8 +12,7 @@ import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
 import {
     createStaff,
-    getAllStaffWithPagination,
-    getStaffsByDepartmentAndQueryParamsPaginated,
+    getAllStaffs,
     updateStaff,
 } from "../../api/services/StaffService";
 
@@ -97,12 +96,14 @@ const StaffAddUpdateDetailModal = () => {
                 setImage(null);
                 setLoading(false);
                 hideAddUpdateDetailsModal();
-                getStaffsByDepartmentAndQueryParamsPaginated(
-                    pagination.page,
-                    pagination.pageSize,
+                getAllStaffs(
                     searchFilters.department,
                     searchFilters.column,
                     searchFilters.keyword,
+                    pagination.page,
+                    pagination.pageSize,
+                    null,
+                    null,
                 ).then((response) => {
                     populateStaffListItems(response.data);
                     setTotalCount(response.metadata.totalCount);

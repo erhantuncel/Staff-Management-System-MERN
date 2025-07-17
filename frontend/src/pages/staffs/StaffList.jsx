@@ -5,7 +5,7 @@ import StaffTable from "./StaffTable";
 import StaffAddUpdateDetailModal from "./StaffAddUpdateDetailModal";
 import StaffFilterContainer from "./StaffFilterContainer";
 import { StaffListContext } from "../../contexts/StaffListContext";
-import { getStaffsByDepartmentAndQueryParamsPaginated } from "../../api/services/StaffService";
+import { getAllStaffs } from "../../api/services/StaffService";
 import { getDistinctDepartments } from "../../api/services/DepartmentService";
 import Alert from "../../components/Alert";
 import { useTranslation } from "react-i18next";
@@ -23,12 +23,14 @@ const StaffList = () => {
     } = useContext(StaffListContext);
 
     useEffect(() => {
-        getStaffsByDepartmentAndQueryParamsPaginated(
-            pagination.page,
-            pagination.pageSize,
+        getAllStaffs(
             searchFilters.department,
             searchFilters.column,
             searchFilters.keyword,
+            pagination.page,
+            pagination.pageSize,
+            null,
+            null,
         )
             .then((response) => {
                 populateStaffListItems(response.data);
