@@ -58,7 +58,7 @@ const getAll = async (
     if (sortField !== null) {
         let sortCriteria = {};
         sortCriteria[sortField] = order;
-        pipeLine[1].$facet.data.push({ $sort: sortCriteria });
+        pipeLine[1].$facet.data.unshift({ $sort: sortCriteria });
     }
 
     pipeLine.map((obj) => console.log(obj));
