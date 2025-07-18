@@ -41,7 +41,7 @@ const StaffList = () => {
                 console.log(error);
                 populateStaffListItems([]);
             });
-    }, [pagination, searchFilters]);
+    }, [pagination, searchFilters, sorting]);
 
     useEffect(() => {
         getDistinctDepartments().then((departmentResponse) => {

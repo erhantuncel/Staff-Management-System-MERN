@@ -8,6 +8,7 @@ import { UIContext } from "../../contexts/UIContext";
 import { StaffListContext } from "../../contexts/StaffListContext";
 import { toast } from "react-toastify";
 import { removeStaff } from "../../api/services/StaffService";
+import TableHeadColumn from "./TableHeadColumn";
 
 const StaffTable = () => {
     const { t, i18n } = useTranslation();
@@ -67,6 +68,14 @@ const StaffTable = () => {
         return page * pageSize - pageSize + 1;
     };
 
+    const tableHeadColumns = [
+        { title: "no", isSortable: false },
+        { title: "firstName", isSortable: true },
+        { title: "lastName", isSortable: true },
+        { title: "department", isSortable: true },
+        { title: "createdAt", isSortable: true },
+    ];
+
     const getFormattedDate = (dateStr) => {
         const dateObj = new Date(dateStr);
         const formatter = new Intl.DateTimeFormat(i18n.language, {
@@ -84,11 +93,17 @@ const StaffTable = () => {
             <table className="table">
                 <thead className="bg-base-300 text-base-content sticky top-0">
                     <tr>
-                        <th>{t("STAFF.list.table.title.no")}</th>
-                        <th>{t("STAFF.list.table.title.firstName")}</th>
-                        <th>{t("STAFF.list.table.title.lastName")}</th>
-                        <th>{t("STAFF.list.table.title.departmentName")}</th>
-                        <th>{t("STAFF.list.table.title.registeredDate")}</th>
+                        {tableHeadColumns.map((column) => (
+                            <th key={column.title}>
+                                <TableHeadColumn
+                                    title={t(
+                                        `STAFF.list.table.title.${column.title}`,
+                                    )}
+                                    fieldName={column.title}
+                                    isSortable={column.isSortable}
+                                />
+                            </th>
+                        ))}
                         <th className="lg:w-1/4 xl:w-1/5">
                             {t("STAFF.list.table.title.actions")}
                         </th>
