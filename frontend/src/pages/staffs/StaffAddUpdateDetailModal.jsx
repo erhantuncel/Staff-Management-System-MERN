@@ -105,10 +105,15 @@ const StaffAddUpdateDetailModal = () => {
                     pagination.pageSize,
                     sorting.field,
                     sorting.order,
-                ).then((response) => {
-                    populateStaffListItems(response.data);
-                    setTotalCount(response.metadata.totalCount);
-                });
+                )
+                    .then((response) => {
+                        populateStaffListItems(response.data);
+                        setTotalCount(response.metadata.totalCount);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        populateStaffListItems([]);
+                    });
             });
     };
 
