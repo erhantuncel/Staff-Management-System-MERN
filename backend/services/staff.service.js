@@ -30,9 +30,8 @@ const getAll = async (
         matchCriterias = { department: department };
     }
     if (fieldName) {
-        matchCriterias[fieldName] = { $regex: keyword };
+        matchCriterias[fieldName] = { $regex: keyword, $options: "i" };
     }
-
     const pipeLine = [
         {
             $match: matchCriterias,
