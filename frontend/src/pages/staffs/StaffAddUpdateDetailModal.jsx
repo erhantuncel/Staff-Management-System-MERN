@@ -119,6 +119,9 @@ const StaffAddUpdateDetailModal = () => {
 
     const handleClose = () => {
         hideAddUpdateDetailsModal();
+        setTimeout(() => {
+            reset();
+        }, 300);
     };
 
     const getMessageForToastify = (staff, status) => {
