@@ -1,3 +1,4 @@
 ### macOS ###
 .DS_Store
-zOnlyLocal
+local
+myData

@@ -4,6 +4,7 @@ import Button from "../../components/form/Button";
 import PlusCircleIcon from "../../components/icons/PlusCircleIcon";
 import TrashIcon from "../../components/icons/TrashIcon";
 import { UIContext } from "../../contexts/UIContext";
+import noProfilePhoto from "../../assets/img/no_profile_photo.jpg";
 
 const StaffImage = ({ setValue, image, setImage, error, register }) => {
     const { t } = useTranslation();
@@ -32,11 +33,7 @@ const StaffImage = ({ setValue, image, setImage, error, register }) => {
         <>
             <div className="avatar">
                 <div className="w-48 rounded">
-                    {image ? (
-                        <img src={image} />
-                    ) : (
-                        <img src="../../../assets/img/no_profile_photo.jpg" />
-                    )}
+                    {image ? <img src={image} /> : <img src={noProfilePhoto} />}
                 </div>
             </div>
             {modalToShow !== "details" && (
