@@ -13,6 +13,10 @@ COPY package*.json .
 # Install the dependence
 RUN npm install
 
+# Environment variables
+ARG VITE_PUBLIC_API_BASE_URL
+ENV VITE_PUBLIC_API_BASE_URL $VITE_PUBLIC_API_BASE_URL
+
 # Copy other files to my current directory
 COPY . .
 
