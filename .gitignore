@@ -1,7 +1,7 @@
 ### macOS ###
 .DS_Store
 local
-myData
+mydata
 
 # dotenv environment variable files
 .env
